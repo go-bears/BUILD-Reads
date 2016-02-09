@@ -1,0 +1,60 @@
+
+Minimal Viable Project:
+BUILD (Berkeley Unified in Literacy Development) reads: logging books read by kids, kids' ratings of books, and time spent reading
+
+A form that takes in:
+    student first/last name
+    school
+    grade
+    book being read
+    type of book (picture vs. chapter book)
+    rating of book for that day
+    cumulative avg, rating for the book
+    time they spent reading
+    current date
+    reading sidekick name
+
+
+A page that displays:
+    student name
+    their school & current grade
+    previous books read
+    a book cover for each book (using an API: Currently looking at Overdrive, Good Reads or Open Library. any recommendations would be welcome!)
+    avg rating for each book
+    a list of books they read during a specfic grade level
+    how much time reading time they logged for the session
+    sidekick or list of sidekicks
+
+A database that stores:
+    Student name
+    Books read by students
+    the student's average score for each book
+    each day a student read
+    how much time a student read during a session
+
+
+Proposed technologies for project:
+-Postgres database
+-Python w/ Flask Framework
+-Bootstrap for styling
+-React.js for front-end functionality
+-D3.js for data viz
+-Heroku for deployment (but I also have a free Bluemix account?)
+-would love other recommendations?
+
+
+nice to have:
+-a timer that keeps track of kids' reading time (using React.js?)
+-badges that post to students' logs that reward them on the day they complete reading a book,
+-badges that for when they complete 20, 40, or 60 min reading sprint (using Khan Academy's API for badges? or Font Awesome icons? or ?)
+-kids can tweet short comments about books to Twitter
+
+data visualizations
+-show how much time a student has spent reading over time
+-show how which books are popular at different schools
+-show which books are popular for different grades across different schools
+ 
+
+apply machine learning predictions to recommend a kids' next book
+(we have an example of pearson correlation with movie ratings, is there a different
+algorithm that you recommend?)
