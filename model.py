@@ -45,3 +45,6 @@ class Books(db.Model):
     """Book information table."""
 
     __tablename__ = "Books"
+
+class Sites(db.Model):
+    pass
