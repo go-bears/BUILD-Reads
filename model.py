@@ -39,3 +39,6 @@ class Readers(db.Model):
                                                                                  self.last_name, 
                                                                                  self.birthday, 
                                                                                  self.grade)
+
+
+class Books(db.Model):
