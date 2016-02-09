@@ -58,3 +58,8 @@ data visualizations
 apply machine learning predictions to recommend a kids' next book
 (we have an example of pearson correlation with movie ratings, is there a different
 algorithm that you recommend?)
+
+update google spreadsheet with the database information.
+
+mobile capability
+-update the cover photo with the reader's own drawing with a cellphone image.
