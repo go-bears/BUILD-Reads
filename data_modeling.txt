@@ -1,9 +1,17 @@
+Version 3
+https://docs.google.com/drawings/d/12KB5Elg4Vqekccte-vcdwBBFBFZfFKEEnCInQPiiFJc/edit
+changelog: added back SiteRatings table, added tables UserBadges & BookRatings, renamed table Readers to Users
+
 Version 2.0
 https://docs.google.com/drawings/d/1h6gPnolzfe2fD1yyGIYVpe3v9ufDcYnSECQ4jbsMwB8/edit
+changelog: added grade level and birthday as field to Readers table, deleted SiteRatings & Levels table, 
 
 version 1.5
 https://docs.google.com/drawings/d/15iNt6NWlAOukDs3qt2TKEa2DKfdDK2oPvtHnxbd30B0/edit
+logging of recommended changes
+
 
 version 1.0
 https://docs.google.com/drawings/d/16MGDdCuesWA8PS12D62PNVqMFY_MD2lrCfp9O8Rj71c/edit
+initial draft
 
