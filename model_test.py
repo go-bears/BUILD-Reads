@@ -21,6 +21,7 @@ class User(db.Model):
 
     __tablename__ = "user"
 
+    # values set to nullable for testing
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(50), nullable=True)
     last_name = db.Column(db.String(50), nullable=True)
@@ -44,11 +45,45 @@ class User(db.Model):
                                                                                  self.password)
 
 
+class Book(db.Model):
+    """Book information table."""
+
+    __tablename__ = "books"
+
+    #values set to nullable for testing
+    book_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    title = db.Column(db.String(150), nullable=False)
+    description = db.Column(db.String(500), nullable=True)
+    isbn = db.Column(db.String(150), nullable=True, unique=True)
+    image_url = db.Column(db.String(150), nullable=True, unique=True)
+    book_type = db.Column(db.String(10), nullable=True)
+
+
+    def __repr__(self):
+        """Show info about book."""
+
+        return "<book_id=%d title=%s description=%s isbn=%s image_url=%s book_type=%s >" % \
+                                                                                (self.book_id, 
+                                                                                 self.title, 
+                                                                                 self.description, 
+                                                                                 self.isbn, 
+                                                                                 self.image_url,
+                                                                                 self.book_type)
+
+
+
+
+
 def connect_to_db(app):
     """Connect the database to our Flask app."""
 
-    # Configure to use our PstgreSQL database
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build-reads'
+    # Configure to use our PstgreSQL database for Hackbright Linux
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///build_reads'
+
+    # config for Cloud9
+    #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build-reads'
+    
+
     db.app = app
     db.init_app(app)
     #postgresql://[[:password][@host][:port]/[database-name]
