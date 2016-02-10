@@ -137,7 +137,21 @@ class Badges(db.Model):
 
 
 class SiteRatings(db.Model):
-    """docstring for SiteRatings" def __init__(self, arg):
-        super(SiteRatings,.__init__()
-        self.arg = arg
-        
+    """Association table for Sites and Ratings"""
+
+    site_id = db.Column(db.Integer, db.ForeignKey('sites.site_id'), nullable=False)
+    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=False)
+
+
+class BookRatings(db.Model):
+    """Association table for Books and Ratings"""
+
+    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=False)
+    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=False)
+
+
+class UserBadges(db.Model):
+    """Association table for Users and Badges"""
+
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
+    badge_id = db.Column(db.Integer, db.ForeignKey('badges.badge_id'), nullable=False)
