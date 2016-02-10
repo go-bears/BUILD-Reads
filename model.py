@@ -16,10 +16,10 @@ db = SQLAlchemy()
 # creating database tables for BUILD-reads: Readers, Books, Mentors as "Sidekicks"
 # Sites, Ratings, Reading_sessions, Badges
 
-class Users(db.Model):
+class User(db.Model):
     """Reader information table."""
 
-    __tablename__ = "readers"
+    __tablename__ = "user"
 
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(50), nullable=False)
@@ -41,10 +41,10 @@ class Users(db.Model):
                                                                                  self.password)
 
 
-class Books(db.Model):
+class Book(db.Model):
     """Book information table."""
 
-    __tablename__ = "books"
+    __tablename__ = "book"
 
     book_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(150), nullable=False)
@@ -66,25 +66,26 @@ class Books(db.Model):
                                                                                  self.book_type)
 
 
-class Reading_sessions(db.Model):
+class Reading_session(db.Model):
     """Book information table."""
 
-    __tablename__ = "reading_sessions"
+    __tablename__ = "reading_session"
 
 
     session_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    date = db.Column(db.Datetime, nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
     time_length = db.Column(db.Integer, nullable=False)
     badges_awarded = db.Column(db.Integer, nullable=False)
     rating_score = db.Column(db.Integer, nullable=False)
     
     # set foreign keys from users and books tables
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=False) 
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.book_id'), nullable=False) 
+    sidekick_id = None #fill this in
 
     # set relationship between Reading_sessions and User & Book classes
-    user_id = db.relationship('Users', backref=db.backref("reading_sessions", order_by=session_id))
-    book_id = db.relationship('Books', backref=db.backref("reading_sessions", order_by=session_id))
+    user = db.relationship('User', backref=db.backref("reading_session", order_by=session_id))
+    book = db.relationship('Book', backref=db.backref("reading_session", order_by=session_id))
 
 
     def __repr__(self):
@@ -100,15 +101,21 @@ class Reading_sessions(db.Model):
                                              self.book_id)
 
 
-class Sidekicks(db.Model):
+class Sidekick(db.Model):
     """Reading Mentors (aka Sidekicks) information table."""
 
-    __tablename__ = "sidekicks"
+    __tablename__ = "sidekick"
 
     sidekick_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(25), nullable=False, unique=True)
+
+    # set foreign keys from user table
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+
+    # set relationship between Reading_sessions and User & Book classes
+    user = db.relationship('User', backref=db.backref("sidekick", order_by=sidekick_id))
 
 
     def __repr__(self):
@@ -120,10 +127,10 @@ class Sidekicks(db.Model):
                                                                              self.password)
 
 
-class Sites(db.Model):
+class Site(db.Model):
     """Reading sites information table."""
 
-    __tablename__ = "sites"
+    __tablename__ = "site"
 
     site_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=False)
@@ -138,21 +145,21 @@ class Sites(db.Model):
                                                       self.location)
 
 
-class Ratings(db.Model):
+class Rating(db.Model):
     """Ratings information table"""
 
-    __tablename__ = "ratings"
+    __tablename__ = "rating"
 
     rating_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     comment = db.Column(db.String(350), nullable=False,)
 
     # set foreign keys from users and books tables
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('book.book_id'), nullable=False)
 
         # set relationship between Ratings with User & Book classes
-    user_id = db.relationship('Users', backref=db.backref("ratings", order_by=rating_id))
-    book_id = db.relationship('Books', backref=db.backref("ratings", order_by=rating_id))
+    user_id = db.relationship('User', backref=db.backref("rating", order_by=rating_id))
+    book_id = db.relationship('Book', backref=db.backref("rating", order_by=rating_id))
 
 
     def __repr__(self):
@@ -163,10 +170,10 @@ class Ratings(db.Model):
                                                                      self.user_id, 
                                                                      self.book_id)
 
-class Badges(db.Model):
+class Badge(db.Model):
     """Badges information table"""
 
-    __tablename__ = "badges"
+    __tablename__ = "badge"
 
     badge_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     description = db.Column(db.String(20), nullable=False,)
@@ -185,13 +192,15 @@ class Badges(db.Model):
 ####################################################################
 # Association Tables
 
-class SiteRatings(db.Model):
+class SiteRating(db.Model):
     """Association table for Sites and Ratings"""
 
-    __tablename__ = "site_ratings"
+    __tablename__ = "site_rating"
 
-    site_id = db.Column(db.Integer, db.ForeignKey('sites.site_id'), nullable=False)
-    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=False)
+    #TODO add primary keys 
+
+    site_id = db.Column(db.Integer, db.ForeignKey('site.site_id'), nullable=False)
+    rating_id = db.Column(db.Integer, db.ForeignKey('rating.rating_id'), nullable=False)
 
 
     def __repr__(self):
@@ -200,11 +209,11 @@ class SiteRatings(db.Model):
         return "<site_id=%d rating_id=%d >" % (self.site_id, self.rating_id)
 
 
-
-class BookRatings(db.Model):
+#TODO add primary keys
+class BookRating(db.Model):
     """Association table for Books and Ratings"""
 
-    __tablename__ = "book_ratings"
+    __tablename__ = "book_rating"
 
     book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=False)
     rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=False)
@@ -215,14 +224,14 @@ class BookRatings(db.Model):
 
         return "<book_id=%d rating_id=%d >" % (self.book_id, self.rating_id)
 
-
-class UserBadges(db.Model):
+#TODO add primary keys
+class UserBadge(db.Model):
     """Association table for Users and Badges"""
 
-    __tablename__ = "user_badges"
+    __tablename__ = "user_badge"
 
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    badge_id = db.Column(db.Integer, db.ForeignKey('badges.badge_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
+    badge_id = db.Column(db.Integer, db.ForeignKey('badge.badge_id'), nullable=False)
 
 
     def __repr__(self):
