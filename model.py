@@ -29,7 +29,10 @@ class User(db.Model):
     password = db.Column(db.String(25), nullable=False, unique=True)
     
     # set site_id foreign key
-    site_id = None
+    site_id = db.Column(db.Integer, db.ForeignKey('site.site_id'), nullable=False)
+    
+    # set seit relationship in database
+    site = db.relationship('User', backref=db.backref("Site", order_by=user))
 
 
     def __repr__(self):
