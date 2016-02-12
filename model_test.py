@@ -16,10 +16,11 @@ db = SQLAlchemy()
 # creating database tables for BUILD-reads: Readers, Books, Mentors as "Sidekicks"
 # Sites, Ratings, Reading_sessions, Badges
 
+# User class adds to build_reads db successfully
 class User(db.Model):
     """Reader information table."""
 
-    __tablename__ = "user"
+    __tablename__ = "users"
 
     # values set to nullable for testing
     user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
@@ -27,24 +28,36 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=True)
     birthday = db.Column(db.Date, nullable=True)
     grade = db.Column(db.Integer, nullable=True)
-    password = db.Column(db.String(25), nullable=True, unique=True)
+    password = db.Column(db.String(25), nullable=True)
     
     # set site_id foreign key
-    site_id = "Berkeley Arts Magnet"
+    #site_id = db.relationship('Site', backref=db.backref("sites", order_by=user_id))
+    
+    # site_id temporarily hardcoded
+    site_id = 1
 
+    
+    def commit_to_db(self):
+        """ add user to build_reads db"""
 
+        db.session.add(self)
+        db.session.commit()
+
+        print "I commited", self.first_name, "to the database"
+        
+        
     def __repr__(self):
         """Show info about reader."""
 
-        return "<user_id=%d first_name=%s last_name=%s birthday=%d grade=%d> password=%s" % \
-                                                                                (self.user_id, 
-                                                                                 self.first_name, 
+        return "<first_name=%s last_name=%s birthday=%s grade=%s site_id=%s password=%s>"\
+                                                                               %(self.first_name, 
                                                                                  self.last_name, 
                                                                                  self.birthday, 
                                                                                  self.grade,
+                                                                                 self.site_id,
                                                                                  self.password)
 
-
+# Book class adds to build_reads db successfully
 class Book(db.Model):
     """Book information table."""
 
@@ -58,13 +71,22 @@ class Book(db.Model):
     image_url = db.Column(db.String(150), nullable=True, unique=True)
     book_type = db.Column(db.String(10), nullable=True)
 
+    
+    def commit_to_db(self):
+        """ add instance of user to build_reads db"""
+
+        db.session.add(self)
+        db.session.commit()
+
+        print "I commited", self.title, "to the database"
+        
+
 
     def __repr__(self):
         """Show info about book."""
 
-        return "<book_id=%d title=%s description=%s isbn=%s image_url=%s book_type=%s >" % \
-                                                                                (self.book_id, 
-                                                                                 self.title, 
+        return "<title=%s description=%s isbn=%s image_url=%s book_type=%s >"\
+                                                                               %(self.title, 
                                                                                  self.description, 
                                                                                  self.isbn, 
                                                                                  self.image_url,
@@ -72,6 +94,7 @@ class Book(db.Model):
 
 
 
+        
 
 
 def connect_to_db(app):
