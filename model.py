@@ -94,6 +94,46 @@ class Book(db.Model):
                                                                                  self.book_type)
 
 
+class Sidekick(db.Model):
+    """Reading Mentors (aka Sidekicks) information table."""
+
+    __tablename__ = "sidekicks"
+
+    sidekick_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    first_name = db.Column(db.String(50), nullable=True)
+    last_name = db.Column(db.String(50), nullable=True)
+    password = db.Column(db.String(25), nullable=True)
+
+    # set foreign keys from user table
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
+
+    # set relationship between Reading_sessions and User & Book classes
+    user = db.relationship('User', backref=db.backref("sidekicks", order_by=sidekick_id))
+
+
+    def __repr__(self):
+        """Show info about sidekick."""
+
+        return "<first_name=%s last_name=%s password=%s >" % (self.first_name, 
+                                                              self.last_name,
+                                                              self.password)
+
+class Site(db.Model):
+    """Reading sites information table."""
+
+    __tablename__ = "sites"
+
+    site_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    name = db.Column(db.String(50), nullable=True)
+    location = db.Column(db.String(50), nullable=True)
+
+
+    def __repr__(self):
+        """Show info about site."""
+
+        return "<name=%s location=%s >" % (self.name, self.location)
+
+
 class Reading_session(db.Model):
     """Book information table."""
 
@@ -130,45 +170,8 @@ class Reading_session(db.Model):
                                              self.book_id)
 
 
-class Sidekick(db.Model):
-    """Reading Mentors (aka Sidekicks) information table."""
-
-    __tablename__ = "Sidekicks"
-
-    sidekick_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    first_name = db.Column(db.String(50), nullable=True)
-    last_name = db.Column(db.String(50), nullable=True)
-    password = db.Column(db.String(25), nullable=True, unique=True)
-
-    # set foreign keys from user table
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
-
-    # set relationship between Reading_sessions and User & Book classes
-    user = db.relationship('User', backref=db.backref("sidekicks", order_by=sidekick_id))
 
 
-    def __repr__(self):
-        """Show info about sidekick."""
-
-        return "<first_name=%s last_name=%s password=%s >" % (self.first_name, 
-                                                              self.last_name, 
-                                                              self.password)
-
-
-class Site(db.Model):
-    """Reading sites information table."""
-
-    __tablename__ = "sites"
-
-    site_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    name = db.Column(db.String(50), nullable=True)
-    location = db.Column(db.String(50), nullable=True)
-
-
-    def __repr__(self):
-        """Show info about site."""
-
-        return "<name=%s location=%s >" % (self.name, self.location)
 
 
 class Rating(db.Model):
@@ -216,38 +219,38 @@ class Badge(db.Model):
 # ####################################################################
 # # Association Tables
 
-# class SiteRating(db.Model):
-#     """Association table for Sites and Ratings"""
+class SiteRating(db.Model):
+    """Association table for Sites and Ratings"""
 
-#     __tablename__ = "site_rating"
+    __tablename__ = "site_rating"
 
-#     # TODO add primary keys 
-#     SiteRating = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     site_id = db.Column(db.Integer, db.ForeignKey('site.site_id'), nullable=False)
-#     rating_id = db.Column(db.Integer, db.ForeignKey('rating.rating_id'), nullable=False)
-
-
-#     def __repr__(self):
-#         """Show info about site_rating."""
-
-#         return "<site_id=%d rating_id=%d >" % (self.site_id, self.rating_id)
+    # TODO add primary keys 
+    SiteRating = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    site_id = db.Column(db.Integer, db.ForeignKey('sites.site_id'), nullable=False)
+    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=False)
 
 
+    def __repr__(self):
+        """Show info about site_rating."""
 
-# class BookRating(db.Model):
-#     """Association table for Books and Ratings"""
-
-#     __tablename__ = "book_rating"
-
-#     BookRating = db.Column(db.Integer, primary_key=True, autoincrement=True)
-#     book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=False)
-#     rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=False)
+        return "<site_id=%d rating_id=%d >" % (self.site_id, self.rating_id)
 
 
-#     def __repr__(self):
-#         """Show info about book_rating."""
 
-#         return "<book_id=%d rating_id=%d >" % (self.book_id, self.rating_id)
+class BookRating(db.Model):
+    """Association table for Books and Ratings"""
+
+    __tablename__ = "book_rating"
+
+    BookRating = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=False)
+    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=False)
+
+
+    def __repr__(self):
+        """Show info about book_rating."""
+        
+        return "<book_id=%d rating_id=%d >" % (self.book_id, self.rating_id)
 
 
 class UserBadge(db.Model):
@@ -257,8 +260,7 @@ class UserBadge(db.Model):
 
     UserBadge = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.user_id'), nullable=False)
-    badge_id = db.Column(db.Integer, db.ForeignKey('badge.badge_id'), nullable=False)
-
+   
 
     def __repr__(self):
         """Show info about user_rating."""
@@ -286,4 +288,8 @@ if __name__ == "__main__":
 
     from server import app
     connect_to_db(app)
+
+    # create tables 
+    db.create_all()
+
     print "Connected to DB."
