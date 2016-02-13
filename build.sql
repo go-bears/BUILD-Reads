@@ -487,6 +487,7 @@ SELECT pg_catalog.setval('"book_rating_BookRating_seq"', 1, false);
 --
 
 COPY books (book_id, title, description, isbn, image_url, book_type) FROM stdin;
+1	stuart little	mouse gets car	09090909	wwww.ack.com	c
 \.
 
 
@@ -502,6 +503,7 @@ SELECT pg_catalog.setval('books_book_id_seq', 1, false);
 --
 
 COPY ratings (rating_id, comment, user_id, book_id) FROM stdin;
+1	sad chapter	1	1
 \.
 
 
@@ -509,7 +511,7 @@ COPY ratings (rating_id, comment, user_id, book_id) FROM stdin;
 -- Name: ratings_rating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('ratings_rating_id_seq', 1, false);
+SELECT pg_catalog.setval('ratings_rating_id_seq', 4, true);
 
 
 --
@@ -567,6 +569,7 @@ SELECT pg_catalog.setval('"site_rating_SiteRating_seq"', 1, false);
 --
 
 COPY sites (site_id, name, location) FROM stdin;
+1	berkeley arts magnet	berkeley
 \.
 
 
@@ -597,6 +600,7 @@ SELECT pg_catalog.setval('"user_badge_UserBadge_seq"', 1, false);
 --
 
 COPY users (user_id, first_name, last_name, birthday, grade, password) FROM stdin;
+1	meggie	mittens	2004-01-01	\N	\N
 \.
 
 
@@ -604,7 +608,7 @@ COPY users (user_id, first_name, last_name, birthday, grade, password) FROM stdi
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
 --
 
-SELECT pg_catalog.setval('users_user_id_seq', 1, false);
+SELECT pg_catalog.setval('users_user_id_seq', 1, true);
 
 
 --

@@ -27,11 +27,15 @@ def index():
     ratings_list = Rating.query.all()
     print ratings_list
 
+    badges = Badge.query.all()
+    print badges
+
 
     msg = "we are the users", user_list, "<br> we are the books", book_list,\
             "<br> We are the sessions", session_list,\
             "<br> We are the sidekicks", sidekicks_list,\
-            "We are ratings_list", ratings_list
+            "We are ratings_list", ratings_list,\
+            "we are badges list", badges
 
     return render_template("index.html", msg=msg)
 
