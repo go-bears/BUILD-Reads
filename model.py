@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from datetime import date
 
 # This is the connection to the SQLite database; we're getting this
 # through the Flask-SQLAlchemy helper library. On this, we can find
@@ -66,7 +66,7 @@ class Book(db.Model):
 
     #values set to nullable for testing
     book_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    title = db.Column(db.String(150), nullable=False)
+    title = db.Column(db.String(150), nullable=True)
     description = db.Column(db.String(500), nullable=True)
     isbn = db.Column(db.String(150), nullable=True, unique=True)
     image_url = db.Column(db.String(150), nullable=True, unique=True)
@@ -111,6 +111,15 @@ class Sidekick(db.Model):
     user = db.relationship('User', backref=db.backref("sidekicks", order_by=sidekick_id))
 
 
+    def commit_to_db(self):
+        """ add instance of user to build_reads db"""
+
+        db.session.add(self)
+        db.session.commit()
+
+        print "I commited the sidekick", self.first_name, "to the database"
+
+
     def __repr__(self):
         """Show info about sidekick."""
 
@@ -127,6 +136,14 @@ class Site(db.Model):
     name = db.Column(db.String(50), nullable=True)
     location = db.Column(db.String(50), nullable=True)
 
+
+    def commit_to_db(self):
+        """ add instance of user to build_reads db"""
+
+        db.session.add(self)
+        db.session.commit()
+
+        print "I commited the sidekick", self.name, "to the database"
 
     def __repr__(self):
         """Show info about site."""
@@ -158,6 +175,14 @@ class Reading_session(db.Model):
 
 
 
+    def commit_to_db(self):
+        """ add instance of user to build_reads db"""
+
+        db.session.add(self)
+        db.session.commit()
+
+        print "I commited the session at", self.date, "with", self.badges_awarded, "badges to the database"
+
     def __repr__(self):
         """Show info about reading_session."""
 
@@ -183,12 +208,23 @@ class Rating(db.Model):
     comment = db.Column(db.String(350), nullable=True,)
 
     # set foreign keys from users and books tables
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=True)
+    rating_score = db.Column(db.Integer, db.ForeignKey('reading_sessions.rating_score'), nullable=True) #((, nullable=False) db.Column(db.Integer, nullable=True)
 
     # set relationship between Ratings with User & Book classes
     user = db.relationship('User', backref=db.backref("ratings", order_by=rating_id))
     book = db.relationship('Book', backref=db.backref("ratings", order_by=rating_id))
+    rating_score = db.relationship('Reading_sessions', backref=db.backref("ratings, order_by=rating_id"))
+
+
+    def commit_to_db(self):
+        """ add instance of Rating to build_reads db"""
+
+        db.session.add(self)
+        db.session.commit()
+
+        print "I commited the rating", self.rating_score, "with comment", self.comment, "to the database"
 
 
     def __repr__(self):
@@ -209,6 +245,14 @@ class Badge(db.Model):
     image_url = db.Column(db.String(150), nullable=True, unique=True)
 
 
+    def commit_to_db(self):
+        """ add instance of Rating to build_reads db"""
+
+        db.session.add(self)
+        db.session.commit()
+
+        print "I commited the badge", self.description, "to the database"
+
     def __repr__(self):
         """Show info about rating."""
 
@@ -226,8 +270,8 @@ class SiteRating(db.Model):
 
     # TODO add primary keys 
     SiteRating = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    site_id = db.Column(db.Integer, db.ForeignKey('sites.site_id'), nullable=False)
-    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=False)
+    site_id = db.Column(db.Integer, db.ForeignKey('sites.site_id'), nullable=True)
+    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=True)
 
 
     def __repr__(self):
@@ -243,8 +287,8 @@ class BookRating(db.Model):
     __tablename__ = "book_rating"
 
     BookRating = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=False)
-    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=False)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=True)
+    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=True)
 
 
     def __repr__(self):
