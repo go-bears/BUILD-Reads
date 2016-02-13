@@ -102,7 +102,7 @@ class Reading_session(db.Model):
     session_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     # error: column "date" is of type timestamp without time zone but expression is of type integer
-    #date = db.Column(db.Date, nullable=True)
+    date = db.Column(db.Date, nullable=True)
     
     time_length = db.Column(db.Integer, nullable=True)
     badges_awarded = db.Column(db.Integer, nullable=True)
@@ -133,13 +133,9 @@ class Reading_session(db.Model):
     def __repr__(self):
         """Show info about reading_session."""
 
-        return "time_length =%s badges_awarded=%s rating_score=%s \
-                user_id=%d book_id=%d >" %  (#self.date, 
-                                             self.time_length, 
-                                             self.badges_awarded, 
-                                             self.rating_score,
-                                             self.user_id,
-                                             self.book_id)
+        return "time_length =%s badges_awarded=%s rating_score=%s" %(self.time_length, 
+                                                                     self.badges_awarded, 
+                                                                     self.rating_score)
 
 
 
@@ -187,8 +183,8 @@ class Rating(db.Model):
     comment = db.Column(db.String(350), nullable=True,)
 
     # set foreign keys from users and books tables
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
-    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
+    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=True)
 
     # set relationship between Ratings with User & Book classes
     user = db.relationship('User', backref=db.backref("ratings", order_by=rating_id))
@@ -196,21 +192,18 @@ class Rating(db.Model):
 
 
     def commit_to_db(self):
-        """ add instance of user to build_reads db"""
+        """ add instance of Rating to build_reads db"""
 
         db.session.add(self)
         db.session.commit()
 
-        print "I commited", self.first_name, "to the database"
+        print "I commited", self.comment, "to the database"
 
 
     def __repr__(self):
         """Show info about rating."""
 
-        return "<rating_id=%d comment=%s user_id=%d book_id=%d >" % (self.rating_id, 
-                                                                     self.comment, 
-                                                                     self.user_id, 
-                                                                     self.book_id)
+        return "<comment=%s >" % (self.comment)
 
 
 class Badge(db.Model):

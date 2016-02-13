@@ -18,8 +18,20 @@ def index():
     book_list = Book.query.all()
     print book_list
 
+    session_list = Reading_session.query.all()
+    print session_list
 
-    msg = "we are the users", user_list, "we are the books", book_list
+    sidekicks_list = Sidekick.query.all()
+    print sidekicks_list
+
+    ratings_list = Rating.query.all()
+    print ratings_list
+
+
+    msg = "we are the users", user_list, "<br> we are the books", book_list,\
+            "<br> We are the sessions", session_list,\
+            "<br> We are the sidekicks", sidekicks_list,\
+            "We are ratings_list", ratings_list
 
     return render_template("index.html", msg=msg)
 
