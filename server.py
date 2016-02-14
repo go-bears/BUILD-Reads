@@ -1,13 +1,25 @@
 # import statment for running on cloud 9
-#import os 
+import os 
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, request, flash, session
+from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
+from jinja2 import StrictUndefined
 
-from model_test import *
+from model import *
 
 app = Flask(__name__)
 #db = SQLAlchemy(app)
+
+# Required to use Flask sessions and the debug toolbar
+app.secret_key = "ABC"
+
+# Normally, if you use an undefined variable in Jinja2, it fails silently.
+# This is horrible. Fix this so that, instead, it raises an error.
+app.jinja_env.undefined = StrictUndefined
+
+
+
 
 @app.route('/')
 def index():
@@ -31,22 +43,35 @@ def index():
     print badges
 
 
-    msg = "we are the users", user_list, "<br> we are the books", book_list,\
-            "<br> We are the sessions", session_list,\
-            "<br> We are the sidekicks", sidekicks_list,\
+    msg = "we are the users", user_list, "we are the books", book_list,\
+            "We are the sessions", session_list,\
+            "We are the sidekicks", sidekicks_list,\
             "We are ratings_list", ratings_list,\
             "we are badges list", badges
 
     return render_template("index.html", msg=msg)
 
 
+@app.route("/new_user")
+def new_user_form():
+    """Displays user login form."""
+
+    
+    return render_template("new_reader.html")
+
+
+@app.route('/new_user_completion', methods=['POST'])
+def new_user_completion():
+    """ User registration new user's first_name, last_name, birthday, school"""
+
+    pass
 
 if __name__ == "__main__":
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     connect_to_db(app)
-    app.run(debug=True)
+    # app.run(debug=True)
 
     
 
     # app config for Cloud9
-    # app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
+    app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))

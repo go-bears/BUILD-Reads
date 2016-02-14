@@ -4,7 +4,7 @@
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
-SET client_encoding = 'UTF8';
+SET client_encoding = 'SQL_ASCII';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
@@ -30,20 +30,19 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: badges; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: badges; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE badges (
     badge_id integer NOT NULL,
-    description character varying(50),
-    image_url character varying(150)
+    data json
 );
 
 
-ALTER TABLE public.badges OWNER TO "user";
+ALTER TABLE public.badges OWNER TO postgres;
 
 --
--- Name: badges_badge_id_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: badges_badge_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE badges_badge_id_seq
@@ -54,30 +53,30 @@ CREATE SEQUENCE badges_badge_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.badges_badge_id_seq OWNER TO "user";
+ALTER TABLE public.badges_badge_id_seq OWNER TO postgres;
 
 --
--- Name: badges_badge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: badges_badge_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE badges_badge_id_seq OWNED BY badges.badge_id;
 
 
 --
--- Name: book_rating; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: book_rating; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE book_rating (
     "BookRating" integer NOT NULL,
-    book_id integer NOT NULL,
-    rating_id integer NOT NULL
+    book_id integer,
+    rating_id integer
 );
 
 
-ALTER TABLE public.book_rating OWNER TO "user";
+ALTER TABLE public.book_rating OWNER TO postgres;
 
 --
--- Name: book_rating_BookRating_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: book_rating_BookRating_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE "book_rating_BookRating_seq"
@@ -88,22 +87,22 @@ CREATE SEQUENCE "book_rating_BookRating_seq"
     CACHE 1;
 
 
-ALTER TABLE public."book_rating_BookRating_seq" OWNER TO "user";
+ALTER TABLE public."book_rating_BookRating_seq" OWNER TO postgres;
 
 --
--- Name: book_rating_BookRating_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: book_rating_BookRating_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE "book_rating_BookRating_seq" OWNED BY book_rating."BookRating";
 
 
 --
--- Name: books; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: books; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE books (
     book_id integer NOT NULL,
-    title character varying(150) NOT NULL,
+    title character varying(150),
     description character varying(500),
     isbn character varying(150),
     image_url character varying(150),
@@ -111,10 +110,10 @@ CREATE TABLE books (
 );
 
 
-ALTER TABLE public.books OWNER TO "user";
+ALTER TABLE public.books OWNER TO postgres;
 
 --
--- Name: books_book_id_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: books_book_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE books_book_id_seq
@@ -125,31 +124,32 @@ CREATE SEQUENCE books_book_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.books_book_id_seq OWNER TO "user";
+ALTER TABLE public.books_book_id_seq OWNER TO postgres;
 
 --
--- Name: books_book_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: books_book_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE books_book_id_seq OWNED BY books.book_id;
 
 
 --
--- Name: ratings; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: ratings; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE ratings (
     rating_id integer NOT NULL,
     comment character varying(350),
-    user_id integer NOT NULL,
-    book_id integer NOT NULL
+    user_id integer,
+    book_id integer,
+    rating_score integer
 );
 
 
-ALTER TABLE public.ratings OWNER TO "user";
+ALTER TABLE public.ratings OWNER TO postgres;
 
 --
--- Name: ratings_rating_id_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: ratings_rating_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE ratings_rating_id_seq
@@ -160,17 +160,17 @@ CREATE SEQUENCE ratings_rating_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.ratings_rating_id_seq OWNER TO "user";
+ALTER TABLE public.ratings_rating_id_seq OWNER TO postgres;
 
 --
--- Name: ratings_rating_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: ratings_rating_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE ratings_rating_id_seq OWNED BY ratings.rating_id;
 
 
 --
--- Name: reading_sessions; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: reading_sessions; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE reading_sessions (
@@ -185,10 +185,10 @@ CREATE TABLE reading_sessions (
 );
 
 
-ALTER TABLE public.reading_sessions OWNER TO "user";
+ALTER TABLE public.reading_sessions OWNER TO postgres;
 
 --
--- Name: reading_sessions_session_id_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: reading_sessions_session_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE reading_sessions_session_id_seq
@@ -199,17 +199,17 @@ CREATE SEQUENCE reading_sessions_session_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.reading_sessions_session_id_seq OWNER TO "user";
+ALTER TABLE public.reading_sessions_session_id_seq OWNER TO postgres;
 
 --
--- Name: reading_sessions_session_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: reading_sessions_session_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE reading_sessions_session_id_seq OWNED BY reading_sessions.session_id;
 
 
 --
--- Name: sidekicks; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: sidekicks; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE sidekicks (
@@ -221,10 +221,10 @@ CREATE TABLE sidekicks (
 );
 
 
-ALTER TABLE public.sidekicks OWNER TO "user";
+ALTER TABLE public.sidekicks OWNER TO postgres;
 
 --
--- Name: sidekicks_sidekick_id_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: sidekicks_sidekick_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE sidekicks_sidekick_id_seq
@@ -235,30 +235,30 @@ CREATE SEQUENCE sidekicks_sidekick_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sidekicks_sidekick_id_seq OWNER TO "user";
+ALTER TABLE public.sidekicks_sidekick_id_seq OWNER TO postgres;
 
 --
--- Name: sidekicks_sidekick_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: sidekicks_sidekick_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE sidekicks_sidekick_id_seq OWNED BY sidekicks.sidekick_id;
 
 
 --
--- Name: site_rating; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: site_rating; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE site_rating (
     "SiteRating" integer NOT NULL,
-    site_id integer NOT NULL,
-    rating_id integer NOT NULL
+    site_id integer,
+    rating_id integer
 );
 
 
-ALTER TABLE public.site_rating OWNER TO "user";
+ALTER TABLE public.site_rating OWNER TO postgres;
 
 --
--- Name: site_rating_SiteRating_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: site_rating_SiteRating_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE "site_rating_SiteRating_seq"
@@ -269,17 +269,17 @@ CREATE SEQUENCE "site_rating_SiteRating_seq"
     CACHE 1;
 
 
-ALTER TABLE public."site_rating_SiteRating_seq" OWNER TO "user";
+ALTER TABLE public."site_rating_SiteRating_seq" OWNER TO postgres;
 
 --
--- Name: site_rating_SiteRating_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: site_rating_SiteRating_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE "site_rating_SiteRating_seq" OWNED BY site_rating."SiteRating";
 
 
 --
--- Name: sites; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: sites; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE sites (
@@ -289,10 +289,10 @@ CREATE TABLE sites (
 );
 
 
-ALTER TABLE public.sites OWNER TO "user";
+ALTER TABLE public.sites OWNER TO postgres;
 
 --
--- Name: sites_site_id_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: sites_site_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE sites_site_id_seq
@@ -303,28 +303,29 @@ CREATE SEQUENCE sites_site_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.sites_site_id_seq OWNER TO "user";
+ALTER TABLE public.sites_site_id_seq OWNER TO postgres;
 
 --
--- Name: sites_site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: sites_site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE sites_site_id_seq OWNED BY sites.site_id;
 
 
 --
--- Name: user_badge; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: user_badge; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE user_badge (
-    "UserBadge" integer NOT NULL
+    "UserBadge" integer NOT NULL,
+    user_id integer
 );
 
 
-ALTER TABLE public.user_badge OWNER TO "user";
+ALTER TABLE public.user_badge OWNER TO postgres;
 
 --
--- Name: user_badge_UserBadge_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: user_badge_UserBadge_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE "user_badge_UserBadge_seq"
@@ -335,17 +336,17 @@ CREATE SEQUENCE "user_badge_UserBadge_seq"
     CACHE 1;
 
 
-ALTER TABLE public."user_badge_UserBadge_seq" OWNER TO "user";
+ALTER TABLE public."user_badge_UserBadge_seq" OWNER TO postgres;
 
 --
--- Name: user_badge_UserBadge_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: user_badge_UserBadge_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE "user_badge_UserBadge_seq" OWNED BY user_badge."UserBadge";
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: user; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
 --
 
 CREATE TABLE users (
@@ -354,14 +355,15 @@ CREATE TABLE users (
     last_name character varying(50),
     birthday date,
     grade integer,
-    password character varying(25)
+    password character varying(25),
+    site_id integer
 );
 
 
-ALTER TABLE public.users OWNER TO "user";
+ALTER TABLE public.users OWNER TO postgres;
 
 --
--- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: user
+-- Name: users_user_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
 CREATE SEQUENCE users_user_id_seq
@@ -372,103 +374,102 @@ CREATE SEQUENCE users_user_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.users_user_id_seq OWNER TO "user";
+ALTER TABLE public.users_user_id_seq OWNER TO postgres;
 
 --
--- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: user
+-- Name: users_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
 ALTER SEQUENCE users_user_id_seq OWNED BY users.user_id;
 
 
 --
--- Name: badge_id; Type: DEFAULT; Schema: public; Owner: user
+-- Name: badge_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY badges ALTER COLUMN badge_id SET DEFAULT nextval('badges_badge_id_seq'::regclass);
 
 
 --
--- Name: BookRating; Type: DEFAULT; Schema: public; Owner: user
+-- Name: BookRating; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY book_rating ALTER COLUMN "BookRating" SET DEFAULT nextval('"book_rating_BookRating_seq"'::regclass);
 
 
 --
--- Name: book_id; Type: DEFAULT; Schema: public; Owner: user
+-- Name: book_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY books ALTER COLUMN book_id SET DEFAULT nextval('books_book_id_seq'::regclass);
 
 
 --
--- Name: rating_id; Type: DEFAULT; Schema: public; Owner: user
+-- Name: rating_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ratings ALTER COLUMN rating_id SET DEFAULT nextval('ratings_rating_id_seq'::regclass);
 
 
 --
--- Name: session_id; Type: DEFAULT; Schema: public; Owner: user
+-- Name: session_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reading_sessions ALTER COLUMN session_id SET DEFAULT nextval('reading_sessions_session_id_seq'::regclass);
 
 
 --
--- Name: sidekick_id; Type: DEFAULT; Schema: public; Owner: user
+-- Name: sidekick_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY sidekicks ALTER COLUMN sidekick_id SET DEFAULT nextval('sidekicks_sidekick_id_seq'::regclass);
 
 
 --
--- Name: SiteRating; Type: DEFAULT; Schema: public; Owner: user
+-- Name: SiteRating; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY site_rating ALTER COLUMN "SiteRating" SET DEFAULT nextval('"site_rating_SiteRating_seq"'::regclass);
 
 
 --
--- Name: site_id; Type: DEFAULT; Schema: public; Owner: user
+-- Name: site_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY sites ALTER COLUMN site_id SET DEFAULT nextval('sites_site_id_seq'::regclass);
 
 
 --
--- Name: UserBadge; Type: DEFAULT; Schema: public; Owner: user
+-- Name: UserBadge; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY user_badge ALTER COLUMN "UserBadge" SET DEFAULT nextval('"user_badge_UserBadge_seq"'::regclass);
 
 
 --
--- Name: user_id; Type: DEFAULT; Schema: public; Owner: user
+-- Name: user_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_seq'::regclass);
 
 
 --
--- Data for Name: badges; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: badges; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY badges (badge_id, description, image_url) FROM stdin;
-1	You read for 20 min! Congrats!	\N
+COPY badges (badge_id, data) FROM stdin;
 \.
 
 
 --
--- Name: badges_badge_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: badges_badge_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('badges_badge_id_seq', 1, true);
+SELECT pg_catalog.setval('badges_badge_id_seq', 1, false);
 
 
 --
--- Data for Name: book_rating; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: book_rating; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY book_rating ("BookRating", book_id, rating_id) FROM stdin;
@@ -476,81 +477,89 @@ COPY book_rating ("BookRating", book_id, rating_id) FROM stdin;
 
 
 --
--- Name: book_rating_BookRating_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: book_rating_BookRating_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('"book_rating_BookRating_seq"', 1, false);
 
 
 --
--- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: books; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY books (book_id, title, description, isbn, image_url, book_type) FROM stdin;
-1	stuart little	mouse gets car	09090909	wwww.ack.com	c
+1	Stuart Little	mouse and car	64410927	www.bookpix1.com	c
+2	Charlotte's web	girl and pig	64400557	www.bookpix2.com	c
+3	Harry Potter and the Sorcerer's Stone	boy and owl	1781100489	www.bookpix.com3	c
+4	Richard Scarry's Best Little Board Book Ever	talking animals	449819019	www.bookpix.com4	p
+5	Little Miss Litterbug	don't litter	1438925190	www.bookpix.com5	p
+6	Little Miss Splendid	happy happy	698177266	www.bookpix.com6	p
 \.
 
 
 --
--- Name: books_book_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: books_book_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('books_book_id_seq', 1, false);
 
 
 --
--- Data for Name: ratings; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: ratings; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY ratings (rating_id, comment, user_id, book_id) FROM stdin;
-1	sad chapter	1	1
+COPY ratings (rating_id, comment, user_id, book_id, rating_score) FROM stdin;
+1	"good story!"	1	1	\N
+2	"love wilbur"	2	2	\N
 \.
 
 
 --
--- Name: ratings_rating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: ratings_rating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('ratings_rating_id_seq', 4, true);
+SELECT pg_catalog.setval('ratings_rating_id_seq', 1, false);
 
 
 --
--- Data for Name: reading_sessions; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: reading_sessions; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY reading_sessions (session_id, date, time_length, badges_awarded, rating_score, user_id, book_id, sidekick_id) FROM stdin;
-1	\N	20	\N	4	\N	\N	\N
-2	\N	20	\N	4	\N	\N	\N
-3	\N	20	\N	4	\N	\N	\N
-4	\N	20	\N	4	\N	\N	\N
+1	2014-01-01 00:00:00	30	2	5	1	1	1
+2	2014-02-01 00:00:00	15	1	5	2	3	2
+3	2014-03-01 00:00:00	40	3	5	3	2	3
 \.
 
 
 --
--- Name: reading_sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: reading_sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('reading_sessions_session_id_seq', 4, true);
+SELECT pg_catalog.setval('reading_sessions_session_id_seq', 1, false);
 
 
 --
--- Data for Name: sidekicks; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: sidekicks; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY sidekicks (sidekick_id, first_name, last_name, password, user_id) FROM stdin;
-1	melissa	F	\N	\N
+1	victoria	cendejas	password	1
+2	melissa	f	password	2
+3	elizabeth	o	password	3
+4	matt	m	password	4
 \.
 
 
 --
--- Name: sidekicks_sidekick_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: sidekicks_sidekick_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('sidekicks_sidekick_id_seq', 1, true);
+SELECT pg_catalog.setval('sidekicks_sidekick_id_seq', 1, false);
 
 
 --
--- Data for Name: site_rating; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: site_rating; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY site_rating ("SiteRating", site_id, rating_id) FROM stdin;
@@ -558,69 +567,86 @@ COPY site_rating ("SiteRating", site_id, rating_id) FROM stdin;
 
 
 --
--- Name: site_rating_SiteRating_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: site_rating_SiteRating_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('"site_rating_SiteRating_seq"', 1, false);
 
 
 --
--- Data for Name: sites; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: sites; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
 COPY sites (site_id, name, location) FROM stdin;
-1	berkeley arts magnet	berkeley
+1	Berkeley Arts Magnet	Berkeley
+2	Cragmont Elementary	Berkeley
+3	Emerson Elementary, Berkeley	Berkeley
+4	Jefferson Elementary	Berkeley
+5	John Muir Elementary	Berkeley
+6	LeConte Elementary School	Berkeley
+7	Malcolm X Elementary School	Berkeley
+8	Oxford Elementary	Berkeley
+9	Rosa Parks 	Berkeley
+10	Thousand Oaks	Berkeley
+11	Washington Elementary	Berkeley
+12	Bahia School Age Program	Berkeley
+13	Berkeley Maynard Academy	Berkeley
+14	Berkeley Youth Alternatives	Berkeley
+15	Emerson Elementary	Oakland
+16	Lafayette Elementary	Oakland
+17	Think College Now	Oakland
+18	James Kenney Recreation Center	Berkeley
+19	Martin Luther King, Jr. Elementary School	Oakland
+20	Sankofa	Oakland
+21	Young Adult Project	Berkeley
 \.
 
 
 --
--- Name: sites_site_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: sites_site_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('sites_site_id_seq', 1, false);
 
 
 --
--- Data for Name: user_badge; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: user_badge; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY user_badge ("UserBadge") FROM stdin;
+COPY user_badge ("UserBadge", user_id) FROM stdin;
 \.
 
 
 --
--- Name: user_badge_UserBadge_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: user_badge_UserBadge_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
 SELECT pg_catalog.setval('"user_badge_UserBadge_seq"', 1, false);
 
 
 --
--- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: user
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY users (user_id, first_name, last_name, birthday, grade, password) FROM stdin;
-1	meggie	mittens	2004-01-01	\N	\N
+COPY users (user_id, first_name, last_name, birthday, grade, password, site_id) FROM stdin;
+1	daniel	tiger	2003-01-01	7	password	\N
+2	meggie	mittens	2004-01-01	6	password	\N
+3	lilly	kitty	2005-01-01	5	password	\N
+4	auden	burton	2006-01-01	4	password	\N
+5	ezra	burton	2007-01-01	3	password	\N
+6	ammy	keung	2008-01-01	2	password	\N
 \.
 
 
 --
--- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: user
+-- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('users_user_id_seq', 1, true);
-
-
---
--- Name: badges_image_url_key; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
---
-
-ALTER TABLE ONLY badges
-    ADD CONSTRAINT badges_image_url_key UNIQUE (image_url);
+SELECT pg_catalog.setval('users_user_id_seq', 1, false);
 
 
 --
--- Name: badges_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: badges_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY badges
@@ -628,7 +654,7 @@ ALTER TABLE ONLY badges
 
 
 --
--- Name: book_rating_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: book_rating_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY book_rating
@@ -636,7 +662,7 @@ ALTER TABLE ONLY book_rating
 
 
 --
--- Name: books_image_url_key; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: books_image_url_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY books
@@ -644,7 +670,7 @@ ALTER TABLE ONLY books
 
 
 --
--- Name: books_isbn_key; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: books_isbn_key; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY books
@@ -652,7 +678,7 @@ ALTER TABLE ONLY books
 
 
 --
--- Name: books_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: books_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY books
@@ -660,7 +686,7 @@ ALTER TABLE ONLY books
 
 
 --
--- Name: ratings_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: ratings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY ratings
@@ -668,7 +694,7 @@ ALTER TABLE ONLY ratings
 
 
 --
--- Name: reading_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: reading_sessions_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY reading_sessions
@@ -676,15 +702,7 @@ ALTER TABLE ONLY reading_sessions
 
 
 --
--- Name: sidekicks_password_key; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
---
-
-ALTER TABLE ONLY sidekicks
-    ADD CONSTRAINT sidekicks_password_key UNIQUE (password);
-
-
---
--- Name: sidekicks_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: sidekicks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY sidekicks
@@ -692,7 +710,7 @@ ALTER TABLE ONLY sidekicks
 
 
 --
--- Name: site_rating_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: site_rating_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY site_rating
@@ -700,7 +718,7 @@ ALTER TABLE ONLY site_rating
 
 
 --
--- Name: sites_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: sites_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY sites
@@ -708,7 +726,7 @@ ALTER TABLE ONLY sites
 
 
 --
--- Name: user_badge_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: user_badge_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY user_badge
@@ -716,7 +734,7 @@ ALTER TABLE ONLY user_badge
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: user; Tablespace: 
+-- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
 --
 
 ALTER TABLE ONLY users
@@ -724,7 +742,7 @@ ALTER TABLE ONLY users
 
 
 --
--- Name: book_rating_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: book_rating_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY book_rating
@@ -732,7 +750,7 @@ ALTER TABLE ONLY book_rating
 
 
 --
--- Name: book_rating_rating_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: book_rating_rating_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY book_rating
@@ -740,7 +758,7 @@ ALTER TABLE ONLY book_rating
 
 
 --
--- Name: ratings_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: ratings_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ratings
@@ -748,7 +766,15 @@ ALTER TABLE ONLY ratings
 
 
 --
--- Name: ratings_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: ratings_rating_score_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY ratings
+    ADD CONSTRAINT ratings_rating_score_fkey FOREIGN KEY (rating_score) REFERENCES reading_sessions(session_id);
+
+
+--
+-- Name: ratings_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ratings
@@ -756,7 +782,7 @@ ALTER TABLE ONLY ratings
 
 
 --
--- Name: reading_sessions_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: reading_sessions_book_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reading_sessions
@@ -764,7 +790,7 @@ ALTER TABLE ONLY reading_sessions
 
 
 --
--- Name: reading_sessions_sidekick_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: reading_sessions_sidekick_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reading_sessions
@@ -772,7 +798,7 @@ ALTER TABLE ONLY reading_sessions
 
 
 --
--- Name: reading_sessions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: reading_sessions_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY reading_sessions
@@ -780,7 +806,7 @@ ALTER TABLE ONLY reading_sessions
 
 
 --
--- Name: sidekicks_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: sidekicks_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY sidekicks
@@ -788,7 +814,7 @@ ALTER TABLE ONLY sidekicks
 
 
 --
--- Name: site_rating_rating_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: site_rating_rating_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY site_rating
@@ -796,11 +822,27 @@ ALTER TABLE ONLY site_rating
 
 
 --
--- Name: site_rating_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: user
+-- Name: site_rating_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY site_rating
     ADD CONSTRAINT site_rating_site_id_fkey FOREIGN KEY (site_id) REFERENCES sites(site_id);
+
+
+--
+-- Name: user_badge_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY user_badge
+    ADD CONSTRAINT user_badge_user_id_fkey FOREIGN KEY (user_id) REFERENCES users(user_id);
+
+
+--
+-- Name: users_site_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_site_id_fkey FOREIGN KEY (site_id) REFERENCES sites(site_id);
 
 
 --

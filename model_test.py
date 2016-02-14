@@ -237,7 +237,7 @@ def connect_to_db(app):
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///build_reads'
 
     # config for Cloud9
-    #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build-reads'
+    #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build_reads'
     
 
     db.app = app

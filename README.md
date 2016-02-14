@@ -1,5 +1,6 @@
 #BUILD reads
 
+### Notes for running on c9.io
 -starting and signing into postgres db (build_reads)
     $ sudo sudo -u postgres psql build_reads
 
