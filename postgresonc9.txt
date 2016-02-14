@@ -1,0 +1,19 @@
+connecting to postgres db on 
+start 
+sudo service postgresql start
+
+#login as user/role postgres
+sudo sudo -u postgres psql
+
+#connect to db from inside postgres
+postgres=# \c build-reads aka your database
+
+#for createdb and drop db need to sudo into username "postgres"
+sudo sudo -u postgres <createdb/dropdb> <nameofdb>
+
+# to dump db to sql file
+sudo sudo -u postgres pg_dump <mydatabase> > <myfile.sql>
+
+
+# to load db to sql file
+sudo sudo -u postgres psql <mydatabase> > <myfile.sql>
