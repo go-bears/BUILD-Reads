@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form action='/new_user' method="POST">
+  <p>
+    <h2>New BUILD reader</h2>
+    <label for="first-name">
+      First Name:
+    </label>
+      <input type="text" name="first_name" placeholder="first_name">
+      
+    <label for="last-name">
+      Last Name:
+    </label>
+      <input type="text" name="last_name" placeholder="first_name">
+    
+    <label for="birthday">
+      Birthday:
+    </label>
+      <input type="text" name="birthday" placeholder="YYYYMMDD">
+      
+    <label for="School">
+      School:
+    </label>
+    
+      <select name="school">
+        <option value="Red">Red</option>
+        <option value="Green">Green</option>        
+      </select>
+    
+  </p>
+  <p>
+    <label>
+      Password:
+      <input type="password" name="password" placeholder="password" value="password" >
+  </label>
+  </p>
+  <input type="Submit" value="Login"/>
+</form>
+
+{% endblock %}
