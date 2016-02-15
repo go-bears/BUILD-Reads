@@ -3,7 +3,7 @@ start
 sudo service postgresql start
 
 #login as user/role postgres
-sudo sudo -u postgres psql
+sudo sudo -u postgres psql build_reads
 
 #connect to db from inside postgres
 postgres=# \c build-reads aka your database

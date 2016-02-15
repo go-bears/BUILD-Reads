@@ -66,6 +66,45 @@ def new_user_completion():
 
     pass
 
+
+
+@app.route('/login_completion', methods=["POST"])
+def login_completion():
+    """Login resolution page, takes in login info, checks db for login or adds user"""
+
+    email = request.form.get('username')
+    password =request.form.get('password')
+
+    print email, password
+
+    # successful login    
+    if db.session.query(User).filter((User.email==email) & (User.password==password)).first():
+        print "Database queried!"
+        flash("You are now logged in!")
+        session['email'] = email
+        return render_template("homepage.html", logged_in=session.get('email', False))
+
+    # email already exists -- incorrect password
+    elif db.session.query(User).filter(User.email==email).first():
+        flash("The password does not match the user email. Try Again!")
+        return render_template('login_form.html', logged_in=session.get('email', False)) 
+
+    # not email in db -- new user add
+    elif not db.session.query(User).filter((User.email==email) & (User.password==password)).first():
+        new_user = User(email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+
+        session['email'] = email
+        flash("Hi! We added you the database")
+
+        print "I commited ", new_user, "to the database"
+        return render_template("homepage.html", logged_in=session.get('email', False))
+
+
+
+
+
 if __name__ == "__main__":
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     connect_to_db(app)

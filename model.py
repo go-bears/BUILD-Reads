@@ -52,17 +52,26 @@ class User(db.Model):
 
         print "I commited", self.first_name, "to the database"
         
-        
+    
+    def set_val_user_id():
+        """Set value for the next user_id after seeding database"""
+    
+        # Get the Max user_id in the database
+        result = db.session.query(func.max(User.user_id)).one()
+        max_id = int(result[0])
+        return max_id
+    
+    
 
     def __repr__(self):
         """Show info about reader."""
 
         return "<first_name=%s last_name=%s birthday=%s\
-        grade=%s site_id=%s password=%s>" %(self.first_name, 
+        grade=%s site=%s password=%s>" %(self.first_name, 
                                             self.last_name, 
                                             self.birthday, 
                                             self.grade,
-                                            self.site_id,
+                                            self.site,
                                             self.password)
 
 # Book class adds to build_reads db successfully

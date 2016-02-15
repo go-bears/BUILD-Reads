@@ -1,41 +1,43 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<form action='/new_user' method="POST">
+<form action='/register_new_user' method="POST">
   <p>
     <h2>New BUILD reader</h2>
-    <label for="first-name">
-      First Name:
-    </label>
+    
+    <label for="first-name">First Name:</label>
       <input type="text" name="first_name" placeholder="first_name">
-      
-    <label for="last-name">
-      Last Name:
-    </label>
+      <br>
+    <label for="last-name">Last Name:</label>
       <input type="text" name="last_name" placeholder="first_name">
-    
-    <label for="birthday">
-      Birthday:
-    </label>
-      <input type="text" name="birthday" placeholder="YYYYMMDD">
-      
-    <label for="School">
-      School:
-    </label>
-    
+      <br>
+    <label for="birthday">Your Birthday:</label>
+      <input type="text" name="birthday" placeholder="YYYY-MM-DD">
+      <br>
+    <label for="School">Your School:</label>
       <select name="school">
-        <option value="Red">Red</option>
-        <option value="Green">Green</option>        
+        {% for site in sites  %}
+        <option placeholder="choose your school" value="{{ site.name }}">{{ site.name }}</option>
+        {% endfor %}
+      </select>
+      <br>
+    <label for="Grade">Your Grade:</label>
+      <select name="grade">
+        {% for grade in grades %}
+        <option placeholder="choose your school grade" value="{{ grade }}">{{ grade }}</option>
+        {% endfor %}
       </select>
     
   </p>
   <p>
-    <label>
-      Password:
-      <input type="password" name="password" placeholder="password" value="password" >
-  </label>
+    <label>Password:  </label>
+      <input type="text" name="password" placeholder="password" value="password" >
+
   </p>
-  <input type="Submit" value="Login"/>
+  <input type="Submit" value="Register"/>
+  
 </form>
+
+{{ msg }}
 
 {% endblock %}
