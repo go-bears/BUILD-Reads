@@ -4,7 +4,7 @@
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
-SET client_encoding = 'SQL_ASCII';
+SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
@@ -635,6 +635,9 @@ COPY users (user_id, first_name, last_name, birthday, grade, password, site_id) 
 4	auden	burton	2006-01-01	4	password	\N
 5	ezra	burton	2007-01-01	3	password	\N
 6	ammy	keung	2008-01-01	2	password	\N
+8	emily	fluffy	2014-09-09	6	password	1
+10	Russian	Blue	2005-05-05	2	password	2
+12	Curly	Bishop	2000-05-21	8	password	21
 \.
 
 
@@ -642,7 +645,7 @@ COPY users (user_id, first_name, last_name, birthday, grade, password, site_id) 
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('users_user_id_seq', 1, false);
+SELECT pg_catalog.setval('users_user_id_seq', 12, true);
 
 
 --

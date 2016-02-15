@@ -1,5 +1,5 @@
 # import statment for running on cloud 9
-import os 
+# import os 
 
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
@@ -108,9 +108,9 @@ def login_completion():
 if __name__ == "__main__":
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     connect_to_db(app)
-    # app.run(debug=True)
+    app.run(debug=True)
 
     
 
     # app config for Cloud9
-    app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
+    #app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))

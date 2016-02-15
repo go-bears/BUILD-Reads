@@ -21,20 +21,21 @@ app.jinja_env.undefined = StrictUndefined
 
 
 @app.route("/new_user")
-def new_user_form():
-    """Displays user login form."""
+def serve_new_user_form():
+    """Displays user new user form."""
     
+    # values for dropdown menu
     sites = db.session.query(Site).all()
     grades = ['k', 1,2,3,4,5,6,7,8]
-    msg = "i'm displaying the form"
-  
-  
+    
+
     return render_template("new_reader.html", sites=sites, grades=grades, msg=msg)
 
 
 @app.route('/register_new_user', methods=["POST"])
 def register_new_user():
     """ User registration: saves new user's first_name, last_name, birthday, school"""
+    
     msg = "i am registering new users"
     sites = db.session.query(Site).all()
     grades =  ['k', 1,2,3,4,5,6,7,8]
@@ -52,21 +53,33 @@ def register_new_user():
     grade = request.form.get('grade')
     password = request.form.get('password')
     
+    # values for Flask session dictionary
+    session['first_name'] = first_name
+    session['school'] = school
+
+
+    # Database queries to build_reads db +++++++++++++++++++++++++++++++++++++++++++++
+    
+    # checks if user is already in db
     if db.session.query(User).filter((User.first_name==first_name) &
                                      (User.last_name==last_name) &
                                      (User.birthday==birthday)).first():
         print "Database queried!"
-        session['first_name'] = first_name
-        flash("You're a BUILD reader! We logged you in!", first_name)
-        print "did you want to update your settings? or start a reading session?"
+
+        flash("You're already a BUILD reader! We logged you in %s!" % first_name)
         
-    
+    # registers new user to db
     else:
+        # queries db for site_id based on school name
         site = Site.query.filter(Site.name==school).first()
         site_id = site.site_id
-        
-            
-        new_user = User(first_name=first_name, 
+
+        # sets id for new user entry
+        new_user_id = set_val_user_id()
+     
+        # creates instance of User for db     
+        new_user = User(user_id=new_user_id,
+                        first_name=first_name, 
                         last_name=last_name,
                         birthday=birthday,
                         grade=grade,
@@ -75,19 +88,29 @@ def register_new_user():
 
         new_user.commit_to_db()
         
-        session['first_name'] = first_name
-        flash("Hi! We added you the database", first_name)
-
+        # flashes db confirmation message to user
+        flash("Hi %s! We added you to BUILD reads!" % first_name)
+        
+        # confirmation message in terminal
         print "I commited ", new_user, "to the database"
         
         
     return render_template("new_reader.html", sites=sites, msg=msg, grades=grades)
 
 
+@app.route('/reading_session', methods=["POST"])
+def serve_reading_session_form():
+    user = session['first_name']
+    msg = "Tell us about your adventure %s !" % user
+    flash(msg)
+
+    return render_template("reading_session.html" )
+    
+
 if __name__ == "__main__":
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     connect_to_db(app)
-    # app.run(debug=True)
+    app.run(debug=True)
 
     # app config for Cloud9
-    app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
+    # app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))

@@ -37,7 +37,21 @@
   <input type="Submit" value="Register"/>
   
 </form>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+
+      <button action='/reading_session'>Let's start a reading session</button>
+
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
 
 {{ msg }}
+
 
 {% endblock %}

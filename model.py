@@ -369,8 +369,36 @@ class UserBadge(db.Model):
         return "<book_id=%d rating_id=%d >" % (self.user_id, self.badge_id)
 
 
-##############################################################################
-# Helper functions
+#####################################################################################
+# Helper Functions
+
+# These functions get last value in a database table and 
+# then gives a new id for a new entry
+def set_val_user_id():
+    """Set value for the next user_id after seeding database"""
+
+    # Get the Max user_id in the database
+    result = db.session.query(db.func.max(User.user_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('users_user_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+def set_val_book_id():
+    """Set value for the next book_id after seeding database"""
+
+    # Get the Max user_id in the database
+    result = db.session.query(db.func.max(Book.book_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('books_book_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""
@@ -378,10 +406,10 @@ def connect_to_db(app):
     # Configure to use our PstgreSQL database     
     # postgresql://[[:password][@host][:port]/[database-name]
 
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///build_reads'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///build_reads'
     
     # config for Cloud9
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build_reads'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build_reads'
     
     db.app = app
     db.init_app(app)
@@ -396,5 +424,8 @@ if __name__ == "__main__":
 
     # create tables 
     db.create_all()
+
+    # import a user_id new user
+    set_val_user_id()
 
     print "Connected to DB."

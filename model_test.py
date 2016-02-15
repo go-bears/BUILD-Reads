@@ -23,7 +23,7 @@ class User(db.Model):
     __tablename__ = "users"
 
     # values set to nullable for testing
-    user_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     first_name = db.Column(db.String(50), nullable=True)
     last_name = db.Column(db.String(50), nullable=True)
     birthday = db.Column(db.Date, nullable=True)
@@ -31,10 +31,10 @@ class User(db.Model):
     password = db.Column(db.String(25), nullable=True)
     
     # set site_id foreign key
-    #site_id = db.relationship('Site', backref=db.backref("sites", order_by=user_id))
+    site_id = db.relationship('Site', backref=db.backref("sites", order_by=user_id))
     
-    # site_id temporarily hardcoded
-    site_id = 1
+    # # site_id temporarily hardcoded
+    # site_id = 1
 
     
     def commit_to_db(self):
@@ -228,6 +228,10 @@ class Badge(db.Model):
         """Show info about rating."""
 
         return "<description=%s image_url=%s >" % (self.description, self.image_url)
+
+
+
+
 
 
 def connect_to_db(app):
