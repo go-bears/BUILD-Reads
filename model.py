@@ -53,15 +53,7 @@ class User(db.Model):
         print "I commited", self.first_name, "to the database"
         
     
-    def set_val_user_id():
-        """Set value for the next user_id after seeding database"""
-    
-        # Get the Max user_id in the database
-        result = db.session.query(func.max(User.user_id)).one()
-        max_id = int(result[0])
-        return max_id
-    
-    
+
 
     def __repr__(self):
         """Show info about reader."""
