@@ -59,6 +59,9 @@ def log_reading_session():
     # 
     today = datetime.now()
 
+    # TODO get for the data from the form fields
+
+
     # queries db for user information by first name. this is ok for now.
     #TODO make query smarter by searching by first and last name or get query from data in Flask Session
     user_data = db.session.query(User).filter((User.first_name==user)).first()
