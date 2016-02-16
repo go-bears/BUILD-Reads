@@ -399,6 +399,21 @@ def set_val_book_id():
     db.session.commit()
 
 
+def set_val_reading_session_id():
+    """Set value for the next reading_session after seeding database"""
+
+    # Get the Max user_id in the database
+    result = db.session.query(db.func.max(Reading_session.session_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('reading_session_reading_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
+
+
+
+
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""

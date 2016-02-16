@@ -19,87 +19,125 @@ app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 
 
+#TESTED and WORKS!!
 
-
+#server the landing page. Currently page is used as summaryy page 
+#displaying all data in build_reads db
 @app.route('/')
 def index():
     """Homepage."""
 
     user_list = User.query.all()
-    print user_list 
     book_list = Book.query.all()
-    print book_list
-
     session_list = Reading_session.query.all()
-    print session_list
-
     sidekicks_list = Sidekick.query.all()
-    print sidekicks_list
-
     ratings_list = Rating.query.all()
-    print ratings_list
-
     badges = Badge.query.all()
-    print badges
 
 
-    msg = "we are the users", user_list, "we are the books", book_list,\
-            "We are the sessions", session_list,\
-            "We are the sidekicks", sidekicks_list,\
-            "We are ratings_list", ratings_list,\
-            "we are badges list", badges
+    msg = "we are the users", user_list, \
+          "we are the books", book_list,\
+          "We are the sessions", session_list,\
+          "We are the sidekicks", sidekicks_list,\
+          "We are ratings_list", ratings_list,\
+          "we are badges list", badges
 
     return render_template("index.html", msg=msg)
 
 
+#TESTED and WORKS!!
 @app.route("/new_user")
-def new_user_form():
-    """Displays user login form."""
-
+def serve_new_user_form():
+    """Displays user new user form."""
     
-    return render_template("new_reader.html")
+    # values for dropdown menu
+    sites = db.session.query(Site).all()
+    grades = ['k', 1,2,3,4,5,6,7,8]
+    
+
+    return render_template("new_reader.html", sites=sites, grades=grades, msg=msg)
 
 
-@app.route('/new_user_completion', methods=['POST'])
-def new_user_completion():
-    """ User registration new user's first_name, last_name, birthday, school"""
+#TESTED and WORKS!!
+@app.route('/register_new_user', methods=["POST"])
+def register_new_user():
+    """ User registration: saves new user's first_name, last_name, birthday, school"""
+    
+    # temporary message for me about page info
+    msg = "i am registering new users"
+    
+    # values for dropdown menu
+    sites = db.session.query(Site).all()
+    grades =  ['k', 1,2,3,4,5,6,7,8]
+    
 
-    pass
+   # collecting new user data from new_reader.html
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
+    school = request.form.get('school')
+    grade = request.form.get('grade')
+    password = request.form.get('password')
+
+    # splitting string returned in birthday
+    year, month, day = request.form.get('birthday').split('-')
+    # converting string into datetime object for db
+    birthday =date(int(year), int(month), int(day))
+    
+    
+    # values for Flask session dictionary
+    session['first_name'] = first_name
+    session['school'] = school
 
 
+    #### Database queries to build_reads db ######################################
+    
+    # checks if user is already in db
+    if db.session.query(User).filter((User.first_name==first_name) &
+                                     (User.last_name==last_name) &
+                                     (User.birthday==birthday)).first():
 
-@app.route('/login_completion', methods=["POST"])
-def login_completion():
-    """Login resolution page, takes in login info, checks db for login or adds user"""
+        reader = db.session.query(User).filter((User.first_name==first_name) &
+                                     (User.last_name==last_name) &
+                                     (User.birthday==birthday)).first()
 
-    email = request.form.get('username')
-    password =request.form.get('password')
-
-    print email, password
-
-    # successful login    
-    if db.session.query(User).filter((User.email==email) & (User.password==password)).first():
         print "Database queried!"
-        flash("You are now logged in!")
-        session['email'] = email
-        return render_template("homepage.html", logged_in=session.get('email', False))
 
-    # email already exists -- incorrect password
-    elif db.session.query(User).filter(User.email==email).first():
-        flash("The password does not match the user email. Try Again!")
-        return render_template('login_form.html', logged_in=session.get('email', False)) 
 
-    # not email in db -- new user add
-    elif not db.session.query(User).filter((User.email==email) & (User.password==password)).first():
-        new_user = User(email=email, password=password)
-        db.session.add(new_user)
-        db.session.commit()
+        # stores reader's user.id from db
+        session['reader_id'] = reader.user_id
+        print "the reader id is for %s is %s" % reader, session['reader_id']
 
-        session['email'] = email
-        flash("Hi! We added you the database")
+        # confirmation message for user
+        flash("You're already a BUILD reader! We logged you in %s!" % first_name)
+        
+    # registers new user to db
+    else:
+        # queries db for site_id based on school name
+        site = Site.query.filter(Site.name==school).first()
+        site_id = site.site_id
 
+        # sets id for new user entry
+        new_user_id = set_val_user_id()
+     
+        # creates instance of User for db     
+        new_user = User(user_id=new_user_id,
+                        first_name=first_name, 
+                        last_name=last_name,
+                        birthday=birthday,
+                        grade=grade,
+                        password=password,
+                        site_id=site_id)
+
+        new_user.commit_to_db()
+        
+        # flashes db confirmation message to user
+        flash("Hi %s! We added you to BUILD reads!" % first_name)
+        
+        # confirmation message in terminal
         print "I commited ", new_user, "to the database"
-        return render_template("homepage.html", logged_in=session.get('email', False))
+        
+        
+    return render_template("new_reader.html", sites=sites, msg=msg, grades=grades)
 
 
 

@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+<form action='/log_reading_session' method='POST'>
+  <p>
+    <h2>New Reading Session</h2>
+
+<!-- flash message from @app.route('/reading_session') -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+
+    {{ date }}
+    <br>
+    <label for="title">Book Title:</label>
+      <input type="text" name="title" placeholder="Book Title">
+      <br>
+      <label for="reading-session-length">Length of Reading session in minutes:</label><br>
+      <input type="number" name="time_length" placeholder="20" min='20'>
+      <br>
+  
+      <select name="sidekick">
+        {% for mentor in sidekicks  %}
+        <option placeholder="choose your school" value="{{ mentor.first_name}} {{mentor.last_name}}">{{ mentor.first_name}} {{ mentor.last_name }}</option>
+        {% endfor %}
+      </select>
+  
+        <label for="book-rating">Rate How Much You Enjoyed Your Book today:</label><br>
+      <input type="number" name="rating_score" placeholder="book rating" min='1' max='5'>
+      <br>
+
+    <label for="comments">Comments:</label> <br>
+
+      <input type="textarea" name="comments" placeholder="350 characters Max"  style="height:100px;width:200px;">
+      <br>
+      
+
+    <input type="Submit" value="Submit Reading Log">
+</form>
+
+
+
+{{ msg }}
+
+
+{% endblock %}
