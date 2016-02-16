@@ -29,7 +29,7 @@
   
       <select name="sidekick">
         {% for mentor in sidekicks  %}
-        <option placeholder="choose your school" value="{{ mentor.first_name}} {{mentor.last_name}}">{{ mentor.first_name}} {{ mentor.last_name }}</option>
+        <option placeholder="choose your school" value="{{mentor.last_name}}">{{ mentor.first_name}} {{ mentor.last_name }}</option>
         {% endfor %}
       </select>
   

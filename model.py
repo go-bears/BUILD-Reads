@@ -389,7 +389,7 @@ def set_val_user_id():
 def set_val_book_id():
     """Set value for the next book_id after seeding database"""
 
-    # Get the Max user_id in the database
+    # Get the Max book_id in the database
     result = db.session.query(db.func.max(Book.book_id)).one()
     max_id = int(result[0])
 
@@ -402,7 +402,7 @@ def set_val_book_id():
 def set_val_reading_session_id():
     """Set value for the next reading_session after seeding database"""
 
-    # Get the Max user_id in the database
+    # Get the Max session_id in the database
     result = db.session.query(db.func.max(Reading_session.session_id)).one()
     max_id = int(result[0])
 

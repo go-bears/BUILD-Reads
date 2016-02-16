@@ -53,7 +53,7 @@ def serve_new_user_form():
     # values for dropdown menu
     sites = db.session.query(Site).all()
     grades = ['k', 1,2,3,4,5,6,7,8]
-    
+    msg = "I'm servering the form"
 
     return render_template("new_reader.html", sites=sites, grades=grades, msg=msg)
 
