@@ -1,0 +1,53 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+Today is:  {{ today_date }}
+
+<form action='/register_new_mentor' method="POST">
+  <p>
+    <h2>Welcome to BUILD! We're happy to meet you!</h2>
+    
+    <label for="first-name">First Name:</label>
+      <input type="text" name="first_name" placeholder="first_name">
+      <br>
+    <label for="last-name">Last Name:</label>
+      <input type="text" name="last_name" placeholder="first_name">
+      <br>
+    <label for="birthday">Your Birthday:</label>
+      <input type="text" name="birthday" placeholder="YYYY-MM-DD">
+      <br>
+    <label for="School">Your Site:</label>
+      <select name="school">
+        {% for site in sites  %}
+        <option placeholder="choose your school" value="{{ site.name }}">{{ site.name }}</option>
+        {% endfor %}
+      </select>
+      <br>
+  </p>
+  <p>
+    <label>Password:  </label>
+      <input type="text" name="password" placeholder="password" value="password" >
+
+  </p>
+  <input type="Submit" value="Register">
+  
+</form>
+{% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+
+      <a href='/'><button>Start a reading session with your scholar</button></a>
+
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+
+
+{{ msg }}
+
+
+{% endblock %}
