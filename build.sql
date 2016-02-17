@@ -4,7 +4,7 @@
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
-SET client_encoding = 'UTF8';
+SET client_encoding = 'SQL_ASCII';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
@@ -35,7 +35,7 @@ SET default_with_oids = false;
 
 CREATE TABLE badges (
     badge_id integer NOT NULL,
-    data json
+    description character varying(50)
 );
 
 
@@ -142,7 +142,7 @@ CREATE TABLE ratings (
     comment character varying(350),
     user_id integer,
     book_id integer,
-    rating_score integer
+    session_id integer
 );
 
 
@@ -457,7 +457,10 @@ ALTER TABLE ONLY users ALTER COLUMN user_id SET DEFAULT nextval('users_user_id_s
 -- Data for Name: badges; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY badges (badge_id, data) FROM stdin;
+COPY badges (badge_id, description) FROM stdin;
+1	'you earned a badge for reading 20min!'
+2	'you earned a badge for reading 40min!'
+3	'you earned a badge for reading 60min!'
 \.
 
 
@@ -508,9 +511,9 @@ SELECT pg_catalog.setval('books_book_id_seq', 1, false);
 -- Data for Name: ratings; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY ratings (rating_id, comment, user_id, book_id, rating_score) FROM stdin;
-1	"good story!"	1	1	\N
-2	"love wilbur"	2	2	\N
+COPY ratings (rating_id, comment, user_id, book_id, session_id) FROM stdin;
+1	"good story!"	1	1	1
+2	"love wilbur"	2	2	2
 \.
 
 
@@ -527,8 +530,10 @@ SELECT pg_catalog.setval('ratings_rating_id_seq', 1, false);
 
 COPY reading_sessions (session_id, date, time_length, badges_awarded, rating_score, user_id, book_id, sidekick_id) FROM stdin;
 1	2014-01-01 00:00:00	30	2	5	1	1	1
-2	2014-02-01 00:00:00	15	1	5	2	3	2
-3	2014-03-01 00:00:00	40	3	5	3	2	3
+2	2014-01-02 00:00:00	15	1	5	2	3	2
+3	2014-01-03 00:00:00	40	3	5	3	2	3
+5	2016-02-17 07:22:53.594531	20	1	5	16	1	1
+7	2016-02-17 00:00:00	20	1	5	16	1	1
 \.
 
 
@@ -536,7 +541,7 @@ COPY reading_sessions (session_id, date, time_length, badges_awarded, rating_sco
 -- Name: reading_sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('reading_sessions_session_id_seq', 1, false);
+SELECT pg_catalog.setval('reading_sessions_session_id_seq', 7, true);
 
 
 --
@@ -548,6 +553,7 @@ COPY sidekicks (sidekick_id, first_name, last_name, password, user_id) FROM stdi
 2	melissa	f	password	2
 3	elizabeth	o	password	3
 4	matt	m	password	4
+6	Preeti	Purry	password	\N
 \.
 
 
@@ -555,7 +561,7 @@ COPY sidekicks (sidekick_id, first_name, last_name, password, user_id) FROM stdi
 -- Name: sidekicks_sidekick_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('sidekicks_sidekick_id_seq', 1, false);
+SELECT pg_catalog.setval('sidekicks_sidekick_id_seq', 6, true);
 
 
 --
@@ -638,6 +644,8 @@ COPY users (user_id, first_name, last_name, birthday, grade, password, site_id) 
 8	emily	fluffy	2014-09-09	6	password	1
 10	Russian	Blue	2005-05-05	2	password	2
 12	Curly	Bishop	2000-05-21	8	password	21
+14	ammy	Keung	2008-01-01	2	password	1
+16	julius	tsui	2009-02-02	1	password	2
 \.
 
 
@@ -645,7 +653,7 @@ COPY users (user_id, first_name, last_name, birthday, grade, password, site_id) 
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('users_user_id_seq', 12, true);
+SELECT pg_catalog.setval('users_user_id_seq', 16, true);
 
 
 --
@@ -769,11 +777,11 @@ ALTER TABLE ONLY ratings
 
 
 --
--- Name: ratings_rating_score_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: ratings_session_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
 ALTER TABLE ONLY ratings
-    ADD CONSTRAINT ratings_rating_score_fkey FOREIGN KEY (rating_score) REFERENCES reading_sessions(session_id);
+    ADD CONSTRAINT ratings_session_id_fkey FOREIGN KEY (session_id) REFERENCES reading_sessions(session_id);
 
 
 --
