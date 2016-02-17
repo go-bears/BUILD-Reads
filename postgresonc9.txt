@@ -16,4 +16,7 @@ sudo sudo -u postgres pg_dump <mydatabase> > <myfile.sql>
 
 
 # to load db to sql file
-sudo sudo -u postgres psql <mydatabase> > <myfile.sql>
+sudo sudo -u postgres psql <mydatabase> < <myfile.sql>
+
+# copy csv directly into postgres
+COPY <tablename> FROM '/home/ubuntu/workspace/test-data/<filename>' DELIMITER ',' CSV;

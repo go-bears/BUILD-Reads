@@ -413,10 +413,10 @@ def connect_to_db(app):
     # Configure to use our PstgreSQL database     
     # postgresql://[[:password][@host][:port]/[database-name]
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///build_reads'
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///build_reads'
     
     # config for Cloud9
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build_reads'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build_reads'
     
     db.app = app
     db.init_app(app)
@@ -433,6 +433,6 @@ if __name__ == "__main__":
     db.create_all()
 
     # import a user_id new user
-    set_val_user_id()
+    # set_val_user_id()
 
     print "Connected to DB."

@@ -1,6 +1,7 @@
 # import statment for running on cloud 9
-# import os 
+import os 
 
+from datetime import date, datetime
 from flask import Flask, render_template, redirect, request, flash, session
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
@@ -53,7 +54,7 @@ def serve_new_user_form():
     # values for dropdown menu
     sites = db.session.query(Site).all()
     grades = ['k', 1,2,3,4,5,6,7,8]
-    msg = "I'm servering the form"
+    msg = "I'm serving the form"
 
     return render_template("new_reader.html", sites=sites, grades=grades, msg=msg)
 
@@ -101,11 +102,13 @@ def register_new_user():
                                      (User.birthday==birthday)).first()
 
         print "Database queried!"
-
+        print reader
 
         # stores reader's user.id from db
         session['reader_id'] = reader.user_id
-        print "the reader id is for %s is %s" % reader, session['reader_id']
+        print session['reader_id']
+        
+        print "the reader id is for {} is {}".format(reader, session['reader_id'])
 
         # confirmation message for user
         flash("You're already a BUILD reader! We logged you in %s!" % first_name)
@@ -140,15 +143,39 @@ def register_new_user():
     return render_template("new_reader.html", sites=sites, msg=msg, grades=grades)
 
 
+# Serves the reading log form 
+@app.route('/reading_session')
+def serve_reading_session_form():
+    """Serves the reading session log. """
 
+    # date to for date stamp for db session
+    today = datetime.now()
+
+    #date for user display
+    date = "%s/%s/%s" % (today.month, today.day, today.year) 
+    
+    # Flask session data for reader's name
+    user = session['first_name']
+
+    # queries db for list of sidekicks for dropdown menu
+    # TODO limit dropdown mentors to mentors currently assigned to the site.
+    sidekicks = db.session.query(Sidekick).all()
+    
+    # information messages    
+    msg = "i'm serving the reading session page"
+    flash("Tell us about your reading adventure %s !" % user)
+
+    return render_template("reading_session.html", msg=msg, sidekicks=sidekicks, date=date)
 
 
 if __name__ == "__main__":
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     connect_to_db(app)
-    app.run(debug=True)
+    
+    # app config for local machine
+    # app.run(debug=True)
 
     
 
     # app config for Cloud9
-    #app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
+    app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
