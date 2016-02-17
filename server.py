@@ -67,27 +67,12 @@ def serve_new_user_form():
     grades = ['k', 1,2,3,4,5,6,7,8]
     msg = "I'm serving the form"
 
-    return render_template("new_reader.html", 
+    return render_template("new_user.html", 
                            sites=sites,
                            grades=grades,
                            msg=msg,
                            today_date=today_date)
     
-# Serves the mentor sign-up form
-@app.route('/new_mentor')
-def serve_new_mentor_form():
-    """Displays user new user form."""
-    
-    # values for dropdown menu
-    sites = db.session.query(Site).all()
-    
-    msg = "I'm serving the new mentor form"
-
-    return render_template("new_mentor.html", 
-                           sites=sites,
-                           msg=msg,
-                           today_date=today_date)
-
 
 #TESTED and WORKS!!
 @app.route('/register_new_user', methods=["POST"])
@@ -126,56 +111,60 @@ def register_new_user():
 
 
     #### Database queries to build_reads db ######################################
-    if user_type == "student"
-        # checks if user is already in db
-        if db.session.query(User).filter((User.first_name==first_name) &
-                                         (User.last_name==last_name) &
-                                         (User.birthday==birthday)).first():
-    
-            reader = db.session.query(User).filter((User.first_name==first_name) &
-                                         (User.last_name==last_name) &
-                                         (User.birthday==birthday)).first()
-    
-            print "Database queried!"
-            print reader
-    
-            # stores reader's user.id from db
-            session['reader_id'] = reader.user_id
-            print session['reader_id']
-            
-            print "the reader id is for {} is {}".format(reader, session['reader_id'])
-    
-            # confirmation message for user
-            flash("You're already a BUILD reader! We logged you in %s!" % first_name)
-            
-        # registers new user to db
-        else:
-            # queries db for site_id based on school name
-            site = Site.query.filter(Site.name==school).first()
-            site_id = site.site_id
-    
-            # sets id for new user entry
-            new_user_id = set_val_user_id()
-         
-            # creates instance of User for db     
-            new_user = User(user_id=new_user_id,
-                            first_name=first_name, 
-                            last_name=last_name,
-                            birthday=birthday,
-                            grade=grade,
-                            password=password,
-                            site_id=site_id)
-    
-            new_user.commit_to_db()
-            
-            # flashes db confirmation message to user
-            flash("Hi %s! We added you to BUILD reads!" % first_name)
-            
-            # confirmation message in terminal
-            print "I commited ", new_user, "to the database"
-            
-            
+ 
+    # checks if user is already in db
+    if db.session.query(User).filter((User.first_name==first_name) &
+                                     (User.last_name==last_name) &
+                                     (User.birthday==birthday)).first():
 
+        reader = db.session.query(User).filter((User.first_name==first_name) &
+                                     (User.last_name==last_name) &
+                                     (User.birthday==birthday)).first()
+
+        print "Database queried!"
+        print reader
+
+        # stores reader's user.id from db
+        session['reader_id'] = reader.user_id
+        print session['reader_id']
+        
+        print "the reader id is for {} is {}".format(reader, session['reader_id'])
+
+        # confirmation message for user
+        flash("You're already a BUILD reader! We logged you in %s!" % first_name)
+        
+    # registers new user to db
+    else:
+        # queries db for site_id based on school name
+        site = Site.query.filter(Site.name==school).first()
+        site_id = site.site_id
+
+        # sets id for new user entry
+        new_user_id = set_val_user_id()
+     
+        # creates instance of User for db     
+        new_user = User(user_id=new_user_id,
+                        first_name=first_name, 
+                        last_name=last_name,
+                        birthday=birthday,
+                        grade=grade,
+                        password=password,
+                        site_id=site_id)
+
+        new_user.commit_to_db()
+        
+        # flashes db confirmation message to user
+        flash("Hi %s! We added you to BUILD reads!" % first_name)
+        
+        # confirmation message in terminal
+        print "I commited ", new_user, "to the database"
+            
+            
+    return render_template("new_user.html", 
+                           sites=sites,
+                           grades=grades,
+                           msg=msg,
+                           today_date=today_date)
 
 
 # Serves the reading log form 
@@ -265,7 +254,7 @@ def serve_new_mentor_form():
     sites = db.session.query(Site).all()
     
     msg = "I'm serving the new mentor form"
-    today_date = "2/17/16"
+   
     return render_template("new_mentor.html", 
                            sites=sites,
                            msg=msg,
@@ -290,8 +279,7 @@ def register_new_mentor():
     site = Site.query.filter(Site.name==school).first()
     site_id = site.site_id
     
-    today_date = "2/17/16"
-    
+
     
     # checks if mentor is already in db
     if db.session.query(Sidekick).filter((Sidekick.first_name==first_name) &

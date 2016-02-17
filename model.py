@@ -163,6 +163,32 @@ class Site(db.Model):
         return "<name=%s location=%s >" % (self.name, self.location)
 
 
+class Badge(db.Model):
+    """Badges information table"""
+
+    __tablename__ = "badges"
+
+    badge_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    description = db.Column(db.String(50), nullable=True,)
+    # badge_data = db.Column('data', JSON, nullable=True)
+
+
+
+    def commit_to_db(self):
+        
+        """ add instance of Rating to build_reads db"""
+
+        db.session.add(self)
+        db.session.commit()
+
+        print "I commited the badge", self.description, "to the database"
+
+    def __repr__(self):
+        """Show info about rating."""
+
+        return "<description=%s>" % (self.description)
+
+
 class Reading_session(db.Model):
     """Book information table."""
 
@@ -281,34 +307,6 @@ class Rating(db.Model):
 
 
 
-
-class Badge(db.Model):
-    """Badges information table"""
-
-    __tablename__ = "badges"
-
-    badge_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    description = db.Column(db.String(50), nullable=True,)
-    # badge_data = db.Column('data', JSON, nullable=True)
-
-
-
-    def commit_to_db(self):
-        
-        """ add instance of Rating to build_reads db"""
-
-        db.session.add(self)
-        db.session.commit()
-
-        print "I commited the badge", self.description, "to the database"
-
-    def __repr__(self):
-        """Show info about rating."""
-
-        return "<description=%s>" % (self.description)
-
-
-
 # ####################################################################
 # # Association Tables
 
@@ -364,7 +362,7 @@ class UserBadge(db.Model):
 #####################################################################################
 # Helper Functions
 
-# These functions get last value in a database table and 
+# These functions get last value in a database table after seeding database 
 # then gives a new id for a new entry
 def set_val_user_id():
     """Set value for the next user_id after seeding database"""

@@ -534,6 +534,8 @@ COPY reading_sessions (session_id, date, time_length, badges_awarded, rating_sco
 3	2014-01-03 00:00:00	40	3	5	3	2	3
 5	2016-02-17 07:22:53.594531	20	1	5	16	1	1
 7	2016-02-17 00:00:00	20	1	5	16	1	1
+9	2016-02-17 00:00:00	20	1	5	8	1	6
+11	2016-02-17 00:00:00	20	1	5	18	5	1
 \.
 
 
@@ -541,7 +543,7 @@ COPY reading_sessions (session_id, date, time_length, badges_awarded, rating_sco
 -- Name: reading_sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('reading_sessions_session_id_seq', 7, true);
+SELECT pg_catalog.setval('reading_sessions_session_id_seq', 11, true);
 
 
 --
@@ -646,6 +648,7 @@ COPY users (user_id, first_name, last_name, birthday, grade, password, site_id) 
 12	Curly	Bishop	2000-05-21	8	password	21
 14	ammy	Keung	2008-01-01	2	password	1
 16	julius	tsui	2009-02-02	1	password	2
+18	pumba	rahmati	2010-10-10	1	password	17
 \.
 
 
@@ -653,7 +656,7 @@ COPY users (user_id, first_name, last_name, birthday, grade, password, site_id) 
 -- Name: users_user_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('users_user_id_seq', 16, true);
+SELECT pg_catalog.setval('users_user_id_seq', 18, true);
 
 
 --
