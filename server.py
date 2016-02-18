@@ -92,7 +92,12 @@ def register_new_user():
     first_name = request.form.get('first_name')
     last_name = request.form.get('last_name')
     school = request.form.get('school')
+    
     grade = request.form.get('grade')
+    # convert grade k to integer for db record
+    if grade =='k':
+        grade = 0
+    
     password = request.form.get('password')
 
     # splitting string returned in birthday
@@ -105,6 +110,8 @@ def register_new_user():
     birthday = date(int(year), int(month), int(day))
     print "this is the birthday date obj", birthday
     
+    
+
     
     # values for Flask session dictionary
     session['first_name'] = first_name
@@ -193,8 +200,6 @@ def serve_reading_session_form():
                            today_date=today_date)
 
 
-
-
 # Collects the form information 
 @app.route('/log_reading_session', methods=["POST"])
 def log_reading_session():
@@ -209,15 +214,10 @@ def log_reading_session():
 
     # collects data from the form fields
     title = request.form.get('title')
-    print 'this is the title', title
     sidekick_lastname = request.form.get('sidekick')
-    print 'this is the last name,', sidekick_lastname
     rating_score = request.form.get('rating_score')
-    print 'this is the rating_score', rating_score
     comment = request.form.get('comment')
-    print "this is the book comment", comment
     time_length = request.form.get('time_length')
-    print 'this it the time_length', time_length
     
 
     # queries db for user information by first name. this is ok for now.
@@ -418,7 +418,9 @@ if __name__ == "__main__":
     
     # app config for local machine
     # app.run(debug=True)
-
+    
+    # flask debugging toolbar
+    DebugToolbarExtension(app)
     
 
     # app config for Cloud9
