@@ -383,6 +383,11 @@ def show_user_details(reader_id):
         # book = db.session.query(Book).filter(Book.book_id==user_rating.book_id).first()
         current_book = user_rating.book.title
         
+        
+        #TODO get books titles to show on user page
+        #calculate average ratings for a book
+        #count earned for badges per day/day/month
+        
         if current not in book_dict:
             get_all_ratings_for_book = current_book.ratings
             print get_all_ratings_for_current_book

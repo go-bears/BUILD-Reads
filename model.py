@@ -100,7 +100,6 @@ class Book(db.Model):
                                                              self.isbn, 
                                                              self.image_url,
                                                              self.book_type)
-_
 
 class Sidekick(db.Model):
     """Reading Mentors (aka Sidekicks) information table."""
