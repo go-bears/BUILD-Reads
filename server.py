@@ -77,7 +77,8 @@ def serve_new_user_form():
 #TESTED and WORKS!!
 @app.route('/register_new_user', methods=["POST"])
 def register_new_user():
-    """ User registration: saves new user's first_name, last_name, birthday, school"""
+    """ User registration: saves new user's 
+    first_name, last_name, birthday, school"""
     
     # temporary message for me about page info
     msg = "i am registering new users"
@@ -141,6 +142,9 @@ def register_new_user():
 
         # sets id for new user entry
         new_user_id = set_val_user_id()
+        
+        # stores reader_id in flask session
+        session['reader_id'] = new_user_id
      
         # creates instance of User for db     
         new_user = User(user_id=new_user_id,
@@ -190,6 +194,7 @@ def serve_reading_session_form():
 
 
 
+
 # Collects the form information 
 @app.route('/log_reading_session', methods=["POST"])
 def log_reading_session():
@@ -202,17 +207,18 @@ def log_reading_session():
     # TODO limit dropdown mentors to mentors currently assigned to the site.
     sidekicks = db.session.query(Sidekick).all()
 
-    # TODO get for the data from the form fields
+    # collects data from the form fields
     title = request.form.get('title')
-    print title
+    print 'this is the title', title
     sidekick_lastname = request.form.get('sidekick')
-    print sidekick_lastname
+    print 'this is the last name,', sidekick_lastname
     rating_score = request.form.get('rating_score')
-    print rating_score
-    comments = request.form.get('comment')
-    print comments
+    print 'this is the rating_score', rating_score
+    comment = request.form.get('comment')
+    print "this is the book comment", comment
     time_length = request.form.get('time_length')
-    print time_length
+    print 'this it the time_length', time_length
+    
 
     # queries db for user information by first name. this is ok for now.
     #TODO make query smarter by searching by first and last name or get query from data in Flask Session
@@ -235,14 +241,37 @@ def log_reading_session():
                                           user_id=user_data.user_id,
                                           book_id=book_data.book_id,    
                                           sidekick_id=sidekick_data.sidekick_id)
-    
-    # commits new reaading session instance to db
+    print new_reading_session
+
+    # commits new reading session instance to db
     new_reading_session.commit_to_db()
     
+    msg = "I recorded the reading log information"
+
+
+    # sets new rating id
+    #new_rating_id = set_val_rating_session_id()
+    
+    # creates new instance of a rating
+    new_rating = Rating(#rating_id=new_rating_id,
+                        comment=comment,
+                        user_id=user_data.user_id,
+                        book_id=book_data.book_id,
+                        session_id=new_session_id)
+    
+    new_rating.commit_to_db()
+    print "i logged new this new_rating",  book_data.book_id, comment#, new_rating_id,                    
+        
     # user confirmation
     flash("Great Work! I logged your reading session %s !" % user)
-    msg = "I recorded the reading log information"
-    return render_template("reading_session.html", msg=msg, sidekicks=sidekicks, today_date=today_date)
+    
+    
+    return render_template("reading_session.html", 
+                           msg=msg,
+                           sidekicks=sidekicks,
+                           today_date=today_date)
+
+
 
 
 # Serves the mentor sign-up form
@@ -317,6 +346,7 @@ def register_new_mentor():
         # confirmation message in terminal
         print "I commited ", new_sidekick, "to the database"
         
+        # confirmation message for user
         msg = new_sidekick, "was added to the database"
     
         
@@ -324,6 +354,57 @@ def register_new_mentor():
                            sites=sites, 
                            msg=msg,
                            today_date=today_date)
+
+
+@app.route("/user/<int:reader_id>")
+def show_user_details(reader_id):
+    """Return page showing the details of a reader's history."""
+
+    msg = "I am the user detail page of ", session['reader_id']    
+    print msg
+    # retrieve reader id from flask session
+    reader_id = session['reader_id']
+    print "this is the reader's id", reader_id
+    
+    name = session['first_name']
+    print "the reader's name is", name
+
+    
+    p_user_details = db.session.query(User).filter(User.user_id==reader_id).first()
+    print "i'm the user", p_user_details
+    
+    user_ratings_list = Rating.query.filter(Rating.user_id == reader_id).all()
+    
+    
+    print 'you read these books'
+    book_dict = {}
+    for user_rating in user_ratings_list:
+        # query for books by user_
+        # book = db.session.query(Book).filter(Book.book_id==user_rating.book_id).first()
+        current_book = user_rating.book.title
+        
+        if current not in book_dict:
+            get_all_ratings_for_book = current_book.ratings
+            print get_all_ratings_for_current_book
+            book_dict[current_book.title] = get_all_ratings_for_current_book
+        else:
+            get_one_book_rating = db.session.query(Reading_session).filter((Reading_session.book_id==user_rating.book_id) &(Reading_session.user_id==reader_id)).first()
+            book_dict[current_book.title].append(get_one_book_rating)
+            
+        
+        
+    print book_dict
+        
+    
+    print 'your earned badges'
+    
+    flash("You worked hard %s" % p_user_details.first_name)
+    
+    return render_template("user_details.html",
+                           msg=msg,
+                           today_date=today_date,
+                           user_details=p_user_details,
+                           book_dict=book_dict)
 
 
 if __name__ == "__main__":

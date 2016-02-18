@@ -100,7 +100,7 @@ class Book(db.Model):
                                                              self.isbn, 
                                                              self.image_url,
                                                              self.book_type)
-
+_
 
 class Sidekick(db.Model):
     """Reading Mentors (aka Sidekicks) information table."""
@@ -290,7 +290,7 @@ class Rating(db.Model):
         db.session.add(self)
         db.session.commit()
 
-        print "I commited the rating", self.rating_score,\
+        print "I commited the rating", self.rating_id,\
               "with comment", self.comment, "to the database"
 
 
@@ -325,7 +325,7 @@ class SiteRating(db.Model):
         """Show info about site_rating."""
 
         return "<site_id=%d rating_id=%d >" % (self.site_id, self.rating_id)
-
+8665567
 
 
 class BookRating(db.Model):
@@ -415,6 +415,17 @@ def set_val_reading_session_id():
     db.session.commit()
 
 
+def set_val_rating_session_id():
+    """Set value for the next rating_session record after seeding database"""
+
+    # Get the Max session_id in the database
+    result = db.session.query(db.func.max(Rating.rating_id)).one()
+    max_id = int(result[0])
+
+    # Set the value for the next user_id to be max_id + 1
+    query = "SELECT setval('ratings_rating_id_seq', :new_id)"
+    db.session.execute(query, {'new_id': max_id + 1})
+    db.session.commit()
 
 
 

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+
+Today is {{ today_date }}
+
+<form action='/log_reading_session' method='POST'>
+  <p>
+    <h2>Your Reading Journeys!</h2>
+
+<!-- flash message from @app.route("/user/<int:user_id>")-->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+
+    {{ user_details }}
+
+    {{ book_dict }}
+{{ msg }}
+
+
+{% endblock %}
