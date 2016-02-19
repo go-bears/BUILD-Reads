@@ -21,7 +21,9 @@ Today is {{ today_date }}
 
     {{ user_details }}
 
-    {{ book_dict }}
+            {% for item in user_ratings_list %}
+          <li>{{ item.book.title }}</li>
+        {% endfor %}
 {{ msg }}
 
 

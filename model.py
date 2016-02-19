@@ -3,6 +3,7 @@ from datetime import date
 from flask_sqlalchemy import SQLAlchemy
 
 from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.orm import backref, relationship
 
 
 # This is the connection to the SQLite database; we're getting this
@@ -118,7 +119,7 @@ class Sidekick(db.Model):
 
     # set relationship between Reading_sessions and User & Book classes
     user = db.relationship('User', 
-                           backref=db.backref("sidekicks", 
+                           backref=db.backref("sidekicks",
                            order_by=sidekick_id))
 
 
@@ -206,17 +207,17 @@ class Reading_session(db.Model):
     # set foreign keys from users and books tables
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.user_id'), 
-                        nullable=True)
+                        nullable=False)
     book_id = db.Column(db.Integer, 
                         db.ForeignKey('books.book_id'), 
-                        nullable=True) 
+                        nullable=False) 
     sidekick_id = db.Column(db.Integer, 
                             db.ForeignKey('sidekicks.sidekick_id'), 
                             nullable=True) 
 
     # set relationship between Reading_sessions and User & Book classes
     user = db.relationship('User', 
-                           backref=db.backref("reading_sessions", 
+                           backref=db.backref("reading_sessions",
                            order_by=session_id))
     book = db.relationship('Book', 
                            backref=db.backref("reading_sessions", 
@@ -259,28 +260,28 @@ class Rating(db.Model):
     # set foreign keys from users and books tables
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.user_id'), 
-                        nullable=True)
+                        nullable=False)
                         
     book_id = db.Column(db.Integer, 
                         db.ForeignKey('books.book_id'), 
-                        nullable=True)
+                        nullable=False)
     
     session_id = db.Column(db.Integer, 
                            db.ForeignKey('reading_sessions.session_id'), 
-                           nullable=True) 
+                           nullable=False) 
     
     # set relationship between Ratings with User & Book classes
     user = db.relationship('User', 
                             backref=db.backref("ratings", 
-                                                order_by=rating_id))
+                            order_by=rating_id))
                                                       
     book = db.relationship('Book', 
                             backref=db.backref("ratings", 
-                                               order_by=rating_id))
+                            order_by=rating_id))
                                                       
     session = db.relationship('Reading_session', 
                              backref=db.backref("ratings", 
-                                                order_by=rating_id))
+                             order_by=rating_id))
 
 
     def commit_to_db(self):
@@ -324,7 +325,7 @@ class SiteRating(db.Model):
         """Show info about site_rating."""
 
         return "<site_id=%d rating_id=%d >" % (self.site_id, self.rating_id)
-8665567
+
 
 
 class BookRating(db.Model):
@@ -362,7 +363,9 @@ class UserBadge(db.Model):
 # Helper Functions
 
 # These functions get last value in a database table after seeding database 
-# then gives a new id for a new entry
+# then gives a new id for a new entry. 
+# These only need to be run only AFTER seeding db sql alchemy will auto increment again
+
 def set_val_user_id():
     """Set value for the next user_id after seeding database"""
 
@@ -374,6 +377,7 @@ def set_val_user_id():
     query = "SELECT setval('users_user_id_seq', :new_id)"
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
+    
     
 def set_val_sidekick_id():
     """Set value for the next user_id after seeding database"""
