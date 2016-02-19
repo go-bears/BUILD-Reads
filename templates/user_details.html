@@ -19,10 +19,17 @@ Today is {{ today_date }}
     {% endwith %}
 
 
-    {{ user_details }}
-
+    {{ user_details }}<br>
+      Your school is {{user_details.site.name}}
+      Your grade is {{user_details.grade}}
+      
+      <li>You read a total of {{ time }} minutes!!</li>
+      
+      You rated these books
             {% for item in user_ratings_list %}
-          <li>{{ item.book.title }}</li>
+            
+        <li>{{ item.book.title }}: {{item.session.rating_score}}</li>
+        
         {% endfor %}
 {{ msg }}
 

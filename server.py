@@ -74,12 +74,12 @@ def resolve_login():
     
     # collects login information from form
     user_type = request.form.get('user_type')
-    first_name = request.form.get('first_name').lower()
-    last_name = request.form.get('last_name').lower()
-    password = request.form.get('password').lower()
+    first_name = request.form.get('first_name')
+    last_name = request.form.get('last_name')
+    password = request.form.get('password')
 
     if user_type == "scholar":
-        
+
         #checks login information against database
         if db.session.query(User).filter((User.first_name==first_name) &
                                          (User.last_name==last_name) &
@@ -92,7 +92,9 @@ def resolve_login():
             
             # save values for Flask session dictionary
             session['first_name'] = first_name
-            session['user_id'] = scholar.user_id
+            print "this person is logged in,", session['first_name']
+            session['scholar_id'] = scholar.user_id
+            print "this is the user id", session['scholar_id'] 
             
             
             # confirmation message
@@ -126,7 +128,7 @@ def resolve_login():
             flash("Looks like you're new to BUILD! Let's sign you up!")
             return redirect('/new_mentor')
             
-        
+# TODO logout button is on base.html & doesn't work        
 @app.route('/logout', methods=["POST"])
 def logout_session():
     """Logs user out and clears session information"""
@@ -137,7 +139,7 @@ def logout_session():
     # confirm message
     flash("Logging you out!")
     
-    return redirect('/index')
+    return redirect('/')
 
 
 
@@ -215,8 +217,8 @@ def register_new_user():
 
         print "Database queried!"
         print scholar
-
-        # stores scholar's user.id from db
+        
+        # stores scholar's user.id from db if scholar is already in db
         session['scholar_id'] = scholar.user_id
         print session['scholar_id']
         
@@ -233,10 +235,8 @@ def register_new_user():
 
         # sets id for new user entry
         new_user_id = set_val_user_id()
-        
-        # stores scholar_id in flask session
-        session['scholar_id'] = new_user_id
-     
+    
+ 
         # creates instance of User for db     
         new_user = User(user_id=new_user_id,
                         first_name=first_name, 
@@ -247,6 +247,10 @@ def register_new_user():
                         site_id=site_id)
 
         new_user.commit_to_db()
+        
+        # stores scholar_id in flask session after db commit
+        session['scholar_id'] = new_user.user_id
+
         
         # flashes db confirmation message to user
         flash("Hi %s! We added you to BUILD reads!" % first_name)
@@ -268,16 +272,13 @@ def register_new_user():
 def serve_reading_session_form():
     """Serves the reading session log. """
 
-    # Flask session data for scholar's name
-    user = session['first_name']
-
     # queries db for list of sidekicks for dropdown menu
     # TODO limit dropdown mentors to mentors currently assigned to the site.
     sidekicks = db.session.query(Sidekick).all()
     
     # information messages    
     msg = "i'm serving the reading session page"
-    flash("Tell us about your reading adventure %s !" % user)
+    flash("Tell us about your reading adventure %s !" % session['first_name'])
 
     return render_template("reading_session.html", 
                            msg=msg, 
@@ -291,9 +292,7 @@ def serve_reading_session_form():
 def log_reading_session():
     """Collects reading session data and logs reading session to db."""
 
-    # scholar's name from Flask session
-    user = session['first_name']
-    
+
     # queries db for list of sidekicks for dropdown menu
     # TODO limit dropdown mentors to mentors currently assigned to the site.
     sidekicks = db.session.query(Sidekick).all()
@@ -349,7 +348,7 @@ def log_reading_session():
     print "i logged new this new_rating",  book_data.book_id, comment#, new_rating_id,                    
         
     # user confirmation
-    flash("Great Work! I logged your reading session %s !" % user)
+    flash("Great Work! I logged your reading session %s !" % session['first_name'])
     
     
     return render_template("reading_session.html", 
@@ -443,69 +442,57 @@ def register_new_mentor():
                            today_date=today_date)
 
 
+
 # TODO in progress: need to limit data to books and ratings_scores
 @app.route("/user/<int:scholar_id>")
 def show_user_details(scholar_id):
     """Return page showing the details of a scholar's history."""
+    
 
-    msg = "I am the user detail page of ", session['scholar_id']    
-    print msg
-    # retrieve scholar id from flask session
-    scholar_id = session['scholar_id']
-    print "this is the scholar's id", scholar_id
+    scholar_data = User.query.filter(User.user_id == session['scholar_id']).first()
+    print "i'm the user", scholar_data
     
-    name = session['first_name']
-    print "the scholar's name is", name
-
-    
-    p_user_details = db.session.query(User).filter(User.user_id==scholar_id).first()
-    print "i'm the user", p_user_details
-    
-    user_ratings_list = Rating.query.filter(Rating.user_id == scholar_id).all()
+    user_ratings_list = Rating.query.filter(Rating.user_id == session['scholar_id']).all()
     
     
     print 'you read these books'
     book_dict = {}
+    badges = 0
+    total_time = 0
+    
     for user_rating in user_ratings_list:
         print user_rating.book.title
-        # query for books by user_
-        # book = db.session.query(Book).filter(Book.book_id==user_rating.book_id).first()
-        #current_book = user_rating.book.title
+        if user_rating.session.badges_awarded:
+            badges +=1
+        
+        if user_rating.session.time_length:
+            total_time += user_rating.session.time_length
         
         
         #TODO get books titles to show on user page
         #calculate average ratings for a book
         #count earned for badges per day/day/month
         
-        # if current not in book_dict:
-        #     get_all_ratings_for_book = current_book.ratings
-        #     print get_all_ratings_for_current_book
-        #     book_dict[current_book.title] = get_all_ratings_for_current_book
-        # else:
-            # get_one_book_rating = db.session.query(Reading_session).filter((Reading_session.book_id==user_rating.book_id) &(Reading_session.user_id==scholar_id)).first()
-        #     book_dict[current_book.title].append(get_one_book_rating)
-            
-        
-        
+
     print book_dict
         
+    print "badges earned", badges
+    msg = 'your earned %s badges!!!' % badges
     
-    print 'your earned badges'
-    
-    flash("You worked hard %s" % session['first_name'])
+    flash("You worked hard %s !" % session['first_name'])
     
     return render_template("user_details.html",
                            msg=msg,
                            today_date=today_date,
-                           user_details=p_user_details,
+                           user_details=scholar_data,
                            user_ratings_list=user_ratings_list,
-                           book_dict=book_dict)
+                           book_dict=badges,
+                           time=total_time)
 
 
 if __name__ == "__main__":
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     connect_to_db(app)
-    
     # app config for local machine
     # app.run(debug=True)
     
