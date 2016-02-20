@@ -9,6 +9,9 @@ from jinja2 import StrictUndefined
 
 from model import *
 
+#######################################################################
+# Flask variables and tools
+
 app = Flask(__name__)
 #db = SQLAlchemy(app)
 
@@ -20,8 +23,11 @@ app.secret_key = "ABC"
 app.jinja_env.undefined = StrictUndefined
 
 
-# date objects for display and for database
 
+######################################################################
+# Global variables for this app
+
+# Create datetime objects for display and for database
 today = datetime.now()
 
 # date stamp for db session
@@ -31,10 +37,12 @@ date_stamp = today.date()
 today_date = "%s/%s/%s" % (today.month, today.day, today.year)
 
 
+####### Serving Pages ################################################
+
 #TESTED and WORKS!!
 
-#serving the landing page. Currently page is used as summary page 
-#displaying all data in build_reads db
+# serving the landing page. Currently page is used as summary page 
+# displaying all data in build_reads db
 @app.route('/')
 def index():
     """Homepage."""
@@ -67,8 +75,75 @@ def serve_login_form():
     return render_template("login.html", today_date=today_date)
 
 
+# TESTED AND WORKS
+# Serves the reading log form 
+@app.route('/reading_session')
+def serve_reading_session_form():
+    """Serves the reading session log. """
+
+    # queries db for list of sidekicks for dropdown menu
+    # TODO limit dropdown mentors to mentors currently assigned to the site.
+    sidekicks = db.session.query(Sidekick).all()
+    
+    # information messages    
+    msg = "i'm serving the reading session page"
+    flash("Tell us about your reading adventure %s !" % session['first_name'])
+
+    return render_template("reading_session.html", 
+                           msg=msg, 
+                           sidekicks=sidekicks, 
+                           today_date=today_date)
+
+
+#TESTED and WORKS!!
+@app.route("/new_user")
+def serve_new_user_form():
+    """Displays user new user form."""
+    
+    # values for dropdown menu
+    sites = db.session.query(Site).all()
+    grades = ['k', 1,2,3,4,5,6,7,8]
+    msg = "I'm serving the form"
+
+    return render_template("new_user.html", 
+                           sites=sites,
+                           grades=grades,
+                           msg=msg,
+                           today_date=today_date)
+
+
+# TESTED AND WORKS
+# Serves the mentor sign-up form
+@app.route('/new_mentor')
+def serve_new_mentor_form():
+    """Displays user new user form."""
+    
+    # values for dropdown menu
+    sites = db.session.query(Site).all()
+    
+    msg = "I'm serving the new mentor form"
+   
+    return render_template("new_mentor.html", 
+                           sites=sites,
+                           msg=msg,
+                           today_date=today_date)
+
+
+@app.route("/user/")
+def serve_user_details_page():
+    """Displays template for user's reading history """
+    
+    msg = "you must be logged in to see your reading history"
+    
+    return render_template("index.html", 
+                           msg=msg,
+                           today_date=today_date)
+
+
+########### Server Logic ###################################                           
+
 # TODO in progress Method not allow error. mentor login should go to mentor dashboard
-@app.route('/resolve_login', methods=["POST"])    
+@app.route('/resolve_login', methods=["POST", "GET"])    
 def resolve_login():
     """Manages login logic to direct to /reading_session or /new_user."""
     
@@ -77,6 +152,7 @@ def resolve_login():
     first_name = request.form.get('first_name')
     last_name = request.form.get('last_name')
     password = request.form.get('password')
+    
 
     if user_type == "scholar":
 
@@ -91,8 +167,11 @@ def resolve_login():
                                                     (User.password==password)).first()
             
             # save values for Flask session dictionary
+            session["logged_in"] = True
+            
             session['first_name'] = first_name
             print "this person is logged in,", session['first_name']
+            
             session['scholar_id'] = scholar.user_id
             print "this is the user id", session['scholar_id'] 
             
@@ -128,37 +207,7 @@ def resolve_login():
             flash("Looks like you're new to BUILD! Let's sign you up!")
             return redirect('/new_mentor')
             
-# TODO logout button is on base.html & doesn't work        
-@app.route('/logout', methods=["POST"])
-def logout_session():
-    """Logs user out and clears session information"""
-    
-    # clears flask session
-    session.clear()
-    
-    # confirm message
-    flash("Logging you out!")
-    
-    return redirect('/')
 
-
-
-#TESTED and WORKS!!
-@app.route("/new_user")
-def serve_new_user_form():
-    """Displays user new user form."""
-    
-    # values for dropdown menu
-    sites = db.session.query(Site).all()
-    grades = ['k', 1,2,3,4,5,6,7,8]
-    msg = "I'm serving the form"
-
-    return render_template("new_user.html", 
-                           sites=sites,
-                           grades=grades,
-                           msg=msg,
-                           today_date=today_date)
-    
 
 #TESTED and WORKS!!
 @app.route('/register_new_user', methods=["POST"])
@@ -199,13 +248,13 @@ def register_new_user():
     
 
     
-    # values for Flask session dictionary
+    # values for Flask session dictionary for new user
     session['first_name'] = first_name
     session['school'] = school
 
 
-    #### Database queries to build_reads db ######################################
- 
+    ## Database queries to build_reads db ##
+    
     # checks if user is already in db
     if db.session.query(User).filter((User.first_name==first_name) &
                                      (User.last_name==last_name) &
@@ -266,24 +315,7 @@ def register_new_user():
                            today_date=today_date)
 
 
-# TESTED AND WORKS
-# Serves the reading log form 
-@app.route('/reading_session')
-def serve_reading_session_form():
-    """Serves the reading session log. """
 
-    # queries db for list of sidekicks for dropdown menu
-    # TODO limit dropdown mentors to mentors currently assigned to the site.
-    sidekicks = db.session.query(Sidekick).all()
-    
-    # information messages    
-    msg = "i'm serving the reading session page"
-    flash("Tell us about your reading adventure %s !" % session['first_name'])
-
-    return render_template("reading_session.html", 
-                           msg=msg, 
-                           sidekicks=sidekicks, 
-                           today_date=today_date)
 
 
 # TESTED AND WORKS
@@ -298,34 +330,48 @@ def log_reading_session():
     sidekicks = db.session.query(Sidekick).all()
 
     # collects data from the form fields
-    title = request.form.get('title')
+    title = request.form.get('title').strip()
     sidekick_lastname = request.form.get('sidekick')
     rating_score = request.form.get('rating_score')
     comment = request.form.get('comment')
     time_length = request.form.get('time_length')
+    print time_length, " is how long the reading session was"
+        # calculates badges earned per reading session
+    if time_length < 20:
+        badges = 0
+    elif time_length >= 20 or time_length <= 40:
+        badges = 1
+    elif time_length >= 40 or time_length <= 60:
+        badges = 2
+    else:
+        badges = 3
     
 
     # queries db for user information by first name. this is ok for now.
     #TODO make query smarter by searching by first and last name or get query from data in Flask Session
-    user_data = db.session.query(User).filter((User.first_name==user)).first()
+    user_data = db.session.query(User).filter(User.first_name==\
+                                              session['first_name']).first()
     book_data = db.session.query(Book).filter(Book.title==title).first()
     
     # queries db by sidekick's last name
-    sidekick_data = db.session.query(Sidekick).filter(Sidekick.last_name==sidekick_lastname).first()
+    sidekick_data = db.session.query(Sidekick).filter(Sidekick.last_name==\
+                                                      sidekick_lastname).first()
     
     # sets function generates new reading session id number, use only when seeding db
-    #new_session_id = set_val_reading_session_id()
+    # new_session_id = set_val_reading_session_id()
+    # badges = None
+    
     
     # creates new reading session instance
     new_reading_session = Reading_session(#session_id=new_session_id,
                                           date=date_stamp,
                                           time_length=time_length,
-                                          # TODO write this function that calculates badges on basis of time length 1 badge for 20min 2 for 40 min3 for 60min
-                                          badges_awarded=1,
+                                          badges_awarded=badges,
                                           rating_score=rating_score,
                                           user_id=user_data.user_id,
                                           book_id=book_data.book_id,    
                                           sidekick_id=sidekick_data.sidekick_id)
+    # terminal confirmation
     print new_reading_session
 
     # commits new reading session instance to db
@@ -359,29 +405,15 @@ def log_reading_session():
 
 
 # TESTED AND WORKS
-# Serves the mentor sign-up form
-@app.route('/new_mentor')
-def serve_new_mentor_form():
-    """Displays user new user form."""
-    
-    # values for dropdown menu
-    sites = db.session.query(Site).all()
-    
-    msg = "I'm serving the new mentor form"
-   
-    return render_template("new_mentor.html", 
-                           sites=sites,
-                           msg=msg,
-                           today_date=today_date)
-
-
-# TESTED AND WORKS
 # Collects the new mentor form information 
 @app.route('/register_new_mentor', methods=["POST"])
 def register_new_mentor():
-        # values for dropdown menu
+    """Logs new mentors data from form to database """
+    
+    # draws values from db for dropdown menu
     sites = db.session.query(Site).all()
-    # values fro the form
+    
+    # collectts values from the form
     first_name = request.form.get('first_name')
     last_name = request.form.get('last_name')
     birthday = request.form.get("birthday")
@@ -395,7 +427,6 @@ def register_new_mentor():
     site_id = site.site_id
     
 
-    
     # checks if mentor is already in db
     if db.session.query(Sidekick).filter((Sidekick.first_name==first_name) &
                                          (Sidekick.last_name==last_name) &
@@ -404,7 +435,8 @@ def register_new_mentor():
         sidekick = db.session.query(Sidekick).filter((Sidekick.first_name==first_name) &
                                          (Sidekick.last_name==last_name) &
                                          (Sidekick.password==password)).first()
-    
+        
+        # terminal confirmation messages
         print "Database queried!"
         print sidekick
 
@@ -412,7 +444,7 @@ def register_new_mentor():
         flash("You're already a BUILD Mentor %s!" % first_name)
         msg ="database was queried successfully!"
             
-        # registers new user to db
+    # registers new user to db
     else:
         # sets id for new user entry
         new_sidekick_id = set_val_sidekick_id()
@@ -448,34 +480,50 @@ def register_new_mentor():
 def show_user_details(scholar_id):
     """Return page showing the details of a scholar's history."""
     
-
+    # queries database for scholar information by id
     scholar_data = User.query.filter(User.user_id == session['scholar_id']).first()
     print "i'm the user", scholar_data
     
+    # queries database for all ratings by the scholar by scholar id
     user_ratings_list = Rating.query.filter(Rating.user_id == session['scholar_id']).all()
     
     
     print 'you read these books'
-    book_dict = {}
+    book_rating_dict = {}
     badges = 0
     total_time = 0
     
     for user_rating in user_ratings_list:
-        print user_rating.book.title
+        
+        # calculate total badges earned
         if user_rating.session.badges_awarded:
             badges +=1
         
+        # calculates tot
         if user_rating.session.time_length:
             total_time += user_rating.session.time_length
         
+        # collects individual book ratings
+        if user_rating.book.title not in book_rating_dict:
+            book_rating_dict[user_rating.book.title] = \
+            [user_rating.session.rating_score]
         
+        else:
+            book_rating_dict[user_rating.book.title].append(user_rating.session.rating_score)
+        
+    import numpy
+    
+    for title, ratings in book_rating_dict.items():
+        title = numpy.mean(ratings)
+    
+    print book_rating_dict        
+            
+        # Nice to have
         #TODO get books titles to show on user page
         #calculate average ratings for a book
         #count earned for badges per day/day/month
         
 
-    print book_dict
-        
     print "badges earned", badges
     msg = 'your earned %s badges!!!' % badges
     

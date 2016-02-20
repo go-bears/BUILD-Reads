@@ -3,7 +3,6 @@
 
 Today is {{ today_date }}
 
-<form action='/log_reading_session' method='POST'>
   <p>
     <h2>Your Reading Journeys!</h2>
 
@@ -20,7 +19,7 @@ Today is {{ today_date }}
 
 
     {{ user_details }}<br>
-      Your school is {{user_details.site.name}}
+      Your attend {{user_details.site.name}}
       Your grade is {{user_details.grade}}
       
       <li>You read a total of {{ time }} minutes!!</li>
@@ -33,5 +32,7 @@ Today is {{ today_date }}
         {% endfor %}
 {{ msg }}
 
+<br>
+<a href='/reading_session'><button>Let's start a new reading session!</button></a>
 
 {% endblock %}
