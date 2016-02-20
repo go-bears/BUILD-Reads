@@ -513,17 +513,22 @@ def show_user_details(scholar_id):
         
     import numpy
     
-    for title, ratings in book_rating_dict.items():
-        title = numpy.mean(ratings)
     
-    print book_rating_dict        
+    
+    for title, ratings in book_rating_dict.items():
+        avg_rating = numpy.mean(ratings)
+        book_rating_dict[title] = avg_rating
+    
+    
+    print book_rating_dict
             
         # Nice to have
         #TODO get books titles to show on user page
         #calculate average ratings for a book
         #count earned for badges per day/day/month
         
-
+    
+    
     print "badges earned", badges
     msg = 'your earned %s badges!!!' % badges
     
@@ -534,7 +539,7 @@ def show_user_details(scholar_id):
                            today_date=today_date,
                            user_details=scholar_data,
                            user_ratings_list=user_ratings_list,
-                           book_dict=badges,
+                           book_dict=book_rating_dict,
                            time=total_time)
 
 

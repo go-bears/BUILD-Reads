@@ -18,19 +18,27 @@ Today is {{ today_date }}
     {% endwith %}
 
 
-    {{ user_details }}<br>
-      Your attend {{user_details.site.name}}
-      Your grade is {{user_details.grade}}
+    <!--{{ user_details }}<br>-->
+    <!--  Your attend {{user_details.site.name}}-->
+    <!--  Your grade is {{user_details.grade}}-->
       
-      <li>You read a total of {{ time }} minutes!!</li>
+    <!--  <li>You read a total of {{ time }} minutes!!</li>-->
       
-      You rated these books
-            {% for item in user_ratings_list %}
+    <!--  You rated these books-->
+    <!--        {% for item in user_ratings_list %}-->
             
-        <li>{{ item.book.title }}: {{item.session.rating_score}}</li>
+    <!--    <li>{{ item.book.title }}: {{item.session.rating_score}}</li>-->
         
-        {% endfor %}
+    <!--    {% endfor %}-->
+
+    {% for rating  in book_dict %}
+    
+      <li>{{ rating }} {{ book_dict[rating] }}</li>
+    
+    
+    {% endfor %}
 {{ msg }}
+
 
 <br>
 <a href='/reading_session'><button>Let's start a new reading session!</button></a>
