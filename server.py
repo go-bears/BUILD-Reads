@@ -9,6 +9,7 @@ from jinja2 import StrictUndefined
 
 from model import *
 
+from frontend_logic import  *
 #######################################################################
 # Flask variables and tools
 
@@ -70,14 +71,26 @@ def index():
 @app.route('/login')
 def serve_login_form():
     """Displays login form"""
-
     
+    # selects avatar for user
+    avatar = pick_avatar()
+    session['avatar'] = avatar
+
     return render_template("login.html", today_date=today_date)
 
 
+@app.route('/logout')
+def serve_logout_button():
+    """Clears sessioin and returns user to login form"""
+    session.clear()
+    
+    flash("You successfuly logged out!")
+    
+    return redirect('/login')
+
 # TESTED AND WORKS
 # Serves the reading log form 
-@app.route('/reading_session')
+@app.route('/reading_session', methods=["POST", "GET"])
 def serve_reading_session_form():
     """Serves the reading session log. """
 
@@ -85,14 +98,21 @@ def serve_reading_session_form():
     # TODO limit dropdown mentors to mentors currently assigned to the site.
     sidekicks = db.session.query(Sidekick).all()
     
+    # queries databse for scholar ID for go to 
+    scholar = User.query.filter(User.first_name == session['first_name']).first()
+    
+    print scholar
+    print scholar.user_id
+    
     # information messages    
-    msg = "i'm serving the reading session page"
-    flash("Tell us about your reading adventure %s !" % session['first_name'])
-
+    msg = "Tell us about your reading adventure %s !" % session['first_name']
+    
     return render_template("reading_session.html", 
                            msg=msg, 
                            sidekicks=sidekicks, 
-                           today_date=today_date)
+                           user_id=scholar.user_id,
+                           today_date=today_date,
+                           avatar=session['avatar'])
 
 
 #TESTED and WORKS!!
@@ -129,7 +149,7 @@ def serve_new_mentor_form():
                            today_date=today_date)
 
 
-@app.route("/user/")
+@app.route("/user")
 def serve_user_details_page():
     """Displays template for user's reading history """
     
@@ -137,13 +157,14 @@ def serve_user_details_page():
     
     return render_template("index.html", 
                            msg=msg,
-                           today_date=today_date)
+                           today_date=today_date
+                           )
 
 
 ########### Server Logic ###################################                           
 
 # TODO in progress Method not allow error. mentor login should go to mentor dashboard
-@app.route('/resolve_login', methods=["POST", "GET"])    
+@app.route('/resolve_login', methods=["POST"])    
 def resolve_login():
     """Manages login logic to direct to /reading_session or /new_user."""
     
@@ -154,14 +175,15 @@ def resolve_login():
     password = request.form.get('password')
     
 
+    
     if user_type == "scholar":
 
-        #checks login information against database
+        #checks scholar's login information against user database
         if db.session.query(User).filter((User.first_name==first_name) &
                                          (User.last_name==last_name) &
                                          (User.password==password)).first():
             
-            
+            # queries db for scholar object
             scholar = db.session.query(User).filter((User.first_name==first_name) &
                                                     (User.last_name==last_name) &
                                                     (User.password==password)).first()
@@ -197,7 +219,8 @@ def resolve_login():
             sidekick = db.session.query(User).filter((Sidekick.first_name==first_name) &
                                                      (Sidekick.last_name==last_name) &
                                                      (Sidekick.password==password)).first()
-        # success redirects to mentor dashboard eventually
+        
+        # success will redirects to mentor dashboard eventually
             
             flash("Let's start reading with your scholar! \
                   Please help them with logging in")
@@ -315,9 +338,6 @@ def register_new_user():
                            today_date=today_date)
 
 
-
-
-
 # TESTED AND WORKS
 # Collects the form information 
 @app.route('/log_reading_session', methods=["POST"])
@@ -359,9 +379,7 @@ def log_reading_session():
     
     # sets function generates new reading session id number, use only when seeding db
     # new_session_id = set_val_reading_session_id()
-    # badges = None
-    
-    
+   
     # creates new reading session instance
     new_reading_session = Reading_session(#session_id=new_session_id,
                                           date=date_stamp,
@@ -399,7 +417,9 @@ def log_reading_session():
     
     return render_template("reading_session.html", 
                            msg=msg,
+                           avatar=session['avatar'],
                            sidekicks=sidekicks,
+                           user_id=user_data.user_id,
                            today_date=today_date)
 
 
@@ -476,7 +496,7 @@ def register_new_mentor():
 
 
 # TODO in progress: need to limit data to books and ratings_scores
-@app.route("/user/<int:scholar_id>")
+@app.route("/user/<int:scholar_id>", methods=["POST", "GET"])
 def show_user_details(scholar_id):
     """Return page showing the details of a scholar's history."""
     
@@ -527,7 +547,7 @@ def show_user_details(scholar_id):
         #calculate average ratings for a book
         #count earned for badges per day/day/month
         
-    
+    # user_id = session['scholar_id']
     
     print "badges earned", badges
     msg = 'your earned %s badges!!!' % badges
@@ -537,6 +557,7 @@ def show_user_details(scholar_id):
     return render_template("user_details.html",
                            msg=msg,
                            today_date=today_date,
+                           avatar=session['avatar'],
                            user_details=scholar_data,
                            user_ratings_list=user_ratings_list,
                            book_dict=book_rating_dict,
@@ -549,7 +570,7 @@ if __name__ == "__main__":
     # app config for local machine
     # app.run(debug=True)
     
-    # flask debugging toolbar
+    # Flask debugging toolbar
     DebugToolbarExtension(app)
     
 

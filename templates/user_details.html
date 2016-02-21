@@ -16,7 +16,10 @@ Today is {{ today_date }}
         </ul>
       {% endif %}
     {% endwith %}
-
+    
+   {% if avatar %}  
+      <i class='{{ avatar }}'></i> 
+    {% endif %}
 
     <!--{{ user_details }}<br>-->
     <!--  Your attend {{user_details.site.name}}-->

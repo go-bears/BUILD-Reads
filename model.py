@@ -1,3 +1,7 @@
+# TODO re-write Books model to include author, year, publisher, and open library cover images
+# # Add new model for training data table
+# re-write user for avatar image
+
 from datetime import date
 
 from flask_sqlalchemy import SQLAlchemy
@@ -316,9 +320,15 @@ class SiteRating(db.Model):
     __tablename__ = "site_rating"
 
     # TODO add primary keys 
-    SiteRating = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    site_id = db.Column(db.Integer, db.ForeignKey('sites.site_id'), nullable=True)
-    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=True)
+    SiteRating = db.Column(db.Integer,
+                           primary_key=True,
+                           autoincrement=True)
+    site_id = db.Column(db.Integer,
+                        db.ForeignKey('sites.site_id'), 
+                        nullable=True)
+    rating_id = db.Column(db.Integer,
+                          db.ForeignKey('ratings.rating_id'),
+                          nullable=True)
 
 
     def __repr__(self):
@@ -333,9 +343,15 @@ class BookRating(db.Model):
 
     __tablename__ = "book_rating"
 
-    BookRating = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    book_id = db.Column(db.Integer, db.ForeignKey('books.book_id'), nullable=True)
-    rating_id = db.Column(db.Integer, db.ForeignKey('ratings.rating_id'), nullable=True)
+    BookRating = db.Column(db.Integer,
+                           primary_key=True,
+                           autoincrement=True)
+    book_id = db.Column(db.Integer,
+                        db.ForeignKey('books.book_id'),
+                        nullable=True)
+    rating_id = db.Column(db.Integer,
+                          db.ForeignKey('ratings.rating_id'),
+                          nullable=True)
 
 
     def __repr__(self):
@@ -349,8 +365,12 @@ class UserBadge(db.Model):
 
     __tablename__ = "user_badge"
 
-    UserBadge = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=True)
+    UserBadge = db.Column(db.Integer,
+                          primary_key=True,
+                          autoincrement=True)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.user_id'),
+                        nullable=True)
    
 
     def __repr__(self):

@@ -9,16 +9,21 @@ Today is {{ today_date }}
 
 <!-- flash message from @app.route('/reading_session') -->
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
-        {% for message in messages %}
-          <li>{{ message }}</li>
-        {% endfor %}
-        </ul>
-      {% endif %}
+      {% if messages %} 
+          <ul class=flashes>
+            {% for message in messages %}
+              <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+      {% endif %} 
     {% endwith %}
 
+   {% if avatar %}  
+      <i class='{{ avatar }}'></i> 
+    {% endif %}
+    
 
+  {{ msg }}
     <br>
     <label for="title">Book Title:</label>
       <input type="text" name="title" placeholder="Book Title">
@@ -36,7 +41,7 @@ Today is {{ today_date }}
         </option>
         {% endfor %}
       </select>
-  
+      <br>
         <label for="book-rating">
           Rate How Much You Enjoyed Your Book today:
         </label><br>
@@ -52,9 +57,13 @@ Today is {{ today_date }}
     <input type="Submit" value="Submit Reading Log">
 </form>
 
+  <form action="/user/{{ user_id }}">
+   <input type='submit'  value="Go to Your Reading History">
+  </form>
 
 
-{{ msg }}
+
+
 
 
 {% endblock %}
