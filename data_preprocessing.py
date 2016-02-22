@@ -76,8 +76,6 @@ def merge_userratings_books(df1, df2):
     return User_Ratings_Books
     
 
-
-
 def generate_youth_book_ratings(merged_df):
     """Filter query to limit results to ages 3-18, with ratings >0"""
 
@@ -87,6 +85,79 @@ def generate_youth_book_ratings(merged_df):
  
     return y_user_book_ratings_df
 
+# location_dict ={}
+# states_dict = {}
+def parse_countries(dataframe):
+    
+    dataframe = y_user_book_ratings_df
+    locations = dataframe['location'].tolist()
+    # print locations
+    parsed_loc_list = []
+    for locate in locations:
+        place = locate.split(',')
+        city = place[0].strip()
+        state = place[1].strip()
+        country = place[2].strip()
+        
+        parsed_loc_list.append((city, state, country))
+    
+    
+    return parsed_loc_list
+
+
+def count_countries(parsed_loc):
+    """Counts readers per country."""
+    
+    country_count= {}
+    for loc_tuple in parsed_loc_list:
+        city, state, country = loc_tuple
+        if country not in country_count:
+            country_count[country] = 1
+        elif country == 'wisconsin':
+            country_count['usa'] += 1
+        elif country == 'dc':
+            country_count['usa'] += 1
+        elif country == 'califronia':
+            country_count['usa'] += 1
+            
+        else:
+            country_count[country] += 1
+    
+   
+    return country_count
+    
+def count_states(parsed_loc):
+    """Count number of readers in each state."""
+    
+    states_dict = {}
+    for loc_tuple in parsed_loc_list:
+        city, state, country = loc_tuple
+        
+        for count in country:
+            if country == 'usa':
+                if state not in states_dict:
+                    states_dict[state] = 1
+                else:
+                    states_dict[state] += 1
+           
+            elif country == 'wisconsin':
+                    states_dict['wisconsin'] += 1
+            elif country == 'california':
+                states_dict['california'] += 1
+            elif country == 'dc':
+                if 'dc' not in states_dict:
+                    states_dict['dc'] = 1
+                else:
+                    states_dict['dc'] += 1
+                    
+    
+    return states_dict
+        
+        
+#     print states_dict
+#     # print location_dict
+    
+
 
 ################## run all the preprocessing functions  ############
 users_df = open_users_csv()
@@ -94,8 +165,37 @@ ratings_df = open_ratings_csv()
 books_df = open_books_csv()
 User_Ratings_df = merge_user_ratings(users_df, ratings_df)
 User_Ratings_Books = merge_userratings_books(User_Ratings_df, books_df)
-y_user_book_ratings = generate_youth_book_ratings(User_Ratings_Books)
-
+y_user_book_ratings_df = generate_youth_book_ratings(User_Ratings_Books)
+parsed_loc_list = parse_countries(y_user_book_ratings_df)
+count_countries(parsed_loc_list)
+count_states(parsed_loc_list)
 # ratings are 1-10
 # produces 13554 entries, mean age: 15, mean rating: 7.66
+
+top = y_user_book_ratings_df.groupby('title').agg({'rating': [np.size, np.mean]})
+
+print top.sort([('rating', 'mean')], ascending=False).head()
+# data exploration with pandas below
+# print y_user_book_ratings
+# groups data by age
+age_group = y_user_book_ratings_df.groupby('age')
+age_group.describe()
+
+# the top 25 most rated books
+# most_rated = y_user_book_ratings_df.groupby('title').size().sort_values(ascending=False)[:25]
+# print most_rated
+
+# age_group.loc[:,['user_id','age','title', 'isbn']]
+
+#counts how many ratings each book received
+# print y_suser_book_ratings_df.title.value_counts() #[:25]
+
+# print y_user_book_ratings_df.groupby('title').agg({'rating': [np.size, np.mean]})
+
+
+# print y_user_book_ratings_df.sort([('rating')], ascending=False).head()
+
+
+
+
 

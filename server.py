@@ -219,6 +219,8 @@ def resolve_login():
             sidekick = db.session.query(User).filter((Sidekick.first_name==first_name) &
                                                      (Sidekick.last_name==last_name) &
                                                      (Sidekick.password==password)).first()
+            
+            session['mentor'] = sidekick.sidekick_id
         
         # success will redirects to mentor dashboard eventually
             
@@ -562,6 +564,16 @@ def show_user_details(scholar_id):
                            user_ratings_list=user_ratings_list,
                            book_dict=book_rating_dict,
                            time=total_time)
+
+@app.route("/mentor/<int:sidekick_id>", methods=["POST", "GET"])
+def show_mentor_details(sidekick_id):
+    """Show mentor dashboard with details on reading trends, schools, and list of scholars  """
+    
+    scholars = User.query.filter(user_id.sidekick_id==sidekick_id).all()
+    
+    return render_template('mentor_detail.html', 
+                           today_date=today_date,
+                           scholars=scholars)
 
 
 if __name__ == "__main__":

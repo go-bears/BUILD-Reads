@@ -23,7 +23,7 @@ book_2_raters = data[data.title == book_2].user_id
 
 # create a set of raters that have rated book 1 and book 2
 common_raters = set(book_1_raters).intersection(book_2_raters)
-print common_raters
+print "%d people have reviewed these 2 books" % len(common_raters)
 
 
 def get_book_ratings(title, common_raters):
@@ -37,6 +37,13 @@ def get_book_ratings(title, common_raters):
     
     reviews = reviews[data['user_id'].duplicated()==False]
    
+
+
+# Checking the table with only the common reviewers
+list_common_reviewers = []
+
+for i in common_reviewers:
+    list_common_reviewers.append(i)
 
 # collect all book ratings by the common_raters who have also rated book 1
 book_1_reviews = get_book_ratings(book_1, common_raters)

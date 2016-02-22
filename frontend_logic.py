@@ -4,8 +4,6 @@ from flask import request, session
 from data_preprocessing import *
 
 
-
-
 icon_list =["fa fa-camera-retro fa-4x", 
             "fa fa-hand-peace-o fa-4x", 
             "fa fa-plane fa-4x",
