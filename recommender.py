@@ -1,10 +1,10 @@
 import pandas as pd
 import csv
-import codecs
+import json
 import numpy as np
 import numexpr
 from scipy.stats.stats import pearsonr
-import json
+
 
 from data_preprocessing import y_user_book_ratings
 

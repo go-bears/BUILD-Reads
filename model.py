@@ -274,7 +274,7 @@ class Rating(db.Model):
                            db.ForeignKey('reading_sessions.session_id'), 
                            nullable=False) 
     
-    # set relationship between Ratings with User & Book classes
+    # set backref relationship between Ratings with User & Book classes
     user = db.relationship('User', 
                             backref=db.backref("ratings", 
                             order_by=rating_id))
@@ -308,8 +308,39 @@ class Rating(db.Model):
                                                               self.book_id)
 
 
+class Bookx_data(db.Model):
+    """Book Crossing table creating """
+    
+    "__tablename__" = "bookx_data"
+    
+    record_id = db.Column(db.String(10), nullable=True) 
+    user_id = db.Column(db.String(10), nullable=True)
+    location = db.Column(db.String(150), nullable=True)
+    age = db.Column(db.Integer, nullable=True)
+    isbn = db.Column(db.String(15), nullable=True)
+    rating = db.Column(db.Integer, nullable=True)
+    title = db.Column(db.String(150), nullable=True)
+    author = db.Column(db.String(50), nullable=True)
+    year =  db.Column(db.Integer, nullable=True)
+    publisher = db.Column(db.String(50), nullable=True)
+    image_link = db.Column(db.String(200), nullable=True)
+    
+    # set backref relationship between Bookx_data with Book classes
+    book = db.relationship('Book', 
+                            backref=db.backref("ratings", 
+                            order_by=rating_id))
+    
 
 
+ def __repr__(self):
+        """Show info about Bookx_data."""
+
+        return "<user_id=%s location=%s age=%d isbn=%s rating=%d \
+                title=%s author=% year=%d publisher=%s image_link=%s>" \
+                                                            % (self.rating_id, 
+                                                              self.comment, 
+                                                              self.user_id, 
+                                                              self.book_id)
 
 # ####################################################################
 # # Association Tables
@@ -346,6 +377,7 @@ class BookRating(db.Model):
     BookRating = db.Column(db.Integer,
                            primary_key=True,
                            autoincrement=True)
+                               
     book_id = db.Column(db.Integer,
                         db.ForeignKey('books.book_id'),
                         nullable=True)

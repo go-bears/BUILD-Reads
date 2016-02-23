@@ -569,11 +569,21 @@ def show_user_details(scholar_id):
 def show_mentor_details(sidekick_id):
     """Show mentor dashboard with details on reading trends, schools, and list of scholars  """
     
+    # queries db for scholars that the mentor has worked with via sidekick_id
     scholars = User.query.filter(user_id.sidekick_id==sidekick_id).all()
     
-    return render_template('mentor_detail.html', 
-                           today_date=today_date,
-                           scholars=scholars)
+    # 
+    
+    # if mentor is logged in, render the mentor_details page
+    if session['mentor']:
+        return render_template('mentor_detail.html', 
+                               today_date=today_date,
+                               scholars=scholars)
+    
+    # else return mentor to login page         
+    else:
+        flash("Hi BUILD mentor, please login to see the details page"
+        return redirect('/login')
 
 
 if __name__ == "__main__":

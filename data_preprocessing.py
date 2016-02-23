@@ -23,7 +23,7 @@ def open_users_csv():
 
 
 def open_books_csv():
-    """Open csv separating on semi-colons, set datatype, set headers."""
+    """Open BX-Books.csv separating on semi-colons, set datatype, set headers."""
     
     # open csv and format dataframe
     books_df = pd.read_csv('BX-Dump/BX-Books.csv',
@@ -36,7 +36,7 @@ def open_books_csv():
     return books_df
 
 def open_ratings_csv():
-    """Open csv separating on semi-colons, set datatype, set headers."""
+    """Open BX-Book-Ratings.csv separate on semi-colons, set datatype, set headers."""
     
     # open csv and format dataframe
     ratings_df = pd.read_csv('BX-Dump/BX-Book-Ratings.csv',
@@ -64,7 +64,7 @@ def merge_user_ratings(df1, df2):
     
 
 def merge_userratings_books(df1, df2):
-    """ Merges of user_ratings and dataframes"""
+    """ Merges of user_ratings and books dataframes"""
     
     # Merges User_Ratings and book dataframes on left join
     User_Ratings_Books = pd.merge(User_Ratings_df,
@@ -77,7 +77,7 @@ def merge_userratings_books(df1, df2):
     
 
 def generate_youth_book_ratings(merged_df):
-    """Filter query to limit results to ages 3-18, with ratings >0"""
+    """Filter query to limit results to ages 3-18, with ratings > 0."""
 
     y_user_book_ratings_df = User_Ratings_Books[(User_Ratings_Books['age'] > 3) &
             (User_Ratings_Books['age']< 19) &
@@ -85,9 +85,9 @@ def generate_youth_book_ratings(merged_df):
  
     return y_user_book_ratings_df
 
-# location_dict ={}
-# states_dict = {}
+
 def parse_countries(dataframe):
+    """Parses location string into city, state, country; returns list of tuples."""
     
     dataframe = y_user_book_ratings_df
     locations = dataframe['location'].tolist()
@@ -139,7 +139,7 @@ def count_states(parsed_loc):
                     states_dict[state] = 1
                 else:
                     states_dict[state] += 1
-           
+           # if statements to handle some malformed entries
             elif country == 'wisconsin':
                     states_dict['wisconsin'] += 1
             elif country == 'california':
@@ -152,10 +152,21 @@ def count_states(parsed_loc):
                     
     
     return states_dict
-        
-        
-#     print states_dict
-#     # print location_dict
+
+def count_CA(parsed_loc):
+    """Count readers in different CA cities """
+    
+    CA_dict = {}
+    for loc_tuple in parsed_loc_list:
+        city, state, country = loc_tuple
+        if state == 'california':
+            if city not in CA_dict:
+                CA_dict[city] = 1
+            else:
+                CA_dict[city] = 1
+            
+    return CA_dict
+    
     
 
 
@@ -169,33 +180,51 @@ y_user_book_ratings_df = generate_youth_book_ratings(User_Ratings_Books)
 parsed_loc_list = parse_countries(y_user_book_ratings_df)
 count_countries(parsed_loc_list)
 count_states(parsed_loc_list)
-# ratings are 1-10
+count_CA(parsed_loc_list)
+
+# y_user_book_ratings_df features: ratings are 1-10
 # produces 13554 entries, mean age: 15, mean rating: 7.66
 
-top = y_user_book_ratings_df.groupby('title').agg({'rating': [np.size, np.mean]})
 
-print top.sort([('rating', 'mean')], ascending=False).head()
-# data exploration with pandas below
-# print y_user_book_ratings
+# ############ data exploration with pandas below #######################
+# groups by title and displays mean and sample rating size for each title
+# top = y_user_book_ratings_df.groupby('title').agg({'rating': [np.size, np.mean]})
+# print top.sort([('rating', 'mean')], ascending=False).head()
+# 
+# 
 # groups data by age
 age_group = y_user_book_ratings_df.groupby('age')
-age_group.describe()
+# print age_group.head()
+# print age_group.describe()
 
-# the top 25 most rated books
+# top 25 most rated books
 # most_rated = y_user_book_ratings_df.groupby('title').size().sort_values(ascending=False)[:25]
 # print most_rated
-
-# age_group.loc[:,['user_id','age','title', 'isbn']]
 
 #counts how many ratings each book received
 # print y_suser_book_ratings_df.title.value_counts() #[:25]
 
-# print y_user_book_ratings_df.groupby('title').agg({'rating': [np.size, np.mean]})
+# finds sample size and mean of book ratings and selects 20 highest mean scores
+mean_rating = y_user_book_ratings_df.loc[:,['rating',
+                                                'title']].groupby('title').agg({'rating':[np.size,
+                                                                                      np.mean]})
+
+# print mean_rating
+# print mean_rating.sort([('rating', 'mean')], ascending=False).head()
 
 
-# print y_user_book_ratings_df.sort([('rating')], ascending=False).head()
+# filter for books with rating:size with more than 10 ratings
+atleast_3 = mean_rating['rating']['size'] >= 3
+# print atleast_3.describe()
+# produces 698 entries
 
 
+# print top 20 scores with rating sample size > 3
+# print mean_rating[atleast_3].sort([('rating', 'mean')], ascending=False).head(20)
+
+# converts dataframe to csv file
+# y_user_book_ratings_df.to_csv('y_book_rating.csv')
 
 
-
+most_50 = atleast_3.groupby('title').size().order(ascending=False)[:50]
+print most_50
