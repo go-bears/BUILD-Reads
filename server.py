@@ -89,7 +89,6 @@ def serve_logout_button():
     return redirect('/login')
 
 # TESTED AND WORKS
-# Serves the reading log form 
 @app.route('/reading_session', methods=["POST", "GET"])
 def serve_reading_session_form():
     """Serves the reading session log. """
@@ -308,11 +307,11 @@ def register_new_user():
         site_id = site.site_id
 
         # sets id for new user entry
-        new_user_id = set_val_user_id()
+        # new_user_id = set_val_user_id()
     
  
         # creates instance of User for db     
-        new_user = User(user_id=new_user_id,
+        new_user = User(#user_id=new_user_id,
                         first_name=first_name, 
                         last_name=last_name,
                         birthday=birthday,
@@ -469,10 +468,10 @@ def register_new_mentor():
     # registers new user to db
     else:
         # sets id for new user entry
-        new_sidekick_id = set_val_sidekick_id()
+        # new_sidekick_id = set_val_sidekick_id()
      
         # creates instance of Sidekick for db     
-        new_sidekick = Sidekick(sidekick_id=new_sidekick_id,
+        new_sidekick = Sidekick(#sidekick_id=new_sidekick_id,
                         first_name=first_name, 
                         last_name=last_name,
                         password=password)
@@ -509,6 +508,8 @@ def show_user_details(scholar_id):
     # queries database for all ratings by the scholar by scholar id
     user_ratings_list = Rating.query.filter(Rating.user_id == session['scholar_id']).all()
     
+    # need to run query that collects sidekicks that belong to a scholar
+
     
     print 'you read these books'
     book_rating_dict = {}
@@ -524,7 +525,7 @@ def show_user_details(scholar_id):
         # calculates tot
         if user_rating.session.time_length:
             total_time += user_rating.session.time_length
-        
+    
         # collects individual book ratings
         if user_rating.book.title not in book_rating_dict:
             book_rating_dict[user_rating.book.title] = \
@@ -565,15 +566,17 @@ def show_user_details(scholar_id):
                            book_dict=book_rating_dict,
                            time=total_time)
 
+
+# this doesn't work yet
 @app.route("/mentor/<int:sidekick_id>", methods=["POST", "GET"])
 def show_mentor_details(sidekick_id):
     """Show mentor dashboard with details on reading trends, schools, and list of scholars  """
     
     # queries db for scholars that the mentor has worked with via sidekick_id
-    scholars = User.query.filter(user_id.sidekick_id==sidekick_id).all()
+    #   = Reading_session.query.filter(reading_session.sidekick_id==sidekick_id).all()
+    # print scholars
     
-    # 
-    
+
     # if mentor is logged in, render the mentor_details page
     if session['mentor']:
         return render_template('mentor_detail.html', 
@@ -582,7 +585,8 @@ def show_mentor_details(sidekick_id):
     
     # else return mentor to login page         
     else:
-        flash("Hi BUILD mentor, please login to see the details page"
+        flash("Hi BUILD mentor, please login to see the details page")
+        
         return redirect('/login')
 
 

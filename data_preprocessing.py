@@ -193,7 +193,7 @@ count_CA(parsed_loc_list)
 # 
 # 
 # groups data by age
-age_group = y_user_book_ratings_df.groupby('age')
+# age_group = y_user_book_ratings_df.groupby('age')
 # print age_group.head()
 # print age_group.describe()
 
@@ -205,16 +205,17 @@ age_group = y_user_book_ratings_df.groupby('age')
 # print y_suser_book_ratings_df.title.value_counts() #[:25]
 
 # finds sample size and mean of book ratings and selects 20 highest mean scores
-mean_rating = y_user_book_ratings_df.loc[:,['rating',
-                                                'title']].groupby('title').agg({'rating':[np.size,
-                                                                                      np.mean]})
-
+# mean_rating = y_user_book_ratings_df.loc[:,['rating',
+                                                # 'title']].groupby('title').agg({'rating':[np.size,
+                                                                                    #   np.mean]})
+# print y_user_book_ratings_df.loc['isbn','title'].head()
+# print y_user_book_ratings_df.head() 
 # print mean_rating
 # print mean_rating.sort([('rating', 'mean')], ascending=False).head()
 
 
 # filter for books with rating:size with more than 10 ratings
-atleast_3 = mean_rating['rating']['size'] >= 3
+# atleast_3 = mean_rating['rating']['size'] >= 3
 # print atleast_3.describe()
 # produces 698 entries
 
@@ -225,6 +226,5 @@ atleast_3 = mean_rating['rating']['size'] >= 3
 # converts dataframe to csv file
 # y_user_book_ratings_df.to_csv('y_book_rating.csv')
 
-
-most_50 = atleast_3.groupby('title').size().order(ascending=False)[:50]
-print most_50
+# most_50 = atleast_3.groupby('title').size().order(ascending=False)[:50]
+# print most_50

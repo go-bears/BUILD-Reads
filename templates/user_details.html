@@ -21,23 +21,25 @@ Today is {{ today_date }}
       <i class='{{ avatar }}'></i> 
     {% endif %}
 
-    <!--{{ user_details }}<br>-->
-    <!--  Your attend {{user_details.site.name}}-->
-    <!--  Your grade is {{user_details.grade}}-->
-      
-    <!--  <li>You read a total of {{ time }} minutes!!</li>-->
-      
-    <!--  You rated these books-->
-    <!--        {% for item in user_ratings_list %}-->
-            
-    <!--    <li>{{ item.book.title }}: {{item.session.rating_score}}</li>-->
-        
-    <!--    {% endfor %}-->
 
-    {% for rating  in book_dict %}
+      Your attend {{ user_details.site.name }}
+      <br> 
+      Your grade is {{ user_details.grade }}
+      <br>
+    
+      <li>You read a total of {{ time }} minutes!!</li>
+      
+      <!--You rated these books-->
+      <!--      {% for item in user_ratings_list %}-->
+            
+      <!--  <li>{{ item.book.title }}: {{item.session.rating_score}}</li>-->
+        
+        {% endfor %}
+
+    {% for rating in book_dict %}
     
       <li>{{ rating }} {{ book_dict[rating] }}</li>
-    
+  
     
     {% endfor %}
 {{ msg }}

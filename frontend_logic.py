@@ -1,10 +1,13 @@
 import random
 from flask import request, session
 
-from data_preprocessing import *
+# from data_preprocessing import *
 
 
-icon_list =["fa fa-camera-retro fa-4x", 
+# data frame 
+# BOOK_DATA = y_user_book_ratings_df
+
+ICON_LIST =["fa fa-camera-retro fa-4x", 
             "fa fa-hand-peace-o fa-4x", 
             "fa fa-plane fa-4x",
             "fa fa-rocket fa-4x",
@@ -16,16 +19,28 @@ icon_list =["fa fa-camera-retro fa-4x",
             "fa fa-birthday-cake fa-4x"]
             
 
+OPEN_LIBRARY_COVER_URL = "http://covers.openlibrary.org/b/isbn/"
+OPEN_LIBRARY_SMALL_IMG_END = "-S.jpg"
+OPEN_LIBRARY_MED_IMG_END = "-M.jpg"
+OPEN_LIBRARY_LRG_IMG_END = "-L.jpg"
+
 def pick_avatar():
-    user_avatar = random.choice(icon_list)
+    user_avatar = random.choice(ICON_LIST)
     
     print user_avatar
     return user_avatar
 
 
-def get_book_covers(titles):
-        titles = book_dict 
-        print titles
+def book_search(title):
+    """searches for an isbn number by title in Bookx_data or in Open library"""
+    pass    
+    # book_data .str.lower()
+
+
+def get_book_covers(isbn_list):
+    """Takes in a list of ISBNs and generates a book cover urls """
+    pass              
+        # print titles
         # user_ratings_list = Rating.query.filter(Rating.user_id == session['scholar_id']).all()
 
 

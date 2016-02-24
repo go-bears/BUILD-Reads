@@ -151,6 +151,8 @@ class Site(db.Model):
     site_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), nullable=True)
     location = db.Column(db.String(50), nullable=True)
+    
+    ratings = db.session
 
 
     def commit_to_db(self):
@@ -311,9 +313,9 @@ class Rating(db.Model):
 class Bookx_data(db.Model):
     """Book Crossing table creating """
     
-    "__tablename__" = "bookx_data"
+    __tablename__ = "bookx_data"
     
-    record_id = db.Column(db.String(10), nullable=True) 
+    record_id = db.Column(db.String(10), primary_key=True, nullable=True) 
     user_id = db.Column(db.String(10), nullable=True)
     location = db.Column(db.String(150), nullable=True)
     age = db.Column(db.Integer, nullable=True)
@@ -325,22 +327,33 @@ class Bookx_data(db.Model):
     publisher = db.Column(db.String(50), nullable=True)
     image_link = db.Column(db.String(200), nullable=True)
     
+    
+    # sets isbn from book
+    isbn = db.Column(db.Integer, 
+                        db.ForeignKey('books.isbn'),
+                        nullable=False)
+    
     # set backref relationship between Bookx_data with Book classes
     book = db.relationship('Book', 
-                            backref=db.backref("ratings", 
-                            order_by=rating_id))
+                            backref=db.backref("Bookx_data", 
+                            order_by=isbn))
     
 
-
- def __repr__(self):
+    def __repr__(self):
         """Show info about Bookx_data."""
-
-        return "<user_id=%s location=%s age=%d isbn=%s rating=%d \
-                title=%s author=% year=%d publisher=%s image_link=%s>" \
-                                                            % (self.rating_id, 
-                                                              self.comment, 
-                                                              self.user_id, 
-                                                              self.book_id)
+    
+        return "<user_id=%s location=%s age=%d isbn=%s rating=%d <title=%s author=% year=%d publisher=%s image_link=%s>" \
+                                                                % (self.record_id, 
+                                                                  self.user_id, 
+                                                                  self.location, 
+                                                                  self.age,
+                                                                  self.isbn,
+                                                                  self.rating,
+                                                                  self.title,
+                                                                  self.author,
+                                                                  self.year,
+                                                                  self.publisher,
+                                                                  self.image_link)
 
 # ####################################################################
 # # Association Tables
@@ -350,7 +363,7 @@ class SiteRating(db.Model):
 
     __tablename__ = "site_rating"
 
-    # TODO add primary keys 
+     
     SiteRating = db.Column(db.Integer,
                            primary_key=True,
                            autoincrement=True)
