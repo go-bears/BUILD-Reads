@@ -9,7 +9,7 @@ from jinja2 import StrictUndefined
 
 from model import *
 
-from frontend_logic import  *
+import frontend_logic
 #######################################################################
 # Flask variables and tools
 
@@ -246,8 +246,7 @@ def register_new_user():
     sites = db.session.query(Site).all()
     grades =  ['k', 1,2,3,4,5,6,7,8]
     
-
-   # collecting new user data from new_user.html
+    # collecting new user data from new_user.html
     first_name = request.form.get('first_name')
     last_name = request.form.get('last_name')
     school = request.form.get('school')
@@ -258,7 +257,9 @@ def register_new_user():
         grade = 0
     
     password = request.form.get('password')
-
+    
+    avatar = pick_avatar()
+    
     # splitting string returned in birthday
     str_birthday = request.form.get('birthday')
     print "this string", str_birthday
@@ -317,6 +318,7 @@ def register_new_user():
                         birthday=birthday,
                         grade=grade,
                         password=password,
+                        avatar=avatar,
                         site_id=site_id)
 
         new_user.commit_to_db()

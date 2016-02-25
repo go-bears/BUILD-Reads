@@ -39,6 +39,9 @@ class User(db.Model):
     birthday = db.Column(db.Date, nullable=True)
     grade = db.Column(db.Integer, nullable=True)
     password = db.Column(db.String(25), nullable=True)
+    avatar = db.Column(db.String(50), nullable=True)
+    
+    
     
     # set site_id foreign key
     site_id = db.Column(db.Integer, 
@@ -80,10 +83,11 @@ class Book(db.Model):
     #values set to nullable for testing
     book_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(150), nullable=True)
+    author = db.Column(db.String(100), nullable=True)
     description = db.Column(db.String(500), nullable=True)
-    isbn = db.Column(db.String(150), nullable=True)
-    image_url = db.Column(db.String(150), nullable=True)
-    book_type = db.Column(db.String(10), nullable=True)
+    isbn = db.Column(db.String(15), nullable=True, unique=True)
+    image_url_sm = db.Column(db.String(200), nullable=True)
+    image_url_md = db.Column(db.String(200), nullable=True)
 
     
     def commit_to_db(self):
@@ -99,12 +103,14 @@ class Book(db.Model):
     def __repr__(self):
         """Show info about book."""
 
-        return "<title=%s description=%s isbn=%s image_url=%s book_type=%s >"\
-                                                           %(self.title, 
-                                                             self.description, 
-                                                             self.isbn, 
-                                                             self.image_url,
-                                                             self.book_type)
+        return "<title=%s author=%s description=%s isbn=%s \
+                image_url_sm =%s image_url_md=%s >" %(self.title, 
+                                                      self.author,
+                                                      self.isbn,
+                                                      self.description,
+                                                      self.image_url_sm,
+                                                      self.image_url_md)
+                                                           
 
 class Sidekick(db.Model):
     """Reading Mentors (aka Sidekicks) information table."""
@@ -175,8 +181,8 @@ class Badge(db.Model):
     __tablename__ = "badges"
 
     badge_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    description = db.Column(db.String(50), nullable=True,)
-    # badge_data = db.Column('data', JSON, nullable=True)
+    description = db.Column(db.String(50), nullable=True)
+    badge_url = db.Column(db.String(50), nullable=True)
 
 
 
@@ -319,7 +325,7 @@ class Bookx_data(db.Model):
     user_id = db.Column(db.String(10), nullable=True)
     location = db.Column(db.String(150), nullable=True)
     age = db.Column(db.Integer, nullable=True)
-    isbn = db.Column(db.String(15), nullable=True)
+    isbn = db.Column(db.String(15), nullable=True, unique=True)
     rating = db.Column(db.Integer, nullable=True)
     title = db.Column(db.String(150), nullable=True)
     author = db.Column(db.String(50), nullable=True)
@@ -329,21 +335,26 @@ class Bookx_data(db.Model):
     
     
     # sets isbn from book
-    isbn = db.Column(db.Integer, 
+    isbn = db.Column(db.String(15), 
                         db.ForeignKey('books.isbn'),
                         nullable=False)
     
     # set backref relationship between Bookx_data with Book classes
     book = db.relationship('Book', 
-                            backref=db.backref("Bookx_data", 
+                            backref=db.backref("Bookx_data",
+                            foreign_keys=[isbn],
                             order_by=isbn))
     
+    
+    # billing_address_id = Column(Integer, ForeignKey("address.id"))
+    
+    # billing_address = relationship("Address", foreign_keys=[billing_address_id])
 
     def __repr__(self):
         """Show info about Bookx_data."""
     
-        return "<user_id=%s location=%s age=%d isbn=%s rating=%d <title=%s author=% year=%d publisher=%s image_link=%s>" \
-                                                                % (self.record_id, 
+        return "<user_id=%s location=%s age=%d isbn=%s rating=%d <title=%s \
+                author=% year=%d publisher=%s image_link=%s>"  % (self.record_id, 
                                                                   self.user_id, 
                                                                   self.location, 
                                                                   self.age,

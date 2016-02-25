@@ -19,11 +19,6 @@ ICON_LIST =["fa fa-camera-retro fa-4x",
             "fa fa-birthday-cake fa-4x"]
             
 
-OPEN_LIBRARY_COVER_URL = "http://covers.openlibrary.org/b/isbn/"
-OPEN_LIBRARY_SMALL_IMG_END = "-S.jpg"
-OPEN_LIBRARY_MED_IMG_END = "-M.jpg"
-OPEN_LIBRARY_LRG_IMG_END = "-L.jpg"
-
 def pick_avatar():
     user_avatar = random.choice(ICON_LIST)
     

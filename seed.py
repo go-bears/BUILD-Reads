@@ -71,3 +71,5 @@ def set_val_rating_session_id():
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
 
+def set_val_badges():
+

@@ -167,7 +167,8 @@ def count_CA(parsed_loc):
             
     return CA_dict
     
-    
+
+
 
 
 ################## run all the preprocessing functions  ############
@@ -177,10 +178,18 @@ books_df = open_books_csv()
 User_Ratings_df = merge_user_ratings(users_df, ratings_df)
 User_Ratings_Books = merge_userratings_books(User_Ratings_df, books_df)
 y_user_book_ratings_df = generate_youth_book_ratings(User_Ratings_Books)
-parsed_loc_list = parse_countries(y_user_book_ratings_df)
-count_countries(parsed_loc_list)
-count_states(parsed_loc_list)
-count_CA(parsed_loc_list)
+
+# print y_user_book_ratings_df.head()
+
+# creates list of isbns from & saves results to csv
+# isbn_list = y_user_book_ratings_df[y_user_book_ratings_df.columns[3]]
+# isbn_list.to_csv('isbn_list.csv')
+
+
+# parsed_loc_list = parse_countries(y_user_book_ratings_df)
+# count_countries(parsed_loc_list)
+# count_states(parsed_loc_list)
+# count_CA(parsed_loc_list)
 
 # y_user_book_ratings_df features: ratings are 1-10
 # produces 13554 entries, mean age: 15, mean rating: 7.66
