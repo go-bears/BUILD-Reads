@@ -6,7 +6,6 @@ from datetime import date
 
 from flask_sqlalchemy import SQLAlchemy
 
-from sqlalchemy.dialects.postgresql import JSON
 from sqlalchemy.orm import backref, relationship
 
 
@@ -67,12 +66,13 @@ class User(db.Model):
         """Show info about reader."""
 
         return "<first_name=%s last_name=%s birthday=%s\
-        grade=%s site=%s password=%s>" %(self.first_name, 
+        grade=%s site=%s password=%s avatar=%s>" %(self.first_name, 
                                             self.last_name, 
                                             self.birthday, 
                                             self.grade,
                                             self.site,
-                                            self.password)
+                                            self.password,
+                                            self.avatar)
 
 # Book class adds to build_reads db successfully
 class Book(db.Model):
@@ -81,11 +81,11 @@ class Book(db.Model):
     __tablename__ = "books"
 
     #values set to nullable for testing
-    book_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(150), nullable=True)
     author = db.Column(db.String(100), nullable=True)
-    description = db.Column(db.String(500), nullable=True)
-    isbn = db.Column(db.String(15), nullable=True, unique=True)
+    description = db.Column(db.String(1000), nullable=True)
+    isbn = db.Column(db.String(15), primary_key=True, 
+                     nullable=True, unique=True)
     image_url_sm = db.Column(db.String(200), nullable=True)
     image_url_md = db.Column(db.String(200), nullable=True)
 
@@ -181,9 +181,9 @@ class Badge(db.Model):
     __tablename__ = "badges"
 
     badge_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    description = db.Column(db.String(50), nullable=True)
-    badge_url = db.Column(db.String(50), nullable=True)
-
+    name = db.Column(db.String(50), nullable=True)
+    description = db.Column(db.String(300), nullable=True)
+    badge_url = db.Column(db.String(100), nullable=True)
 
 
     def commit_to_db(self):
@@ -220,8 +220,8 @@ class Reading_session(db.Model):
     user_id = db.Column(db.Integer, 
                         db.ForeignKey('users.user_id'), 
                         nullable=False)
-    book_id = db.Column(db.Integer, 
-                        db.ForeignKey('books.book_id'), 
+    isbn = db.Column(db.String(15), 
+                        db.ForeignKey('books.isbn'), 
                         nullable=False) 
     sidekick_id = db.Column(db.Integer, 
                             db.ForeignKey('sidekicks.sidekick_id'), 
@@ -239,7 +239,6 @@ class Reading_session(db.Model):
                                order_by=session_id))
 
 
-
     def commit_to_db(self):
         """ add instance of user to build_reads db"""
 
@@ -253,12 +252,12 @@ class Reading_session(db.Model):
         """Show info about reading_session."""
 
         return "<date=%s time_length =%s badges_awarded=%s rating_score=%s \
-                user_id=%d book_id=%d >" %  (self.date, 
+                user_id=%d isbn=%s >" %  (self.date, 
                                              self.time_length, 
                                              self.badges_awarded, 
                                              self.rating_score,
                                              self.user_id,
-                                             self.book_id)
+                                             self.isbn)
 
 
 class Rating(db.Model):
@@ -274,8 +273,8 @@ class Rating(db.Model):
                         db.ForeignKey('users.user_id'), 
                         nullable=False)
                         
-    book_id = db.Column(db.Integer, 
-                        db.ForeignKey('books.book_id'), 
+    isbn = db.Column(db.String(15), 
+                        db.ForeignKey('books.isbn'), 
                         nullable=False)
     
     session_id = db.Column(db.Integer, 
@@ -309,11 +308,11 @@ class Rating(db.Model):
     def __repr__(self):
         """Show info about rating."""
 
-        return "<rating_id=%d comment=%s user_id=%d book_id=%d >" \
+        return "<rating_id=%d comment=%s user_id=%d isbn=%s >" \
                                                             %(self.rating_id, 
                                                               self.comment, 
                                                               self.user_id, 
-                                                              self.book_id)
+                                                              self.isbn)
 
 
 class Bookx_data(db.Model):
@@ -325,7 +324,11 @@ class Bookx_data(db.Model):
     user_id = db.Column(db.String(10), nullable=True)
     location = db.Column(db.String(150), nullable=True)
     age = db.Column(db.Integer, nullable=True)
-    isbn = db.Column(db.String(15), nullable=True, unique=True)
+    isbn = db.Column(db.String(15), 
+                     db.ForeignKey('books.isbn'),
+                     nullable=True, 
+                     unique=True)
+                     
     rating = db.Column(db.Integer, nullable=True)
     title = db.Column(db.String(150), nullable=True)
     author = db.Column(db.String(50), nullable=True)
@@ -333,22 +336,13 @@ class Bookx_data(db.Model):
     publisher = db.Column(db.String(50), nullable=True)
     image_link = db.Column(db.String(200), nullable=True)
     
-    
-    # sets isbn from book
-    isbn = db.Column(db.String(15), 
-                        db.ForeignKey('books.isbn'),
-                        nullable=False)
+
     
     # set backref relationship between Bookx_data with Book classes
     book = db.relationship('Book', 
                             backref=db.backref("Bookx_data",
-                            foreign_keys=[isbn],
                             order_by=isbn))
-    
-    
-    # billing_address_id = Column(Integer, ForeignKey("address.id"))
-    
-    # billing_address = relationship("Address", foreign_keys=[billing_address_id])
+
 
     def __repr__(self):
         """Show info about Bookx_data."""
@@ -402,8 +396,8 @@ class BookRating(db.Model):
                            primary_key=True,
                            autoincrement=True)
                                
-    book_id = db.Column(db.Integer,
-                        db.ForeignKey('books.book_id'),
+    isbn = db.Column(db.String(15),
+                        db.ForeignKey('books.isbn'),
                         nullable=True)
     rating_id = db.Column(db.Integer,
                           db.ForeignKey('ratings.rating_id'),
@@ -413,7 +407,7 @@ class BookRating(db.Model):
     def __repr__(self):
         """Show info about book_rating."""
         
-        return "<book_id=%d rating_id=%d >" % (self.book_id, self.rating_id)
+        return "<isbn=%s rating_id=%d >" % (self.isbn, self.rating_id)
 
 
 class UserBadge(db.Model):
@@ -432,7 +426,7 @@ class UserBadge(db.Model):
     def __repr__(self):
         """Show info about user_rating."""
 
-        return "<book_id=%d rating_id=%d >" % (self.user_id, self.badge_id)
+        return "<user_id=%d rating_id=%d >" % (self.user_id, self.badge_id)
 
 
 
@@ -457,8 +451,8 @@ if __name__ == "__main__":
 
     from server import app
     connect_to_db(app)
-
-    # create tables 
+    
+        # create tables 
     db.create_all()
 
     # import a user_id new user

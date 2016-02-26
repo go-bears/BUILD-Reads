@@ -15,34 +15,8 @@
         <!--canvas for chart-->
         <canvas id="myChart" width="400" height="400"></canvas>
         
-        <script type="text/javascript" src="">
-        // data viz expermeintation
-        // For a pie chart
-    //     var myPieChart = new Chart(ctx[0]).Pie(data,options);
-        
-    //         var data = [
-    //     {
-    //         value: 300,
-    //         color:"#F7464A",
-    //         highlight: "#FF5A5E",
-    //         label: "Red"
-    //     },
-    //     {
-    //         value: 50,
-    //         color: "#46BFBD",
-    //         highlight: "#5AD3D1",
-    //         label: "Green"
-    //     },
-    //     {
-    //         value: 100,
-    //         color: "#FDB45C",
-    //         highlight: "#FFC870",
-    //         label: "Yellow"
-    //     }
-    // ]
 
 
-        </script>
         
         <!--chartsjs CDNs-->
         <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js'></script>
@@ -51,6 +25,55 @@
         <!--jquery CDNs-->
         <script src="//code.jquery.com/jquery-1.12.0.min.js"></script>
         <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+        
+        
+        <p id="geoLocate">Click the button to see your location!</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<div id="mapholder"></div>
+
+<!--Geolocation for mentor button to see reading trends for state-->
+<script>
+var x = document.getElementById("geoLocate");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+    } else {
+        x.innerHTML = "Sorry! Geolocation is not supported by this browser.";
+    }
+}
+
+function showPosition(position) {
+    var latlon = position.coords.latitude + "," + position.coords.longitude;
+
+    var img_url = "http://maps.googleapis.com/maps/api/staticmap?center="
+    +latlon+"&zoom=14&size=400x300&sensor=false";
+    
+    document.getElementById("mapholder").innerHTML = "<img src='"+img_url+"'>";
+}
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            x.innerHTML = "User denied the request for Geolocation."
+            break;
+        case error.POSITION_UNAVAILABLE:
+            x.innerHTML = "Location information is unavailable."
+            break;
+        case error.TIMEOUT:
+            x.innerHTML = "The request to get user location timed out."
+            break;
+        case error.UNKNOWN_ERROR:
+            x.innerHTML = "An unknown error occurred."
+            break;
+    }
+}
+
+
+</script>
+        
     </body>
 </html>
 

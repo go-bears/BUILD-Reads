@@ -1,15 +1,15 @@
-1,daniel,tiger,2003-01-01,7,password,2
-2,meggie,mittens,2004-01-01,6,password,1
-3,lilly,kitty,2005-01-01,5,password,1
-4,auden,burton,2006-01-01,4,password,2
-5,ezra,burton,2007-01-01,3,password,1
-6,ammy,keung,2008-01-01,2,password,1
-8,emily,fluffy,2014-09-09,6,password,1
-10,Russian,Blue,2005-05-05,2,password,2
-12,Curly,Bishop,2000-05-21,8,password,21
-14,ammy,Keung,2008-01-01,2,password,1
-16,julius,tsui,2009-02-02,1,password,2
-18,pumba,rahmati,2010-10-10,1,password,17
-20,Kitney,Karl,2006-05-05,5,password,8
-22,Florence,L,2004-02-18,1,password123,19
-23,Alice,Kitty,2005-01-01,5,password,16
+1,daniel,tiger,2003-01-01,7,password,fa fa-camera-retro fa-4x,2
+2,meggie,mittens,2004-01-01,6,password,fa fa-hand-peace-o fa-4x,1
+3,lilly,kitty,2005-01-01,5,password,fa fa-plane fa-4x,1
+4,auden,burton,2006-01-01,4,password,fa fa-rocket fa-4x,2
+5,ezra,burton,2007-01-01,3,password,fa fa-space-shuttle fa-4x,1
+6,ammy,keung,2008-01-01,2,password,fa fa-taxi fa-4x,1
+8,emily,fluffy,2014-09-09,6,password,fa fa-bicycle fa-4x,1
+10,Russian,Blue,2005-05-05,2,password,fa fa-truck fa-4x,2
+12,Curly,Bishop,2000-05-21,8,password,fa fa-lightbulb-o fa-4x,21
+14,ammy,Keung,2008-01-01,2,password,fa fa-birthday-cake fa-4x,1
+16,julius,tsui,2009-02-02,1,password,fa fa-camera-retro fa-4x,2
+18,pumba,rahmati,2010-10-10,1,password,fa fa-hand-peace-o fa-4x,17
+20,Kitney,Karl,2006-05-05,5,password,fa fa-plane fa-4x,8
+22,Florence,L,2004-02-18,1,password123,fa fa-space-shuttle fa-4x,19
+23,Alice,Kitty,2005-01-01,5,password,fa fa-bicycle fa-4x,16

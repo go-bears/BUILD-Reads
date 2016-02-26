@@ -9,7 +9,8 @@ from jinja2 import StrictUndefined
 
 from model import *
 
-import frontend_logic
+from  frontend_logic import pick_avatar
+
 #######################################################################
 # Flask variables and tools
 
@@ -44,17 +45,62 @@ today_date = "%s/%s/%s" % (today.month, today.day, today.year)
 
 # serving the landing page. Currently page is used as summary page 
 # displaying all data in build_reads db
+def query_all_users():
+    """db query to pull all users """
+    
+    user_list = User.query.all()
+
+    return user_list
+
+def query_all_books():
+    """db query to pull all books"""
+    
+    book_list = Book.query.all()
+
+    return book_list
+
+def query_all_sites():
+    """db query to pull all badges data """
+    
+    sites_list = Site.query.all()
+
+    return sites_list
+
+
+def query_all_reading_sessions():
+    """db query to pull all reading sesssion data"""
+    
+    session_list = Reading_session.query.all()
+
+    return session_list
+
+def query_all_sidekick():
+    """db query to pull all sidekicks data"""
+    
+    sidekicks_list = Sidekick.query.all()
+
+    return sidekicks_list
+
+def query_all_ratings():
+    """db query to pull all ratings data"""
+    
+    ratings_list = Rating.query.all()
+
+    return ratings_list
+
+def query_all_badges():
+    """db query to pull all badges data """
+    
+    badges_list = Badge.query.all()
+
+    return badges_list
+
+
+
+
 @app.route('/')
 def index():
     """Homepage."""
-
-    user_list = User.query.all()
-    book_list = Book.query.all()
-    session_list = Reading_session.query.all()
-    sidekicks_list = Sidekick.query.all()
-    ratings_list = Rating.query.all()
-    badges = Badge.query.all()
-
 
     p_msg = "Everything I know is here:",\
             "we are the users", user_list,\
@@ -62,7 +108,7 @@ def index():
             "We are the sessions", session_list,\
             "We are the sidekicks", sidekicks_list,\
             "We are ratings_list", ratings_list,\
-            "we are badges list", badges
+            "we are badges list", badges_list
 
     return render_template("index.html", msg=p_msg, today_date=today_date)
 
@@ -72,9 +118,9 @@ def index():
 def serve_login_form():
     """Displays login form"""
     
-    # selects avatar for user
-    avatar = pick_avatar()
-    session['avatar'] = avatar
+    # # selects avatar for user
+    # avatar = pick_avatar()
+    # session['avatar'] = avatar
 
     return render_template("login.html", today_date=today_date)
 
@@ -100,6 +146,7 @@ def serve_reading_session_form():
     # queries databse for scholar ID for go to 
     scholar = User.query.filter(User.first_name == session['first_name']).first()
     
+    sites = scholar.site.name
     print scholar
     print scholar.user_id
     
@@ -111,7 +158,8 @@ def serve_reading_session_form():
                            sidekicks=sidekicks, 
                            user_id=scholar.user_id,
                            today_date=today_date,
-                           avatar=session['avatar'])
+                           avatar=session['avatar'],
+                           sites=sites)
 
 
 #TESTED and WORKS!!
@@ -120,7 +168,9 @@ def serve_new_user_form():
     """Displays user new user form."""
     
     # values for dropdown menu
-    sites = db.session.query(Site).all()
+    sites = [site.name for site in sites_list]
+    
+    # db.session.query(Site).all()
     grades = ['k', 1,2,3,4,5,6,7,8]
     msg = "I'm serving the form"
 
@@ -156,8 +206,7 @@ def serve_user_details_page():
     
     return render_template("index.html", 
                            msg=msg,
-                           today_date=today_date
-                           )
+                           today_date=today_date)
 
 
 ########### Server Logic ###################################                           
@@ -195,6 +244,8 @@ def resolve_login():
             
             session['scholar_id'] = scholar.user_id
             print "this is the user id", session['scholar_id'] 
+            
+            session['avatar'] = scholar.avatar
             
             
             # confirmation message
@@ -361,19 +412,21 @@ def log_reading_session():
     print time_length, " is how long the reading session was"
         # calculates badges earned per reading session
     if time_length < 20:
-        badges = 0
+        badge_id = 0
     elif time_length >= 20 or time_length <= 40:
-        badges = 1
+        badge_id = 1
     elif time_length >= 40 or time_length <= 60:
-        badges = 2
+        badge_id = 2
     else:
-        badges = 3
+        badge_id = 3
     
+    session['session_badge'] = badge_id
 
     # queries db for user information by first name. this is ok for now.
     #TODO make query smarter by searching by first and last name or get query from data in Flask Session
     user_data = db.session.query(User).filter(User.first_name==\
                                               session['first_name']).first()
+                                              
     book_data = db.session.query(Book).filter(Book.title==title).first()
     
     # queries db by sidekick's last name
@@ -387,10 +440,10 @@ def log_reading_session():
     new_reading_session = Reading_session(#session_id=new_session_id,
                                           date=date_stamp,
                                           time_length=time_length,
-                                          badges_awarded=badges,
+                                          badges_awarded=badge_id,
                                           rating_score=rating_score,
                                           user_id=user_data.user_id,
-                                          book_id=book_data.book_id,    
+                                          isbn=book_data.isbn,    
                                           sidekick_id=sidekick_data.sidekick_id)
     # terminal confirmation
     print new_reading_session
@@ -408,11 +461,11 @@ def log_reading_session():
     new_rating = Rating(#rating_id=new_rating_id,
                         comment=comment,
                         user_id=user_data.user_id,
-                        book_id=book_data.book_id,
+                        isbn=book_data.isbn,
                         session_id=new_reading_session.session_id)
     
     new_rating.commit_to_db()
-    print "i logged new this new_rating",  book_data.book_id, comment#, new_rating_id,                    
+    print "i logged new this new_rating",  book_data.isbn, comment#, new_rating_id,                    
         
     # user confirmation
     flash("Great Work! I logged your reading session %s !" % session['first_name'])
@@ -454,7 +507,8 @@ def register_new_mentor():
     if db.session.query(Sidekick).filter((Sidekick.first_name==first_name) &
                                          (Sidekick.last_name==last_name) &
                                          (Sidekick.password==password)).first():
-    
+        
+        # queries for sidekick information
         sidekick = db.session.query(Sidekick).filter((Sidekick.first_name==first_name) &
                                          (Sidekick.last_name==last_name) &
                                          (Sidekick.password==password)).first()
@@ -497,7 +551,6 @@ def register_new_mentor():
                            today_date=today_date)
 
 
-
 # TODO in progress: need to limit data to books and ratings_scores
 @app.route("/user/<int:scholar_id>", methods=["POST", "GET"])
 def show_user_details(scholar_id):
@@ -510,31 +563,42 @@ def show_user_details(scholar_id):
     # queries database for all ratings by the scholar by scholar id
     user_ratings_list = Rating.query.filter(Rating.user_id == session['scholar_id']).all()
     
-    # need to run query that collects sidekicks that belong to a scholar
-
+    # query for badge data for the current reading session.
+    badge_data = Badge.query.filter(Badge.badge_id == session['session_badge']).first()
     
     print 'you read these books'
     book_rating_dict = {}
-    badges = 0
+    badges_dict = {}
     total_time = 0
     
+    print user_ratings_list
+    
     for user_rating in user_ratings_list:
-        
-        # calculate total badges earned
+        #
+        # calculate total badges earned 
         if user_rating.session.badges_awarded:
-            badges +=1
+            for badge in badges_list:
+                if badges_awarded == badge_id:
+                    badges_dict['name'] = badge.name
+                    badges_dict['img'] = badge_url
+                        
+                if badges_dict[badge_id] not in badges_dict:
+                    badges_dict[badge_id] = 1
+                else:
+                    badges_dict[badge_id] += 1
         
-        # calculates tot
+        # calculates total time reading
         if user_rating.session.time_length:
             total_time += user_rating.session.time_length
     
         # collects individual book ratings
-        if user_rating.book.title not in book_rating_dict:
-            book_rating_dict[user_rating.book.title] = \
-            [user_rating.session.rating_score]
+        if user_rating.book.isbn:
+            title = user_rating.book.title
+            if title not in book_rating_dict:
+                book_rating_dict[title] = [user_rating.session.rating_score]
         
         else:
-            book_rating_dict[user_rating.book.title].append(user_rating.session.rating_score)
+            book_rating_dict[title].append(user_rating.session.rating_score)
         
     import numpy
     
@@ -544,9 +608,8 @@ def show_user_details(scholar_id):
         avg_rating = numpy.mean(ratings)
         book_rating_dict[title] = avg_rating
     
-    
-    print book_rating_dict
-            
+
+
         # Nice to have
         #TODO get books titles to show on user page
         #calculate average ratings for a book
@@ -554,8 +617,9 @@ def show_user_details(scholar_id):
         
     # user_id = session['scholar_id']
     
-    print "badges earned", badges
-    msg = 'your earned %s badges!!!' % badges
+    print badges_dict
+    print "badges earned", badges_dict
+    msg = 'your earned %s badges!!!' %  badges_dict
     
     flash("You worked hard %s !" % session['first_name'])
     
@@ -566,7 +630,8 @@ def show_user_details(scholar_id):
                            user_details=scholar_data,
                            user_ratings_list=user_ratings_list,
                            book_dict=book_rating_dict,
-                           time=total_time)
+                           time=total_time,
+                           badge_data=badge_data)
 
 
 # this doesn't work yet
@@ -598,9 +663,21 @@ if __name__ == "__main__":
     # app config for local machine
     # app.run(debug=True)
     
+    # Queries to db to be available for other files
+    user_list = query_all_users()
+    book_list = query_all_books()
+    session_list = query_all_reading_sessions()
+    sidekicks_list = query_all_sidekick()
+    ratings_list = query_all_ratings()
+    badges_list = query_all_badges()
+    sites_list = query_all_sites()
+
+    
     # Flask debugging toolbar
     DebugToolbarExtension(app)
     
+    
+
 
     # app config for Cloud9
     app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))

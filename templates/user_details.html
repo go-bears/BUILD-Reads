@@ -22,13 +22,18 @@ Today is {{ today_date }}
     {% endif %}
 
 
-      Your attend {{ user_details.site.name }}
+      You attend {{ user_details.site.name }}
       <br> 
       Your grade is {{ user_details.grade }}
       <br>
+     {% if badge_data %} 
+     You earned a <img src="{{ badge_data.badge_url }}"> <br>
+     {{ badge_data.name }} today
+     
+     {% endif %}
     
       <li>You read a total of {{ time }} minutes!!</li>
-      
+
       <!--You rated these books-->
       <!--      {% for item in user_ratings_list %}-->
             

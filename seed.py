@@ -1,3 +1,41 @@
+from model import *
+
+from flask_sqlalchemy import SQLAlchemy
+
+from server import app
+# db = SQLAlchemy()
+
+
+def load_bookx():
+    """Load Book Crossing data into database."""
+
+    Bookx_data.query.delete()
+
+    # Read u.item file and insert data
+    for row in open('/home/ubuntu/workspace/test-data/y_book_rating.csv'):
+        row = row.rstrip()
+        
+        
+        record_id,user_id,location,age,isbn,rating,_merge,\
+        title,author,year,publisher,image_sm_link,image_md_link,image_lg_link \
+        = row.split(",")
+
+
+        bookx_data = Bookx_data(record_id=record_id,
+                    user_id=user_id, 
+                    location=location,
+                    age = age,
+                    isbn = isbn,
+                    rating = rating,
+                    title = title,
+                    author = author,
+                    year = year,
+                    publisher = publisher,
+                    image_link = None)
+
+        db.session.add(bookx_data)
+
+    db.session.commit()
 
 
 ################################################################################
@@ -20,56 +58,106 @@ def set_val_user_id():
     db.session.commit()
     
     
-def set_val_sidekick_id():
-    """Set value for the next user_id after seeding database"""
+# def set_val_sidekick_id():
+#     """Set value for the next user_id after seeding database"""
 
-    # Get the Max user_id in the database
-    result = db.session.query(db.func.max(Sidekick.sidekick_id)).one()
-    max_id = int(result[0])
+#     # Get the Max user_id in the database
+#     result = db.session.query(db.func.max(Sidekick.sidekick_id)).one()
+#     max_id = int(result[0])
 
-    # Set the value for the next user_id to be max_id + 1
-    query = "SELECT setval('sidekicks_sidekick_id_seq', :new_id)"
-    db.session.execute(query, {'new_id': max_id + 1})
-    db.session.commit()
-
-
-def set_val_book_id():
-    """Set value for the next book_id after seeding database"""
-
-    # Get the Max book_id in the database
-    result = db.session.query(db.func.max(Book.book_id)).one()
-    max_id = int(result[0])
-
-    # Set the value for the next user_id to be max_id + 1
-    query = "SELECT setval('books_book_id_seq', :new_id)"
-    db.session.execute(query, {'new_id': max_id + 1})
-    db.session.commit()
+#     # Set the value for the next user_id to be max_id + 1
+#     query = "SELECT setval('sidekicks_sidekick_id_seq', :new_id)"
+#     db.session.execute(query, {'new_id': max_id + 1})
+#     db.session.commit()
 
 
-def set_val_reading_session_id():
-    """Set value for the next reading_session after seeding database"""
+# def set_val_book_id():
+#     """Set value for the next book_id after seeding database"""
 
-    # Get the Max session_id in the database
-    result = db.session.query(db.func.max(Reading_session.session_id)).one()
-    max_id = int(result[0])
+#     # Get the Max book_id in the database
+#     result = db.session.query(db.func.max(Book.book_id)).one()
+#     max_id = int(result[0])
 
-    # Set the value for the next user_id to be max_id + 1
-    query = "SELECT setval('reading_sessions_session_id_seq', :new_id)"
-    db.session.execute(query, {'new_id': max_id + 1})
-    db.session.commit()
+#     # Set the value for the next user_id to be max_id + 1
+#     query = "SELECT setval('books_book_id_seq', :new_id)"
+#     db.session.execute(query, {'new_id': max_id + 1})
+#     db.session.commit()
 
 
-def set_val_rating_session_id():
-    """Set value for the next rating_session record after seeding database"""
+# def set_val_site_id():
+#     """Set value for the next site_id after seeding database"""
 
-    # Get the Max session_id in the database
-    result = db.session.query(db.func.max(Rating.rating_id)).one()
-    max_id = int(result[0])
+#     # Get the Max book_id in the database
+#     result = db.session.query(db.func.max(Site.site_id)).one()
+#     max_id = int(result[0])
 
-    # Set the value for the next user_id to be max_id + 1
-    query = "SELECT setval('ratings_rating_id_seq', :new_id)"
-    db.session.execute(query, {'new_id': max_id + 1})
-    db.session.commit()
+#     # Set the value for the next user_id to be max_id + 1
+#     query = "SELECT setval('sites_site_id_seq', :new_id)"
+#     db.session.execute(query, {'new_id': max_id + 1})
+#     db.session.commit()
 
-def set_val_badges():
 
+# def set_val_reading_session_id():
+#     """Set value for the next reading_session after seeding database"""
+
+#     # Get the Max session_id in the database
+#     result = db.session.query(db.func.max(Reading_session.session_id)).one()
+#     max_id = int(result[0])
+
+#     # Set the value for the next user_id to be max_id + 1
+#     query = "SELECT setval('reading_sessions_session_id_seq', :new_id)"
+#     db.session.execute(query, {'new_id': max_id + 1})
+#     db.session.commit()
+
+
+# def set_val_rating_session_id():
+#     """Set value for the next rating_session record after seeding database"""
+
+#     # Get the Max session_id in the database
+#     result = db.session.query(db.func.max(Rating.rating_id)).one()
+#     max_id = int(result[0])
+
+#     # Set the value for the next user_id to be max_id + 1
+#     query = "SELECT setval('ratings_rating_id_seq', :new_id)"
+#     db.session.execute(query, {'new_id': max_id + 1})
+#     db.session.commit()
+
+
+
+# def connect_to_db(app):
+#     """Connect the database to our Flask app."""
+
+#     # Configure to use our PstgreSQL database     
+#     # postgresql://[[:password][@host][:port]/[database-name]
+
+#     # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///build_reads'
+    
+#     # config for Cloud9
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build_reads'
+    
+#     db.app = app
+#     db.init_app(app)
+    
+
+# # set_val_user_id()
+# # set_val_sidekick_id()
+# # set_val_book_id()
+# set_val_site_id()
+# # set_val_user_id()
+# # set_val_reading_session_id()
+# # set_val_rating_session_id()
+
+if __name__ == "__main__":
+    # As a convenience, if we run this module interactively, it will leave
+    # you in a state of being able to work with the database directly.
+
+    # from server import app
+    connect_to_db(app)
+    # create tables 
+    # db.create_all()
+
+    load_bookx()
+#     # import a user_id new user
+#     set_val_user_id()
+
+#     print "Connected to DB."
