@@ -401,7 +401,7 @@ def log_reading_session():
 
     # queries db for list of sidekicks for dropdown menu
     # TODO limit dropdown mentors to mentors currently assigned to the site.
-    sidekicks = db.session.query(Sidekick).all()
+    sidekicks = db.session.query(Sidekick).all()  
 
     # collects data from the form fields
     title = request.form.get('title').strip()
@@ -415,12 +415,13 @@ def log_reading_session():
         badge_id = 0
     elif time_length >= 20 or time_length <= 40:
         badge_id = 1
-    elif time_length >= 40 or time_length <= 60:
+    elif time_length > 40 or time_length <= 60:
         badge_id = 2
     else:
         badge_id = 3
     
     session['session_badge'] = badge_id
+    session['time'] = time_length
 
     # queries db for user information by first name. this is ok for now.
     #TODO make query smarter by searching by first and last name or get query from data in Flask Session
@@ -578,7 +579,7 @@ def show_user_details(scholar_id):
         # calculate total badges earned 
         if user_rating.session.badges_awarded:
             for badge in badges_list:
-                if badges_awarded == badge_id:
+                if badges_awarded == session['session_badge']:
                     badges_dict['name'] = badge.name
                     badges_dict['img'] = badge_url
                         
@@ -608,7 +609,7 @@ def show_user_details(scholar_id):
         avg_rating = numpy.mean(ratings)
         book_rating_dict[title] = avg_rating
     
-
+    
 
         # Nice to have
         #TODO get books titles to show on user page
@@ -619,6 +620,7 @@ def show_user_details(scholar_id):
     
     print badges_dict
     print "badges earned", badges_dict
+    
     msg = 'your earned %s badges!!!' %  badges_dict
     
     flash("You worked hard %s !" % session['first_name'])
