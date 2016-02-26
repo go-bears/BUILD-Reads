@@ -66,7 +66,8 @@ class User(db.Model):
         """Show info about reader."""
 
         return "<first_name=%s last_name=%s birthday=%s\
-        grade=%s site=%s password=%s avatar=%s>" %(self.first_name, 
+        grade=%s site=%s password=%s avatar=%s>" %(
+                                            self.first_name, 
                                             self.last_name, 
                                             self.birthday, 
                                             self.grade,

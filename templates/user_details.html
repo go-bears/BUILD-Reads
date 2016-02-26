@@ -44,11 +44,24 @@ Today is {{ today_date }}
     {% for rating in book_dict %}
     
       <li>{{ rating }} {{ book_dict[rating] }}</li>
-  
-    
     {% endfor %}
+    
+    {% for cover in covers %}
+      <li><img src="{{ cover }}"> </li>
+    {% endfor %}
+    
+    
 {{ msg }}
 
+<br>
+Your badge gallery!<br>
+    {% for badge in gallery%}
+    <table>
+      <tr>
+        <img src="{{ badge }}"></img>
+      </tr>
+    </table>
+    {% endfor %}
 
 <br>
 <a href='/reading_session'><button>Let's start a new reading session!</button></a>

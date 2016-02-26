@@ -9,7 +9,7 @@ from jinja2 import StrictUndefined
 
 from model import *
 
-from  frontend_logic import pick_avatar
+from  frontend_logic import pick_avatar, calculate_badges
 
 #######################################################################
 # Flask variables and tools
@@ -118,9 +118,6 @@ def index():
 def serve_login_form():
     """Displays login form"""
     
-    # # selects avatar for user
-    # avatar = pick_avatar()
-    # session['avatar'] = avatar
 
     return render_template("login.html", today_date=today_date)
 
@@ -128,8 +125,8 @@ def serve_login_form():
 @app.route('/logout')
 def serve_logout_button():
     """Clears sessioin and returns user to login form"""
-    session.clear()
     
+    session.clear()
     flash("You successfuly logged out!")
     
     return redirect('/login')
@@ -141,8 +138,7 @@ def serve_reading_session_form():
 
     # queries db for list of sidekicks for dropdown menu
     # TODO limit dropdown mentors to mentors currently assigned to the site.
-    sidekicks = db.session.query(Sidekick).all()
-    
+    sidekicks = sidekicks_list
     # queries databse for scholar ID for go to 
     scholar = User.query.filter(User.first_name == session['first_name']).first()
     
@@ -172,12 +168,10 @@ def serve_new_user_form():
     
     # db.session.query(Site).all()
     grades = ['k', 1,2,3,4,5,6,7,8]
-    msg = "I'm serving the form"
-
+    
     return render_template("new_user.html", 
                            sites=sites,
                            grades=grades,
-                           msg=msg,
                            today_date=today_date)
 
 
@@ -188,13 +182,11 @@ def serve_new_mentor_form():
     """Displays user new user form."""
     
     # values for dropdown menu
-    sites = db.session.query(Site).all()
+    sites = [site.name for site in sites_list]
     
-    msg = "I'm serving the new mentor form"
-   
+    
     return render_template("new_mentor.html", 
                            sites=sites,
-                           msg=msg,
                            today_date=today_date)
 
 
@@ -327,7 +319,7 @@ def register_new_user():
     # values for Flask session dictionary for new user
     session['first_name'] = first_name
     session['school'] = school
-
+    
 
     ## Database queries to build_reads db ##
     
@@ -390,95 +382,6 @@ def register_new_user():
                            grades=grades,
                            msg=msg,
                            today_date=today_date)
-
-
-# TESTED AND WORKS
-# Collects the form information 
-@app.route('/log_reading_session', methods=["POST"])
-def log_reading_session():
-    """Collects reading session data and logs reading session to db."""
-
-
-    # queries db for list of sidekicks for dropdown menu
-    # TODO limit dropdown mentors to mentors currently assigned to the site.
-    sidekicks = db.session.query(Sidekick).all()  
-
-    # collects data from the form fields
-    title = request.form.get('title').strip()
-    sidekick_lastname = request.form.get('sidekick')
-    rating_score = request.form.get('rating_score')
-    comment = request.form.get('comment')
-    time_length = request.form.get('time_length')
-    print time_length, " is how long the reading session was"
-        # calculates badges earned per reading session
-    if time_length < 20:
-        badge_id = 0
-    elif time_length >= 20 or time_length <= 40:
-        badge_id = 1
-    elif time_length > 40 or time_length <= 60:
-        badge_id = 2
-    else:
-        badge_id = 3
-    
-    session['session_badge'] = badge_id
-    session['time'] = time_length
-
-    # queries db for user information by first name. this is ok for now.
-    #TODO make query smarter by searching by first and last name or get query from data in Flask Session
-    user_data = db.session.query(User).filter(User.first_name==\
-                                              session['first_name']).first()
-                                              
-    book_data = db.session.query(Book).filter(Book.title==title).first()
-    
-    # queries db by sidekick's last name
-    sidekick_data = db.session.query(Sidekick).filter(Sidekick.last_name==\
-                                                      sidekick_lastname).first()
-    
-    # sets function generates new reading session id number, use only when seeding db
-    # new_session_id = set_val_reading_session_id()
-   
-    # creates new reading session instance
-    new_reading_session = Reading_session(#session_id=new_session_id,
-                                          date=date_stamp,
-                                          time_length=time_length,
-                                          badges_awarded=badge_id,
-                                          rating_score=rating_score,
-                                          user_id=user_data.user_id,
-                                          isbn=book_data.isbn,    
-                                          sidekick_id=sidekick_data.sidekick_id)
-    # terminal confirmation
-    print new_reading_session
-
-    # commits new reading session instance to db
-    new_reading_session.commit_to_db()
-    
-    msg = "I recorded the reading log information"
-
-
-    # sets new rating id
-    #new_rating_id = set_val_rating_session_id()
-    
-    # creates new instance of a rating
-    new_rating = Rating(#rating_id=new_rating_id,
-                        comment=comment,
-                        user_id=user_data.user_id,
-                        isbn=book_data.isbn,
-                        session_id=new_reading_session.session_id)
-    
-    new_rating.commit_to_db()
-    print "i logged new this new_rating",  book_data.isbn, comment#, new_rating_id,                    
-        
-    # user confirmation
-    flash("Great Work! I logged your reading session %s !" % session['first_name'])
-    
-    
-    return render_template("reading_session.html", 
-                           msg=msg,
-                           avatar=session['avatar'],
-                           sidekicks=sidekicks,
-                           user_id=user_data.user_id,
-                           today_date=today_date)
-
 
 
 # TESTED AND WORKS
@@ -552,54 +455,144 @@ def register_new_mentor():
                            today_date=today_date)
 
 
+# TESTED AND WORKS
+# Collects the form information 
+@app.route('/log_reading_session', methods=["POST"])
+def log_reading_session():
+    """Collects reading session data and logs reading session to db."""
+
+
+    # queries db for list of sidekicks for dropdown menu
+    # TODO limit dropdown mentors to mentors currently assigned to the site.
+    sidekicks = sidekicks_list
+
+    # collects data from the form fields
+    title = request.form.get('title').strip()
+    sidekick_lastname = request.form.get('sidekick')
+    rating_score = request.form.get('rating_score')
+    comment = request.form.get('comment')
+    time_length = int(request.form.get('time_length'))
+    
+    print time_length, " is how long the reading session was"
+    
+    # calculates badges earned per reading session
+    badge_id = calculate_badges(time_length)
+    
+    session['session_badge'] = badge_id
+    session['time'] = time_length
+
+    # queries db for user information by first name. this is ok for now.
+    #TODO make query smarter by searching by first and last name or get query from data in Flask Session
+    user_data = db.session.query(User).filter(User.first_name==\
+                                              session['first_name']).first()
+                                              
+    book_data = db.session.query(Book).filter(Book.title==title).first()
+    
+    # queries db by sidekick's last name
+    sidekick_data = db.session.query(Sidekick).filter(Sidekick.last_name==\
+                                                      sidekick_lastname).first()
+    
+    # sets function generates new reading session id number, use only when seeding db
+    # new_session_id = set_val_reading_session_id()
+   
+    # creates new reading session instance
+    new_reading_session = Reading_session(#session_id=new_session_id,
+                                          date=date_stamp,
+                                          time_length=time_length,
+                                          badges_awarded=badge_id,
+                                          rating_score=rating_score,
+                                          user_id=user_data.user_id,
+                                          isbn=book_data.isbn,    
+                                          sidekick_id=sidekick_data.sidekick_id)
+    # terminal confirmation
+    print new_reading_session
+
+    # commits new reading session instance to db
+    new_reading_session.commit_to_db()
+    
+    msg = "I recorded the reading log information"
+
+
+    # sets new rating id
+    #new_rating_id = set_val_rating_session_id()
+    
+    # creates new instance of a rating
+    new_rating = Rating(#rating_id=new_rating_id,
+                        comment=comment,
+                        user_id=user_data.user_id,
+                        isbn=book_data.isbn,
+                        session_id=new_reading_session.session_id)
+    
+    new_rating.commit_to_db()
+    print "i logged new this new_rating",  book_data.isbn, comment#, new_rating_id,                    
+        
+    # user confirmation
+    flash("Great Work! I logged your reading session %s !" % session['first_name'])
+    
+    
+    return render_template("reading_session.html", 
+                           msg=msg,
+                           avatar=session['avatar'],
+                           sidekicks=sidekicks,
+                           user_id=user_data.user_id,
+                           today_date=today_date)
+
+
+
+
+
 # TODO in progress: need to limit data to books and ratings_scores
 @app.route("/user/<int:scholar_id>", methods=["POST", "GET"])
 def show_user_details(scholar_id):
     """Return page showing the details of a scholar's history."""
     
     # queries database for scholar information by id
-    scholar_data = User.query.filter(User.user_id == session['scholar_id']).first()
+    scholar_data = User.query.filter(User.user_id == scholar_id).first()
     print "i'm the user", scholar_data
+    print scholar_id
     
     # queries database for all ratings by the scholar by scholar id
-    user_ratings_list = Rating.query.filter(Rating.user_id == session['scholar_id']).all()
+    user_ratings_list = Rating.query.filter(Rating.user_id == scholar_id).all()
     
     # query for badge data for the current reading session.
     badge_data = Badge.query.filter(Badge.badge_id == session['session_badge']).first()
+    
+    
     
     print 'you read these books'
     book_rating_dict = {}
     badges_dict = {}
     total_time = 0
+    book_gallery = []
     
-    print user_ratings_list
-    
+
     for user_rating in user_ratings_list:
-        #
+        
         # calculate total badges earned 
-        if user_rating.session.badges_awarded:
-            for badge in badges_list:
-                if badges_awarded == session['session_badge']:
-                    badges_dict['name'] = badge.name
-                    badges_dict['img'] = badge_url
-                        
-                if badges_dict[badge_id] not in badges_dict:
-                    badges_dict[badge_id] = 1
-                else:
-                    badges_dict[badge_id] += 1
+        for badge in badges_list:
+            if user_rating.session.badges_awarded == badge.badge_id:
+                
+                badges_dict[badge.name] = badge.badge_url
+
         
         # calculates total time reading
         if user_rating.session.time_length:
             total_time += user_rating.session.time_length
     
         # collects individual book ratings
-        if user_rating.book.isbn:
-            title = user_rating.book.title
-            if title not in book_rating_dict:
+        for book in book_list:
+            title = book.title
+            if user_rating.book.isbn == book.isbn:
                 book_rating_dict[title] = [user_rating.session.rating_score]
+                if book.image_url_sm not in book_gallery:
+                    book_gallery.append(book.image_url_sm)
+                
+                
+            # if book_rating_dict[title] not in book_rating_dict:
+                
         
-        else:
-            book_rating_dict[title].append(user_rating.session.rating_score)
+        # else:
+        #     book_rating_dict[title].append(user_rating.session.rating_score)
         
     import numpy
     
@@ -612,14 +605,15 @@ def show_user_details(scholar_id):
     
 
         # Nice to have
-        #TODO get books titles to show on user page
-        #calculate average ratings for a book
-        #count earned for badges per day/day/month
+        # TODO get books titles to show on user page
+        # calculate average ratings for a book
+        # count earned for badges per day/day/month
         
     # user_id = session['scholar_id']
     
-    print badges_dict
-    print "badges earned", badges_dict
+    gallery = badges_dict.values()
+    
+    # print "badges earned", badges_dict
     
     msg = 'your earned %s badges!!!' %  badges_dict
     
@@ -633,7 +627,9 @@ def show_user_details(scholar_id):
                            user_ratings_list=user_ratings_list,
                            book_dict=book_rating_dict,
                            time=total_time,
-                           badge_data=badge_data)
+                           badge_data=badge_data,
+                           gallery=gallery,
+                           covers=book_gallery)
 
 
 # this doesn't work yet

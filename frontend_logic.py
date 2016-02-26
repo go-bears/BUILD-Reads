@@ -28,5 +28,14 @@ def pick_avatar():
     return user_avatar
 
 
-def calculate_badges():
-    pass
+def calculate_badges(time_length):
+    if time_length < 20:
+        badge_id = 0
+    elif time_length >= 20 and time_length < 40:
+        badge_id = 1
+    elif time_length > 40 and time_length <= 60:
+        badge_id = 2
+    else:
+        badge_id = 3
+    
+    return badge_id
