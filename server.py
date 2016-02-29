@@ -9,7 +9,7 @@ from jinja2 import StrictUndefined
 
 from model import *
 
-from  frontend_logic import pick_avatar, calculate_badges
+from  server_helper_funct import pick_avatar, calculate_badges, birthday_format
 
 #######################################################################
 # Flask variables and tools
@@ -305,15 +305,7 @@ def register_new_user():
     
     # splitting string returned in birthday
     str_birthday = request.form.get('birthday')
-    print "this string", str_birthday
-    
-    year, month, day = str_birthday.split('-')
-    print 'this is the split string,', year, month, day
-    # converting string into datetime object for db
-    birthday = date(int(year), int(month), int(day))
-    print "this is the birthday date obj", birthday
-    
-    
+    birthday = birthday_format(str_birthday)
 
     
     # values for Flask session dictionary for new user
@@ -571,9 +563,11 @@ def show_user_details(scholar_id):
         # calculate total badges earned 
         for badge in badges_list:
             if user_rating.session.badges_awarded == badge.badge_id:
-                
-                badges_dict[badge.name] = badge.badge_url
-
+                if badges_dict[badge.name] not in badges_dict:
+                    badges_dict[badge.name] = {"url": badge.badge_url, "count":1}
+                else:
+                    badges_dict[badge.name]['count'] += 1
+                    # increment count
         
         # calculates total time reading
         if user_rating.session.time_length:
