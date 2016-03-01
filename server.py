@@ -10,6 +10,7 @@ from jinja2 import StrictUndefined
 
 
 from model import *
+from seed import set_val_user_id
 
 from  server_helper_funct import pick_avatar, calculate_badges,\
                                  birthday_format,\
@@ -151,6 +152,7 @@ def serve_reading_session_form():
     sites = scholar.site.name
     print scholar
     print scholar.user_id
+    print scholar.avatar
     
     # information messages    
     msg = "Tell us about your reading adventure %s !" % session['first_name']
@@ -160,7 +162,7 @@ def serve_reading_session_form():
                            sidekicks=sidekicks, 
                            user_id=scholar.user_id,
                            today_date=today_date,
-                           avatar=session['avatar'],
+                           avatar=scholar.avatar,
                            sites=sites)
 
 
@@ -292,7 +294,7 @@ def register_new_user():
     msg = "i am registering new users"
     
     # values for dropdown menu
-    sites = db.session.query(Site).all()
+    sites = [site.name for site in sites_list]
     grades =  ['k', 1,2,3,4,5,6,7,8]
     
     # collecting new user data from new_user.html
@@ -308,6 +310,7 @@ def register_new_user():
     password = request.form.get('password')
     
     avatar = pick_avatar()
+    session['scholar_id'] = avatar
     
     # splitting string returned in birthday
     str_birthday = request.form.get('birthday')
@@ -349,11 +352,11 @@ def register_new_user():
         site_id = site.site_id
 
         # sets id for new user entry
-        # new_user_id = set_val_user_id()
+        new_user_id = set_val_user_id()
     
  
         # creates instance of User for db     
-        new_user = User(#user_id=new_user_id,
+        new_user = User(user_id=new_user_id,
                         first_name=first_name, 
                         last_name=last_name,
                         birthday=birthday,
@@ -532,7 +535,7 @@ def log_reading_session():
     
     return render_template("reading_session.html", 
                            msg=msg,
-                           avatar=session['avatar'],
+                           avatar=user_data.avatar,
                            sidekicks=sidekicks,
                            user_id=user_data.user_id,
                            today_date=today_date)
@@ -580,7 +583,7 @@ def show_user_details(scholar_id):
     
     return render_template("user_details.html",
                            today_date=today_date,
-                           avatar=session['avatar'],
+                           avatar=scholar_data.avatar,
                            user_details=scholar_data,
                            badge_id=session['session_badge'],
                            time_length = session['time'],

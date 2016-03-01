@@ -85,8 +85,8 @@ y_ratings_df = gl.load_sframe('./y_book_set')
 y_rec_model=gl.load_model('y_rec_model')
 
 # this works!!
-# y_recs = y_rec_model.recommend()
-# print y_recs
+y_recs = y_rec_model.recommend()
+print y_recs
 
 # list of 3 amelia bedelia books &  1 richard scarry
 my_list_of_items =['0064440192', '0064442055', '038049171', '0307157857']
@@ -94,8 +94,8 @@ my_list_of_items =['0064440192', '0064442055', '038049171', '0307157857']
 similar_items = y_rec_model.get_similar_items(my_list_of_items, k=10)
 print similar_items.print_rows(num_rows=40)
 
-y_popular_model = gl.popularity_recommender.create(y_rec_model)
-print y_popular_model.PopularityRecommender.predict(y_popular_model)
+# y_popular_model = gl.popularity_recommender.create(y_rec_model)
+# print y_popular_model.PopularityRecommender.predict(y_popular_model)
 
 # item_similarity_recommender.create
 
