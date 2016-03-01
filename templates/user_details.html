@@ -26,42 +26,49 @@ Today is {{ today_date }}
       <br> 
       Your grade is {{ user_details.grade }}
       <br>
-     {% if badge_data %} 
-     You earned a <img src="{{ badge_data.badge_url }}"> <br>
-     {{ badge_data.name }} today
+      
+    
+  
+      <br>
+
+      Today you read for {{ time_length }} minutes and earned a {{ badge_data.name  }}
+        <table>
+        <tr>
+          <td> <img src="{{ badge_data.badge_url }}"> </td>
+          <td>{{ badge_data.description  }}</td>
      
-     {% endif %}
-    
+        </tr>
+      </table>
+      
       <li>You read a total of {{ time }} minutes!!</li>
-
-      <!--You rated these books-->
-      <!--      {% for item in user_ratings_list %}-->
-            
-      <!--  <li>{{ item.book.title }}: {{item.session.rating_score}}</li>-->
+      You earned these badges!
+      {% for key, value in badges_dict.items() %}
         
-        {% endfor %}
+        <table>
+        <tr>
+          <td> <img src="{{ value['url'] }}"> </td>
+          <td>{{ key }}</td>
+          <td>{{ value['count'] }}</td>
+        </tr>
+      </table>
+      
+      {% endfor %}
 
-    {% for rating in book_dict %}
-    
-      <li>{{ rating }} {{ book_dict[rating] }}</li>
-    {% endfor %}
-    
-    {% for cover in covers %}
-      <li><img src="{{ cover }}"> </li>
-    {% endfor %}
-    
-    
-{{ msg }}
+      You rated these books!
 
-<br>
-Your badge gallery!<br>
-    {% for badge in gallery%}
+      {% for key, value in book_rating_dict.items() %}
+    
     <table>
+      
       <tr>
-        <img src="{{ badge }}"></img>
+        <td> <img src="{{ value['img'] }}"> </td>
+        <td>{{ key }}</td>
+        <td>{{ value['avg_score'] }}</td>
+        <td>{{ value['description'] }}</td>
       </tr>
     </table>
-    {% endfor %}
+      {% endfor %}
+
 
 <br>
 <a href='/reading_session'><button>Let's start a new reading session!</button></a>

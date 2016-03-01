@@ -37,12 +37,12 @@ def generate_google_books_requests(isbn_list):
     """Builds google books api query urls."""
     
     # check for number items in db to reset this number last is 315
-    sample_set = set(isbn_list[2201:2300])
+    sample_set = set(isbn_list[2901:3000])
     
     url_list = []
     
     for isbn in sample_set:
-        api_url = GOOGLE_BOOKS_SEARCH_ISBN + isbn + "&country=CN"
+        api_url = GOOGLE_BOOKS_SEARCH_ISBN + isbn + "&country=US"
         url_list.append(api_url)
 
     return url_list
@@ -56,8 +56,8 @@ def get_book_info(url_list):
 
     default_book_title = 'ISBN is not matched with title'
     default_book_author = 'ISBN is not matched with an author'
-    default_book_cover_sm = '<i class="fa fa-book 3x"></i>'
-    default_book_cover_md = '<i class="fa fa-book 4x"></i>'
+    default_book_cover_sm = None
+    default_book_cover_md = None
     default_book_description = "ISBN is not matched with a description"
 
     for url in url_list:
@@ -144,10 +144,6 @@ def get_badges():
         new_badge.commit_to_db()
           
                       
-    
-    # pprint.pprint(badges_list[0])
-
-
 
 
 if __name__ == "__main__":
@@ -160,7 +156,7 @@ if __name__ == "__main__":
     book_list = query_all_books()   
     
     db_isbn =[book.isbn for book in book_list]
-    print db_isbn
+    # print db_isbn
     isbn_list = open_isbn_list(isbn_filepath)
     # isbn_list =['9781484602607', '9780001846531', '9781484602617']
     url_list = generate_google_books_requests(isbn_list)

@@ -1,5 +1,6 @@
 # import statment for running on cloud 9
-import os 
+import os
+import numpy
 
 from datetime import date, datetime
 from flask import Flask, render_template, redirect, request, flash, session
@@ -7,9 +8,14 @@ from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from jinja2 import StrictUndefined
 
+
 from model import *
 
-from  server_helper_funct import pick_avatar, calculate_badges, birthday_format
+from  server_helper_funct import pick_avatar, calculate_badges,\
+                                 birthday_format,\
+                                 calculates_total_badges,\
+                                 calculates_total_reading_time,\
+                                 tally_book_ratings
 
 #######################################################################
 # Flask variables and tools
@@ -469,9 +475,11 @@ def log_reading_session():
     
     # calculates badges earned per reading session
     badge_id = calculate_badges(time_length)
+    print badge_id
     
     session['session_badge'] = badge_id
     session['time'] = time_length
+
 
     # queries db for user information by first name. this is ok for now.
     #TODO make query smarter by searching by first and last name or get query from data in Flask Session
@@ -548,82 +556,39 @@ def show_user_details(scholar_id):
     
     # query for badge data for the current reading session.
     badge_data = Badge.query.filter(Badge.badge_id == session['session_badge']).first()
-    
-    
+    print badge_data
+
     
     print 'you read these books'
-    book_rating_dict = {}
-    badges_dict = {}
-    total_time = 0
-    book_gallery = []
-    
 
-    for user_rating in user_ratings_list:
-        
-        # calculate total badges earned 
-        for badge in badges_list:
-            if user_rating.session.badges_awarded == badge.badge_id:
-                if badges_dict[badge.name] not in badges_dict:
-                    badges_dict[badge.name] = {"url": badge.badge_url, "count":1}
-                else:
-                    badges_dict[badge.name]['count'] += 1
-                    # increment count
-        
-        # calculates total time reading
-        if user_rating.session.time_length:
-            total_time += user_rating.session.time_length
-    
-        # collects individual book ratings
-        for book in book_list:
-            title = book.title
-            if user_rating.book.isbn == book.isbn:
-                book_rating_dict[title] = [user_rating.session.rating_score]
-                if book.image_url_sm not in book_gallery:
-                    book_gallery.append(book.image_url_sm)
-                
-                
-            # if book_rating_dict[title] not in book_rating_dict:
-                
-        
-        # else:
-        #     book_rating_dict[title].append(user_rating.session.rating_score)
-        
-    import numpy
-    
-    
-    
-    for title, ratings in book_rating_dict.items():
-        avg_rating = numpy.mean(ratings)
-        book_rating_dict[title] = avg_rating
-    
-    
+    badges_dict = calculates_total_badges(badges_list, user_ratings_list)
+    print badges_dict.items()
 
-        # Nice to have
-        # TODO get books titles to show on user page
-        # calculate average ratings for a book
-        # count earned for badges per day/day/month
-        
-    # user_id = session['scholar_id']
-    
-    gallery = badges_dict.values()
-    
-    # print "badges earned", badges_dict
+    # calculates total time reading
+    total_time = calculates_total_reading_time(user_ratings_list)
+    print total_time
+
+    # collects individual book ratings
+    book_rating_dict = tally_book_ratings(book_list, user_ratings_list)
+    print book_rating_dict.items()
+
+
     
     msg = 'your earned %s badges!!!' %  badges_dict
     
     flash("You worked hard %s !" % session['first_name'])
     
     return render_template("user_details.html",
-                           msg=msg,
                            today_date=today_date,
                            avatar=session['avatar'],
                            user_details=scholar_data,
+                           badge_id=session['session_badge'],
+                           time_length = session['time'],
                            user_ratings_list=user_ratings_list,
-                           book_dict=book_rating_dict,
                            time=total_time,
+                           badges_dict=badges_dict,
                            badge_data=badge_data,
-                           gallery=gallery,
-                           covers=book_gallery)
+                           book_rating_dict=book_rating_dict)
 
 
 # this doesn't work yet
