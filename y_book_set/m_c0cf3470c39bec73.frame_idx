@@ -1,0 +1,35 @@
+[sframe]
+version=0
+num_segments=0
+num_columns=14
+nrows=13546
+[column_names]
+0000=record_id
+0001=user_id
+0002=location
+0003=age
+0004=isbn
+0005=rating
+0006=_merge
+0007=title
+0008=author
+0009=year
+0010=publisher
+0011=image-sm link
+0012=image-md link
+0013=image-lg link
+[column_files]
+0000=m_c0cf3470c39bec73.sidx:0
+0001=m_c0cf3470c39bec73.sidx:1
+0002=m_c0cf3470c39bec73.sidx:2
+0003=m_c0cf3470c39bec73.sidx:3
+0004=m_c0cf3470c39bec73.sidx:4
+0005=m_c0cf3470c39bec73.sidx:5
+0006=m_c0cf3470c39bec73.sidx:6
+0007=m_c0cf3470c39bec73.sidx:7
+0008=m_c0cf3470c39bec73.sidx:8
+0009=m_c0cf3470c39bec73.sidx:9
+0010=m_c0cf3470c39bec73.sidx:10
+0011=m_c0cf3470c39bec73.sidx:11
+0012=m_c0cf3470c39bec73.sidx:12
+0013=m_c0cf3470c39bec73.sidx:13
