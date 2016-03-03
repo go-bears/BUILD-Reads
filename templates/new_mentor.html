@@ -20,7 +20,7 @@ Today is:  {{ today_date }}
     <label for="School">Your Site:</label>
       <select name="school">
         {% for site in sites  %}
-        <option placeholder="choose your school" value="{{ site.name }}">{{ site.name }}</option>
+        <option placeholder="choose your school" value="{{ site }}">{{ site }}</option>
         {% endfor %}
       </select>
       <br>

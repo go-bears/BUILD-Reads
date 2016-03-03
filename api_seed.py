@@ -37,7 +37,7 @@ def generate_google_books_requests(isbn_list):
     """Builds google books api query urls."""
     
     # check for number items in db to reset this number last is 315
-    sample_set = set(isbn_list[2901:3000])
+    sample_set = set(isbn_list[3001:4000])
     
     url_list = []
     
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     # get_badges()
     book_list = query_all_books()   
     
-    db_isbn =[book.isbn for book in book_list]
+    db_isbn = [book.isbn for book in book_list]
     # print db_isbn
     isbn_list = open_isbn_list(isbn_filepath)
     # isbn_list =['9781484602607', '9780001846531', '9781484602617']

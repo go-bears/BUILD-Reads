@@ -99,14 +99,24 @@ def tally_book_ratings(book_list, user_ratings_list):
         for book in book_list:
             title = book.title
             if user_rating.book.isbn == book.isbn:
-                # collects scores from ratings, and url from book attribute
-                book_rating_dict[title] = {'score': [user_rating.session.rating_score],
-                                          'img': book.image_url_sm,
-                                          'description': book.description}
+                
+                if title not in book_rating_dict:
+                    # collects scores from ratings, and url from book attribute
+                    book_rating_dict[title] = {'score': [user_rating.session.rating_score],
+                                              'img': book.image_url_sm,
+                                              'description': book.description,
+                                              'time_spent': [user_rating.session.time_length]}
                                           
-                # calcuates average score                          
-                book_rating_dict[title]['avg_score'] = int(numpy.ceil(book_rating_dict[title]['score']))
-    
+                else:
+                    book_rating_dict[title]['score'].append(user_rating.session.rating_score)
+                    book_rating_dict[title]['time_spent'].append(user_rating.session.time_length)
+                    
+                # calculates average score                          
+                book_rating_dict[title]['avg_score'] = int(numpy.mean(book_rating_dict[title]['score']))
+            
+                # calculates total time spent reading a specific book
+                book_rating_dict[title]['total_time'] = sum(book_rating_dict[title]['time_spent'])
+
     print book_rating_dict
     return book_rating_dict
 

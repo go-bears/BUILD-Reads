@@ -1,9 +1,10 @@
 # import statment for running on cloud 9
 import os
 import numpy
+import pprint
 
 from datetime import date, datetime
-from flask import Flask, render_template, redirect, request, flash, session
+from flask import Flask, render_template, redirect, request, flash, session, jsonify
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_sqlalchemy import SQLAlchemy
 from jinja2 import StrictUndefined
@@ -274,13 +275,13 @@ def resolve_login():
         
         # success will redirects to mentor dashboard eventually
             
-            flash("Let's start reading with your scholar! \
-                  Please help them with logging in")
-            return redirect('/login')
+            # flash("Let's start reading with your scholar! \
+            #       Please help them with logging in")
+        return redirect('/mentor_detail')
         
-        else:
-            flash("Looks like you're new to BUILD! Let's sign you up!")
-            return redirect('/new_mentor')
+        # else:
+        #     flash("Looks like you're new to BUILD! Let's sign you up!")
+        #     return redirect('/new_mentor')
             
 
 
@@ -352,11 +353,11 @@ def register_new_user():
         site_id = site.site_id
 
         # sets id for new user entry
-        new_user_id = set_val_user_id()
+        # new_user_id = set_val_user_id()
     
  
         # creates instance of User for db     
-        new_user = User(user_id=new_user_id,
+        new_user = User(#user_id=new_user_id,
                         first_name=first_name, 
                         last_name=last_name,
                         birthday=birthday,
@@ -429,10 +430,10 @@ def register_new_mentor():
     # registers new user to db
     else:
         # sets id for new user entry
-        # new_sidekick_id = set_val_sidekick_id()
+        new_sidekick_id = set_val_sidekick_id()
      
         # creates instance of Sidekick for db     
-        new_sidekick = Sidekick(#sidekick_id=new_sidekick_id,
+        new_sidekick = Sidekick(sidekick_id=new_sidekick_id,
                         first_name=first_name, 
                         last_name=last_name,
                         password=password)
@@ -517,7 +518,7 @@ def log_reading_session():
 
 
     # sets new rating id
-    #new_rating_id = set_val_rating_session_id()
+    # new_rating_id = set_val_rating_session_id()
     
     # creates new instance of a rating
     new_rating = Rating(#rating_id=new_rating_id,
@@ -527,6 +528,7 @@ def log_reading_session():
                         session_id=new_reading_session.session_id)
     
     new_rating.commit_to_db()
+    
     print "i logged new this new_rating",  book_data.isbn, comment#, new_rating_id,                    
         
     # user confirmation
@@ -559,26 +561,18 @@ def show_user_details(scholar_id):
     
     # query for badge data for the current reading session.
     badge_data = Badge.query.filter(Badge.badge_id == session['session_badge']).first()
-    print badge_data
 
-    
-    print 'you read these books'
-
+    # calculates how many of different badges were earned
     badges_dict = calculates_total_badges(badges_list, user_ratings_list)
-    print badges_dict.items()
+
 
     # calculates total time reading
     total_time = calculates_total_reading_time(user_ratings_list)
-    print total_time
 
     # collects individual book ratings
     book_rating_dict = tally_book_ratings(book_list, user_ratings_list)
-    print book_rating_dict.items()
 
 
-    
-    msg = 'your earned %s badges!!!' %  badges_dict
-    
     flash("You worked hard %s !" % session['first_name'])
     
     return render_template("user_details.html",
@@ -594,27 +588,66 @@ def show_user_details(scholar_id):
                            book_rating_dict=book_rating_dict)
 
 
+@app.route('/reading-chart.json')
+def melon_types_data():
+    """Return chart data about scholar's reading history."""
+    
+    user_ratings_list = Rating.query.filter(Rating.user_id == session['scholar_id']).all()
+    print user_ratings_list
+    print session['scholar_id']
+
+    book_rating_dict = tally_book_ratings(book_list, user_ratings_list)
+    print book_rating_dict
+    
+    color_list = [('#81C8D5', '3CDEEE4'), ('#976ACD', '#CBC9ED'), 
+                  ('#697728', '#BCC247'), ('#BB3E55', '#D685A5'),
+                  ('#1B504F', '#349D8B'), ('#774628', '#C68C53')]
+    counter = 0
+    books_data = {}
+    books_data['books'] = []
+    
+    for key, value in book_rating_dict.iteritems():
+        
+        key =  {
+                "value": value['total_time'],
+                "color": color_list[counter][0], 
+                "highlight": color_list[counter][1], 
+                "label": key
+                
+                                    }
+        books_data['books'].append(key)    
+        counter += 1
+
+    print books_data
+    return jsonify(books_data)
+
+
 # this doesn't work yet
-@app.route("/mentor/<int:sidekick_id>", methods=["POST", "GET"])
-def show_mentor_details(sidekick_id):
+@app.route("/mentor_detail", methods=["POST", "GET"])
+def show_mentor_details():
     """Show mentor dashboard with details on reading trends, schools, and list of scholars  """
     
-    # queries db for scholars that the mentor has worked with via sidekick_id
-    #   = Reading_session.query.filter(reading_session.sidekick_id==sidekick_id).all()
-    # print scholars
+    book_display = []
+    book_list = query_all_books()
     
+    for book in book_list:
+        
+        if book.image_url_md !='<i class="fa fa-book 4x"></i>' or book.image_url_md != None:
+            book_display.append(book)
+        else:
+            pass
+        
 
     # if mentor is logged in, render the mentor_details page
-    if session['mentor']:
-        return render_template('mentor_detail.html', 
-                               today_date=today_date,
-                               scholars=scholars)
+   
+    return render_template('mentor_detail.html', 
+                           today_date=today_date,
+                           book_display=book_display)
     
-    # else return mentor to login page         
-    else:
-        flash("Hi BUILD mentor, please login to see the details page")
-        
-        return redirect('/login')
+
+
+
+
 
 
 if __name__ == "__main__":
@@ -636,8 +669,6 @@ if __name__ == "__main__":
     # Flask debugging toolbar
     DebugToolbarExtension(app)
     
-    
-
 
     # app config for Cloud9
     app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))

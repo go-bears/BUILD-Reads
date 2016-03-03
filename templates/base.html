@@ -7,6 +7,17 @@
 
   <!--import jquery-->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.1/jquery.min.js">
+
+  <!--import charts.js-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
+  
+  <!--import jquery-->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  
+  <!--import owl carousel css-->
+  <link rel="stylesheet" href="owlcarousel/owl.carousel.min.css">
+  <link rel="stylesheet" href="owlcarousel/owl.theme.default.min.css">
+  
 </head>
 
 <body>
@@ -22,6 +33,66 @@
   put your content here 
   
   {% endblock %}
+
+
+
+
+    <script>
+    
+      var data = [
+      {
+          value: 300,
+          color:"#F7464A",
+          highlight: "#FF5A5E",
+          label: "Red"
+      },
+      {
+          value: 50,
+          color: "#46BFBD",
+          highlight: "#5AD3D1",
+          label: "Green"
+      },
+      {
+          value: 100,
+          color: "#FDB45C",
+          highlight: "#FFC870",
+          label: "Yellow"
+      }
+  ]
+
+      // global variable to make chart mobile responsive
+       var options = { responsive: true };
+       
+      // select html id readingCharts & returns method for canvas element
+       var donut_data = $("#readingChart").get(0).getContext("2d");
+      
+      // AJAX request to grab data from /reading-chart.json route
+      // $.get("/reading-chart.json", function (data) {
+        
+          // readingChart is rendered by calling on Doughnut function
+      var readingChart = new Chart(donut_data).Doughnut(data,options);
+      
+        // // jquery to get html id readingLegend to generate chart legend
+        // $('#readingLegend').html(myDonutChart.generateLegend());
+        
+        // });
+        
+    </script>
+     
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+
+<script src="https://code.jquery.com/jquery.js"></script>
+
+<!--<script src="owlcarousel/owl.carousel.min.js"></script>-->
 
 </body>
 </html>

@@ -1,22 +1,59 @@
-import unittest
 import server
+import unittest
 
-class DatabaseTests(unittest.TestCase):
+
+
+class LoadPages(unittest.TestCase):
     
-    def test_login(self):
+    def test_login_status_code(self):
         """test login page """
         
         test_client = server.app.test_client()
         result = test_client.get('/login')
         
+        # tests if login pages load
         self.assertEqual(result.status_code, 200)
-        self.assertIn('Today is %s' % server.today_date, result.data)
+    
 
-    def test_form(self):
+    def test_newuser_status_code(self):
+        """test reading session page log """
+        
         test_client = server.app.test_client()
+        result = test_client.get('/reading_session"')    
+        
+        # tests if login pages load
+        self.assertEqual(result.status_code, 200)
 
-        result = test_client.post('/fav_color', data={'color': 'blue'})
-    self.assertIn('I like blue, too', result.data)
 
+class DataDisplays(unittest.TestCase):
+    
+    def test_date_renders(self):
+        """ tests if date loads on login """
+        
+        test_client = server.app.test_client()
+        result = test_client.get('/login')
+        
+        self.assertIn('Today is %s' % server.today_date, result.data)
+    # def test_load_user_detail(self):
+    #     """test is user details page loads """
+        
+    #     test_client = server.app.test_client()
+    #     result = test_client.get('/reading_session/user/6')    
+        
+        
+    #     # tests if login pages load
+    #     self.assertEqual(result.status_code, 200)
+
+
+# class TestDbQueries(unittest.TestCase):
+    
+    
+
+        
+        
+
+
+
+    
 if __name__ == "__main__":
     unittest.main()

@@ -26,13 +26,43 @@ Today is {{ today_date }}
       <br> 
       Your grade is {{ user_details.grade }}
       <br>
-      
+      Today you read for {{ time_length }} minutes and earned a {{ badge_data.name  }} 
     
   
       <br>
+      
+      <div class="readingchart" >
+        <canvas id="readingChart" height="200px"></canvas>
+        <div id="readingLegend" class="chart-legend"></div>
+      </div>
+           
+      <br>
+      <li>You read a total of {{ time }} minutes!!</li>
 
-      Today you read for {{ time_length }} minutes and earned a {{ badge_data.name  }}
-        <table>
+    <script>
+
+
+      // global variable to make chart mobile responsive
+       var options = { responsive: true };
+       
+      // select html id readingCharts & returns method for canvas element
+       var donut_data = $("#readingChart").get(0).getContext("2d");
+      
+      // AJAX request to grab data from /reading-chart.json route
+      $.get("/reading-chart.json", function (data) {
+        
+          // readingChart is rendered by calling on Doughnut function
+      var readingChart = new Chart(donut_data).Doughnut(data.books,options);
+      
+        // // jquery to get html id readingLegend to generate chart legend
+        $('#readingLegend').html(myDonutChart.generateLegend());
+        
+        });
+        
+    </script>
+     
+     
+        <table border=1>
         <tr>
           <td> <img src="{{ badge_data.badge_url }}"> </td>
           <td>{{ badge_data.description  }}</td>
@@ -40,11 +70,11 @@ Today is {{ today_date }}
         </tr>
       </table>
       
-      <li>You read a total of {{ time }} minutes!!</li>
+ 
       You earned these badges!
       {% for key, value in badges_dict.items() %}
         
-        <table>
+        <table border=1>
         <tr>
           <td> <img src="{{ value['url'] }}"> </td>
           <td>{{ key }}</td>
@@ -58,7 +88,7 @@ Today is {{ today_date }}
 
       {% for key, value in book_rating_dict.items() %}
     
-    <table>
+    <table border=1>
       
       <tr>
         <td> <img src="{{ value['img'] }}"> </td>
