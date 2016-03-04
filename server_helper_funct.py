@@ -120,5 +120,26 @@ def tally_book_ratings(book_list, user_ratings_list):
     print book_rating_dict
     return book_rating_dict
 
+def format_chart_colors(book_rating_dict):
+    """Assigns color values to different books for doughnut chart """
+    
+    color_list = [('#81C8D5', '3CDEEE4'), ('#976ACD', '#CBC9ED'), 
+                  ('#697728', '#BCC247'), ('#BB3E55', '#D685A5'),
+                  ('#1B504F', '#349D8B'), ('#774628', '#C68C53')]
+    counter = 0
+    books_data = {}
+    books_data['books'] = []
+    
+    for key, value in book_rating_dict.iteritems():
+        
+        key =  {
+                "value": value['total_time'],
+                "color": color_list[counter][0], 
+                "highlight": color_list[counter][1], 
+                "label": key
+                
+                                    }
+        books_data['books'].append(key)    
+        counter += 1
 
-
+    return books_data

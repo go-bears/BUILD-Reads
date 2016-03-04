@@ -1,30 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <title>Chart.js demo</title>
-    
-    </head>
-    <body>
-        <h2>Mentor Details</h2>
+{% extends 'base.html' %}
+{% block content %}
+
+Today is {{ today_date }}
+
+
+ <h2>Mentor Details</h2>
 
 <!-- Set up your HTML -->
 <div class="owl-carousel">
     
-{% for book in book_display %}
-<div>    <img src="{{ book.image_url_md }} "></img>
-    <br> {{ book.title }}
+    {% for book in book_display %}
+    <div id="img-carousel"> 
+       <tr>
+           <td><img src="{{ book.image_url_md }} "></img></td>
+           <td> {{ book.title }} </td>
+           <td> {{ book.description }} </td>
+    </div>
+    {% endfor %}
 </div>
-{%endfor%}
 
-</div>
 <script type="text/javascript">
     $(document).ready(function() {
-     
-      $("#owl-example").owlCarousel();
-     
+      
+     // initialize carousel
+      $("#img-carousel").owlCarousel({
+            //Lazy load
+            lazyLoad : false,
+            lazyFollow : true,
+            lazyEffect : "fade",
+        });
     });
-</script>        
-    </body>
-</html>
+</script> 
 
+<!-- Important Owl stylesheet -->
+<link rel="stylesheet" href="static/js/vendors/owl-carousel/owl.carousel.css">
+ 
+<!-- Default Theme -->
+<link rel="stylesheet" href="static/js/vendors/owl-carousel/owl.theme.css">
+ 
+<!-- Include owl js plugin -->
+<script src="static/js/vendors/owl-carousel/owl.carousel.js"></script>
+{% endblock %}

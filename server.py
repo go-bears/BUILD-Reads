@@ -17,7 +17,7 @@ from  server_helper_funct import pick_avatar, calculate_badges,\
                                  birthday_format,\
                                  calculates_total_badges,\
                                  calculates_total_reading_time,\
-                                 tally_book_ratings
+                                 tally_book_ratings, format_chart_colors
 
 #######################################################################
 # Flask variables and tools
@@ -286,7 +286,7 @@ def resolve_login():
 
 
 #TESTED and WORKS!!
-@app.route('/register_new_user', methods=["POST"])
+@app.route('/register_new_user', methods=["POST", "GET"])
 def register_new_user():
     """ User registration: saves new user's 
     first_name, last_name, birthday, school"""
@@ -598,34 +598,17 @@ def melon_types_data():
 
     book_rating_dict = tally_book_ratings(book_list, user_ratings_list)
     print book_rating_dict
-    
-    color_list = [('#81C8D5', '3CDEEE4'), ('#976ACD', '#CBC9ED'), 
-                  ('#697728', '#BCC247'), ('#BB3E55', '#D685A5'),
-                  ('#1B504F', '#349D8B'), ('#774628', '#C68C53')]
-    counter = 0
-    books_data = {}
-    books_data['books'] = []
-    
-    for key, value in book_rating_dict.iteritems():
-        
-        key =  {
-                "value": value['total_time'],
-                "color": color_list[counter][0], 
-                "highlight": color_list[counter][1], 
-                "label": key
-                
-                                    }
-        books_data['books'].append(key)    
-        counter += 1
 
+    books_data = format_chart_colors(book_rating_dict)
     print books_data
+    
     return jsonify(books_data)
 
 
 # this doesn't work yet
 @app.route("/mentor_detail", methods=["POST", "GET"])
 def show_mentor_details():
-    """Show mentor dashboard with details on reading trends, schools, and list of scholars  """
+    """Show possible books for scholars  """
     
     book_display = []
     book_list = query_all_books()
