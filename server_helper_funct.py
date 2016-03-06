@@ -121,7 +121,7 @@ def tally_book_ratings(book_list, user_ratings_list):
                 # calculates total time spent reading a specific book
                 book_rating_dict[title]['total_time'] = sum(book_rating_dict[title]['time_spent'])
 
-    print book_rating_dict
+
     return book_rating_dict
 
 def format_chart_colors(book_rating_dict):
@@ -144,14 +144,14 @@ def format_chart_colors(book_rating_dict):
                 "color": color_list[counter][0], 
                 "highlight": color_list[counter][1], 
                 "label": key
+                }
                 
-                                    }
         books_data['books'].append(key)    
         counter += 1
 
     return books_data
 
-def top_recommended(book_list, rec_list):
+def display_book_data(book_list, rec_list):
     """Queries db for top recommended books data"""
                 
     display_data = []
@@ -161,5 +161,4 @@ def top_recommended(book_list, rec_list):
             if isbn == book.isbn:
                 display_data.append(book)
                 
-    print display_data
     return display_data

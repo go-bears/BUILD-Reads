@@ -18,7 +18,7 @@ from  server_helper_funct import pick_avatar, calculate_badges,\
                                  calculates_total_badges,\
                                  calculates_total_reading_time,\
                                  tally_book_ratings, format_chart_colors,\
-                                 top_recommended
+                                 display_book_data
 
 #######################################################################
 # Flask variables and tools
@@ -48,7 +48,7 @@ date_stamp = today.date()
 today_date = "%s/%s/%s" % (today.month, today.day, today.year)
 
 
-####### Serving Pages ################################################
+####### DB Queries ################################################
 
 #TESTED and WORKS!!
 
@@ -105,6 +105,8 @@ def query_all_badges():
     return badges_list
 
 
+
+####### Serving Pages ################################################
 
 
 @app.route('/')
@@ -590,18 +592,14 @@ def show_user_details(scholar_id):
 
 
 @app.route('/reading-chart.json')
-def melon_types_data():
+def books_data():
     """Return chart data about scholar's reading history."""
     
     user_ratings_list = Rating.query.filter(Rating.user_id == session['scholar_id']).all()
-    print user_ratings_list
-    print session['scholar_id']
 
     book_rating_dict = tally_book_ratings(book_list, user_ratings_list)
-    print book_rating_dict
 
     books_data = format_chart_colors(book_rating_dict)
-    print books_data
     
     return jsonify(books_data)
 
@@ -614,10 +612,9 @@ def show_mentor_details():
     sci_fan = [
             "0439420105",
             "0439136369",
-
             "0440498058",
             "0439139597",
-         ]
+             ]
 
     main_rec  =  [
                 "0440414806",
@@ -626,21 +623,46 @@ def show_mentor_details():
                 "0064400557",
                 ]
     
-    sci_fan_display = top_recommended(book_list, sci_fan)
+    sci_fan_display = display_book_data(book_list, sci_fan)
     
-    main_books = top_recommended(book_list, main_rec)
+    main_books = display_book_data(book_list, main_rec)
 
-    
-
-    # if mentor is logged in, render the mentor_details page
    
     return render_template(
                            'mentor_detail.html', 
                            today_date=today_date,
                            book_display=main_books,
-                           sci_fan_display=sci_fan_display,
+                           sci_fan_display=sci_fan_display
                            )
-        
+                           
+@app.route('/mentor-chart.json')
+def mentor_data():
+    """Return chart data about scholar's reading history.""" 
+    
+    data = {}
+    data['interest'] =[
+        {
+            "value": 8,
+            "color":"#F7464A",
+            "highlight": "#FF5A5E",
+            "label": "A Little"
+        },
+        {
+            "value": 36,
+            "color": "#46BFBD",
+            "highlight": "#5AD3D1",
+            "label": "Somewhat"
+        },
+        {
+            "value": 57,
+            "color": "#FDB45C",
+            "highlight": "#FFC870",
+            "label": "A Lot"
+        }
+        ]
+    
+    return jsonify(data)
+
 
 
 if __name__ == "__main__":
