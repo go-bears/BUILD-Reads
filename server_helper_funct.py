@@ -105,11 +105,15 @@ def tally_book_ratings(book_list, user_ratings_list):
                     book_rating_dict[title] = {'score': [user_rating.session.rating_score],
                                               'img': book.image_url_sm,
                                               'description': book.description,
-                                              'time_spent': [user_rating.session.time_length]}
+                                              'time_spent': [user_rating.session.time_length],
+                                              'comments': [user_rating.comment]}
                                           
                 else:
                     book_rating_dict[title]['score'].append(user_rating.session.rating_score)
                     book_rating_dict[title]['time_spent'].append(user_rating.session.time_length)
+                    
+                    if len(book_rating_dict[title]['comments']) >2:
+                        book_rating_dict[title]['comments'].append(user_rating.comment)
                     
                 # calculates average score                          
                 book_rating_dict[title]['avg_score'] = int(numpy.mean(book_rating_dict[title]['score']))
@@ -117,15 +121,18 @@ def tally_book_ratings(book_list, user_ratings_list):
                 # calculates total time spent reading a specific book
                 book_rating_dict[title]['total_time'] = sum(book_rating_dict[title]['time_spent'])
 
-    print book_rating_dict
+
     return book_rating_dict
 
 def format_chart_colors(book_rating_dict):
     """Assigns color values to different books for doughnut chart """
     
-    color_list = [('#81C8D5', '3CDEEE4'), ('#976ACD', '#CBC9ED'), 
+    # color and highlight pairs for charts
+    color_list = [('#3E6CBB', '#81C8D5'), ('#976ACD', '#CBC9ED'), 
                   ('#697728', '#BCC247'), ('#BB3E55', '#D685A5'),
-                  ('#1B504F', '#349D8B'), ('#774628', '#C68C53')]
+                  ('#1B504F', '#349D8B'), ('#774628', '#C68C53'),
+                  ('#302267', '#C3BAE8'), ('#19354D', '#5B74C8')
+                  ]
     counter = 0
     books_data = {}
     books_data['books'] = []
@@ -137,9 +144,21 @@ def format_chart_colors(book_rating_dict):
                 "color": color_list[counter][0], 
                 "highlight": color_list[counter][1], 
                 "label": key
+                }
                 
-                                    }
         books_data['books'].append(key)    
         counter += 1
 
     return books_data
+
+def display_book_data(book_list, rec_list):
+    """Queries db for top recommended books data"""
+                
+    display_data = []
+    
+    for book in book_list:
+        for isbn in rec_list:
+            if isbn == book.isbn:
+                display_data.append(book)
+                
+    return display_data

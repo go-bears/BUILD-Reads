@@ -2,42 +2,72 @@
 {% block content %}
 
 Today is {{ today_date }}
-
-
+<br>
+<img src='http://publicservice.berkeley.edu/sites/default/files/BUILDSitesBanner_0.jpg'>
+<br>
  <h2>Mentor Details</h2>
+<br>
+
+      <div class="interestChart" >
+        <h3>Mentors Reporting of Scholars' Reading Confidence Increases</h3>
+        <canvas id="interestChart" height="200px"></canvas>
+        <div id="interestLegend" class="chart-legend"></div>
+      </div>
+           
+      <br>
+
+    <script>
+
+
+      // global variable to make chart mobile responsive
+       var options = { responsive: true };
+       
+      // select html id readingCharts & returns method for canvas element
+       var donut_data = $("#interestChart").get(0).getContext("2d");
+      
+      // AJAX request to grab data from /reading-chart.json route
+      $.get("/mentor-chart.json", function (data) {
+        
+          // readingChart is rendered by calling on Doughnut function
+      var interestChart = new Chart(donut_data).Doughnut(data,options);
+      
+        // // jquery to get html id readingLegend to generate chart legend
+        $('#rinterestLegend').html(myDonutChart.generateLegend());
+        
+        });
+        
+    </script>
+
+
 
 <!-- Set up your HTML -->
-<div class="owl-carousel">
-    
+   <h3> Main Recommendations</h3>
     {% for book in book_display %}
-    <div id="img-carousel"> 
-       <tr>
-           <td><img src="{{ book.image_url_md }} "></img></td>
-           <td> {{ book.title }} </td>
-           <td> {{ book.description }} </td>
-    </div>
+    
+    <tr class="table table-condensed" border=1> 
+    
+    <br>
+
+       <td><img src="{{ book.image_url_md }} "></img></td>
+       <!--<td> {{ book.title }} </td>-->
+       <td> {{ book.description }} </td>
+     </tr>
+
     {% endfor %}
-</div>
+    
+    <h3> Recommendations for Fantasy /Sci fi readers</h3>
+        {% for book in sci_fan_display %}
+    
+    <tr class="table table-condensed" border=1> 
+    
+    <br>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-      
-     // initialize carousel
-      $("#img-carousel").owlCarousel({
-            //Lazy load
-            lazyLoad : false,
-            lazyFollow : true,
-            lazyEffect : "fade",
-        });
-    });
-</script> 
+       <td><img src="{{ book.image_url_md }} "></img></td>
+       <!--<td> {{ book.title }} </td>-->
+       <td> {{ book.description }} </td>
+     </tr>
 
-<!-- Important Owl stylesheet -->
-<link rel="stylesheet" href="static/js/vendors/owl-carousel/owl.carousel.css">
- 
-<!-- Default Theme -->
-<link rel="stylesheet" href="static/js/vendors/owl-carousel/owl.theme.css">
- 
-<!-- Include owl js plugin -->
-<script src="static/js/vendors/owl-carousel/owl.carousel.js"></script>
+    {% endfor %}
+
+
 {% endblock %}

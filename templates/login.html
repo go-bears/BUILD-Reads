@@ -3,9 +3,28 @@
 
 Today is {{ today_date }}
 
-<form action="/resolve_login" method="POST">
+
+    <div class="container">
+      <div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+            <li role="presentation" class="active"><a href="#">Home</a></li>
+            <li role="presentation"><a href="#">About</a></li>
+            <li role="presentation"></li>
+                <!--make this appear only when user is logged in-->
+            
+    
+    <hr>
+          </ul>
+        </nav>
+        <h3 class="text-muted">BUILD Reads</h3>
+      </div>
+
+      <div class="jumbotron">
+        <h1>Welcome BUILD reads! Please login</h1>
+        
+        <form action="/resolve_login" method="POST">
   <p>
-    <h2>Welcome BUILD reads! Please login</h2>
 
 <h3>Are you a BUILD: </h3>
 
@@ -36,6 +55,11 @@ Today is {{ today_date }}
 
 
 </form> 
+</div>
+        
+        <p><a class="btn btn-lg btn-success" href="#" role="button">Sign up today</a></p>
+      </div>
+
 
 
 {% endblock %}

@@ -62,7 +62,7 @@ Today is {{ today_date }}
     </script>
      
      
-        <table border=1>
+        <table class="table table-responsive table-condensed">
         <tr>
           <td> <img src="{{ badge_data.badge_url }}"> </td>
           <td>{{ badge_data.description  }}</td>
@@ -74,7 +74,7 @@ Today is {{ today_date }}
       You earned these badges!
       {% for key, value in badges_dict.items() %}
         
-        <table border=1>
+        <table class="table table-responsive table-condensed">
         <tr>
           <td> <img src="{{ value['url'] }}"> </td>
           <td>{{ key }}</td>
@@ -88,13 +88,19 @@ Today is {{ today_date }}
 
       {% for key, value in book_rating_dict.items() %}
     
-    <table border=1>
+    <table class="table table-responsive table-condensed" >
       
       <tr>
         <td> <img src="{{ value['img'] }}"> </td>
         <td>{{ key }}</td>
         <td>{{ value['avg_score'] }}</td>
-        <td>{{ value['description'] }}</td>
+        <td> {% for comment in value['comments'] %}
+          <ul>
+            <li> {{ comment }}
+            </li>
+          </ul>
+          {% endfor %}
+        </td>
       </tr>
     </table>
       {% endfor %}

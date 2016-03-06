@@ -21,11 +21,6 @@ class LoadPages(unittest.TestCase):
                             Site(name="Young Adult Project")]
 
 
-        # server._old_book_list = server.book_list
-        server.book_list = [Book(title="Charlotte's Web"),
-                            Book(title="Garfield Thinks Big")]
-
-
     def test_login_status_code(self):
         """test login page """
         
@@ -38,22 +33,26 @@ class LoadPages(unittest.TestCase):
     def test_newuser_status_code(self):
         """test reading session page log """
         
+
+        
         result = self.client.get('/new_user')    
         
         # tests if login pages load
         self.assertEqual(result.status_code, 200)
 
-    # def test_mentor_detail_status_code(self):
-    #     """test mentor detail page loads """
-        
-    #     # server.book_list = [Book(title="Charlotte's Web"),
-    #     #                     Book(title="Garfield Thinks Big")]
+
+    def test_mentor_detail_status_code(self):
+        """test mentor detail page loads """
+
+        result = self.client.get('/mentor_detail')    
+
         
     #     result = self.client.get('/mentor_detail')    
         
     #     # tests if login pages load
     #     self.assertEqual(result.status_code, 200)
         
+
 
     # def tearDown(self):
     #     """Do at end of every test."""
