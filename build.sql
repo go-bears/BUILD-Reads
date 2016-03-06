@@ -3195,6 +3195,25 @@ American Gods	Neil Gaiman	Shadow is a man with a past. But now he wants nothing 
 Hh-Puppies Are Like Th	Jan Pfloog	ISBN is not matched with a description	0394861558	http://books.google.com/books/content?id=VIiAlMSD-8wC&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=VIiAlMSD-8wC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 Thomas' Railway Word Book	Random House	A story about Thomas the Tank Engine teaches children vocabulary words relating to trains, such as trestle and signalman.	0375802819	http://books.google.com/books/content?id=qxP2vQvtA3YC&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=qxP2vQvtA3YC&printsec=frontcover&img=1&zoom=1&source=gbs_api
 The Darts of Cupid and Other Stories	Edith Templeton	A collection of short fiction includes the title story about the relationship between a young British woman and her American superior during World War II.	0375421599	http://books.google.com/books/content?id=M0VbAAAAMAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=M0VbAAAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
+Harry Potter	ISBN is not matched with an author	ISBN is not matched with a description	0439064864	http://books.google.com/books/content?id=n3vng7gyGCYC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=n3vng7gyGCYC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+BEA WebLogic Server 8.1 Unleashed	Mark Artiges	With the release of WebLogic Server 7.0 in June 2002, BEA positioned WebLogic Server as the premier J2EE Web Services development platform. With the next release in late 2002, WLS will integrate WebLogic Workshop and other key tools to provide developers with a stable, market-leading product designed for the next generation of Java applications based on Web Services on the latest J2EE platform. BEA WebLogic Server is the leading J2EE application server, holding almost 40% of the market share in this competitive category. WebLogic Server Unleashed is designed to be the definitive reference work for the WLS developer, offering an in-depth look at the capabilities provided by WLS 7.X and illustrating the best development practices.	043935806X	http://books.google.com/books/content?id=TiAKHpPHpHIC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=TiAKHpPHpHIC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+The Heart of Wisdom Teaching Approach	Robin Sampson	"The Heart of Wisdom Teaching Approach is for all homeschoolers who want to make the Bible the center of their school day. This giant 500+ page book provides you with the methods, program, and resources for a course of study where students spend half the school day studying God?s Word and the other half studying God?s world (academics). Students study history chronologically and science in the order of the days of Creation. This book will encourage, motivate you and instruct you, step by step, how to give your child a Bible-focused, comprehensive education from preschool through high school; one that will train him or her to read, to study, to understand, to love to learn and, most important[...]	0553296981	http://books.google.com/books/content?id=Z1hXJbEUIiMC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=Z1hXJbEUIiMC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+Harry Potter and the Prisoner of Azkaban	J. K. Rowling	During his third year at Hogwarts School for Witchcraft and Wizardry, Harry Potter must confront the devious and dangerous wizard responsible for his parents' deaths. Reprint. 2,500,000 first printing.	0439136369	http://books.google.com/books/content?id=p-W7qWMJUasC&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=p-W7qWMJUasC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+The Godfather	Mario Puzo	More than thirty years ago, a classic was born. A searing novel of the Mafia underworld, The Godfather introduced readers to the first family of American crime fiction, the Corleones, and the powerful legacy of tradition, blood, and honor that was passed on from father to son. With its themes of the seduction of power, the pitfalls of greed, and family allegiance, it resonated with millions of readers across the world?and became the definitive novel of the virile, violent subculture that remains steeped in intrigue, in controversy, and in our collective consciousness.	0451167716	http://books.google.com/books/content?id=BHGqjwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=BHGqjwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
+The Library Media Specialist In the Writing Process	Marge Cox	Provides lessons and activities to help librarians to teach writing through the process method and collaboration with classroom teachers.	0590353403	http://books.google.com/books/content?id=2aO0P-vVKGcC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=2aO0P-vVKGcC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+The Library Media Specialist In the Writing Process	Marge Cox	Provides lessons and activities to help librarians to teach writing through the process method and collaboration with classroom teachers.	059035342X	http://books.google.com/books/content?id=2aO0P-vVKGcC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=2aO0P-vVKGcC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+Read On-- Fantasy Fiction	Neil Hollands	Hundreds of popular fantasy fiction titles are described and categorized according to their underlying features, including coming of age stories, Arthurian romances, breaking of curses, and barbarian warriors.	0439139597	http://books.google.com/books/content?id=Yrwx7GqSWl8C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=Yrwx7GqSWl8C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+Harry Potter and the Prisoner of Azkaban	J. K. Rowling	During his third year at Hogwarts School for Witchcraft and Wizardry, Harry Potter must confront the devious and dangerous wizard responsible for his parents' deaths.	0439136350	http://books.google.com/books/content?id=swJWQ5qq804C&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=swJWQ5qq804C&printsec=frontcover&img=1&zoom=1&source=gbs_api
+A Parent/Teacher Guide to Children's Books on Peace and Tolerance	Bob Blumenthal	How do you teach children to value peace and appreciate diversity? One way is to provide them with books with themes that promote these ideas. The Parent / Teacher Guide to Children's Books on Peace and Tolerance offers readers a wide variety of award-winning titles along with annotations and grade level recommendations. The book is divided into the following sections: Preschool - grade three Grades 4 - 6 Middle school, and High school. Each section has over 100 listings. Topics include civil rights, the Holocaust, slavery, Native Americans, bullying, war, child abuse, bigotry, cooperation, acceptance, apartheid, family relationships, Arab/Israeli conflict, controlling anger, the Civil War, [...]	0440414539	http://books.google.com/books/content?id=YYjKjAOdwqQC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=YYjKjAOdwqQC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+Shiloh	Phyllis Reynolds Naylor	Certain that the dog he has discovered near the old Shiloh schoolhouse has been abused by its owner, Marty Preston secretly vows to do anything to save him. Reprint. Newbery Medal winner.	0440407524	http://books.google.com/books/content?id=Egm0FGsXmMwC&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=Egm0FGsXmMwC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+Lonesome Dove	Larry McMurtry	Set in the late-nineteenth century, this novel chronicles a cattle drive from Texas to Montana, and follows the lives of Gus and Call, the cowboys heading the drive, Gus's woman, Lorena, and Blue Duck, a sinister Indian renegade	067168390X	http://books.google.com/books/content?id=upe3aNDMkn8C&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=upe3aNDMkn8C&printsec=frontcover&img=1&zoom=1&source=gbs_api
+The Library Media Specialist In the Writing Process	Marge Cox	Collaborate with classroom teachers on strategies to teach the writing process in the K?12 library and classroom. This well-organized and easy-to-follow resource is all you need to teach your students to write well. Includes reproducible posters and lessons to use immediately. This book explains the writing process, offers collaborative curriculum connections, and includes a treasure trove of teacher/librarian collaborative writing lessons.	0689824750	http://books.google.com/books/content?id=fE2Zd0T9KrEC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=fE2Zd0T9KrEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+Master of Murder	Christopher Pike	When a series of mysteries plague his town, misfit eighteen-year-old Marvin, the wealthy author of teenage fiction under a pseudonym, begins to believe that the tales of horror he has been creating are not fiction after all.	0671690590	http://books.google.com/books/content?id=xD-Y2hCfd90C&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=xD-Y2hCfd90C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+I Know what You Did Last Summer	Lois Duncan	Four teenagers try to conceal their responsibility for a hit-and-run accident while being pursued by a mystery figure seeking revenge.	0440228441	http://books.google.com/books/content?id=-iR1cpEML-UC&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=-iR1cpEML-UC&printsec=frontcover&img=1&zoom=1&source=gbs_api
+A Wrinkle in Time	Madeleine L'Engle	A midnight visitor escorts Meg, Calvin, and Charles across the barriers of space and time to another world.	0440498058	http://books.google.com/books/content?id=_QMRjwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=_QMRjwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api
+Holes	Louis Sachar	As further evidence of his family's bad fortune which they attribute to a curse on a distant relative, Stanley Yelnats is sent to a hellish correctional camp in the Texas desert where he finds his first real friend, a treasure, and a new sense of himself.	0440414806	http://books.google.com/books/content?id=0wEybI0QFI4C&printsec=frontcover&img=1&zoom=5&source=gbs_api	http://books.google.com/books/content?id=0wEybI0QFI4C&printsec=frontcover&img=1&zoom=1&source=gbs_api
+Adolescents in the Search for Meaning	Mary L. Warner	Compiles a list of 120 books that surveyed teenagers say they have found meaningful.	0446608955	http://books.google.com/books/content?id=jBciv0yueDoC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=jBciv0yueDoC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
+Core Collection for Children and Young Adults	Rachel E. Schwedt	With thousands of new volumes lining the shelves of bookstores, abundant advertisements, and innumerable online reviews, it is becoming increasingly difficulty for the concerned adult to recommend literature that is of quality, yet speaks to young audiences. Core Collection for Children and Young Adults presents the best in contemporary and classic literature for children and young adults. Every book listed in this reference has a concisely worded annotation, which is followed by headings designating awards the book has won, related subjects, and character themes. With more than 350 titles reviewed, this resource will prove invaluable for teachers, librarians, parents, collectors of children[...]	0441005489	http://books.google.com/books/content?id=oFgmN66eMMEC&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api	http://books.google.com/books/content?id=oFgmN66eMMEC&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api
 \.
 
 
@@ -3225,6 +3244,18 @@ COPY ratings (rating_id, comment, user_id, isbn, session_id) FROM stdin;
 12		6	0060263857	12
 13	too easy	6	0307157857	13
 14		6	0307157857	14
+15		6	0060263857	15
+16		6	0060263857	18
+17		6	0060263857	19
+18		6	0060263857	20
+19		6	0060263857	21
+22		6	0060224657	24
+23		6	0060263857	25
+24		6	0060263857	26
+25		6	0060263857	27
+21	I love pigs	6	0060263857	23
+20	I love dinos	6	0060562250	22
+26		6	0060263857	28
 \.
 
 
@@ -3232,7 +3263,7 @@ COPY ratings (rating_id, comment, user_id, isbn, session_id) FROM stdin;
 -- Name: ratings_rating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('ratings_rating_id_seq', 14, true);
+SELECT pg_catalog.setval('ratings_rating_id_seq', 26, true);
 
 
 --
@@ -3254,6 +3285,20 @@ COPY reading_sessions (session_id, date, time_length, badges_awarded, rating_sco
 12	2016-03-01 00:00:00	20	1	8	6	0060263857	1
 13	2016-03-01 00:00:00	20	1	6	6	0307157857	1
 14	2016-03-01 00:00:00	20	1	9	6	0307157857	1
+15	2016-03-02 00:00:00	20	1	7	6	0060263857	1
+16	2016-03-02 00:00:00	20	1	9	6	0060263857	1
+17	2016-03-02 00:00:00	20	1	9	6	0060263857	1
+18	2016-03-02 00:00:00	20	1	9	6	0060263857	1
+19	2016-03-02 00:00:00	20	1	9	6	0060263857	1
+20	2016-03-03 00:00:00	20	1	10	6	0060263857	1
+21	2016-03-03 00:00:00	20	1	9	6	0060263857	1
+22	2016-03-03 00:00:00	20	1	5	6	0060562250	1
+23	2016-03-03 00:00:00	41	2	10	6	0060263857	1
+24	2016-03-03 00:00:00	20	1	10	6	0060224657	1
+25	2016-03-04 00:00:00	20	1	9	6	0060263857	1
+26	2016-03-04 00:00:00	20	1	9	6	0060263857	1
+27	2016-03-04 00:00:00	20	1	8	6	0060263857	1
+28	2016-03-05 00:00:00	20	1	8	6	0060263857	1
 \.
 
 
@@ -3261,7 +3306,7 @@ COPY reading_sessions (session_id, date, time_length, badges_awarded, rating_sco
 -- Name: reading_sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('reading_sessions_session_id_seq', 14, true);
+SELECT pg_catalog.setval('reading_sessions_session_id_seq', 28, true);
 
 
 --
@@ -3272,6 +3317,7 @@ COPY sidekicks (sidekick_id, first_name, last_name, password, user_id) FROM stdi
 1	Victoria	Cendejas	password	1
 2	Matt	Foley	password	2
 3	Matt	Foley	password	2
+5	victoria	cendejas	password	\N
 \.
 
 
@@ -3279,7 +3325,7 @@ COPY sidekicks (sidekick_id, first_name, last_name, password, user_id) FROM stdi
 -- Name: sidekicks_sidekick_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('sidekicks_sidekick_id_seq', 1, false);
+SELECT pg_catalog.setval('sidekicks_sidekick_id_seq', 5, true);
 
 
 --
