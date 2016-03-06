@@ -37,11 +37,11 @@ def generate_google_books_requests(isbn_list):
     """Builds google books api query urls."""
     
     # check for number items in db to reset this number last is 315
-    sample_set = set(isbn_list[3001:4000])
+    # sample_set = set(isbn_list[3001:4000])
     
     url_list = []
     
-    for isbn in sample_set:
+    for isbn in isbn_list:
         api_url = GOOGLE_BOOKS_SEARCH_ISBN + isbn + "&country=US"
         url_list.append(api_url)
 
@@ -157,14 +157,52 @@ if __name__ == "__main__":
     
     db_isbn = [book.isbn for book in book_list]
     # print db_isbn
-    isbn_list = open_isbn_list(isbn_filepath)
-    # isbn_list =['9781484602607', '9780001846531', '9781484602617']
+    # isbn_list = open_isbn_list(isbn_filepath)
+    # isbn_list = [
+    #             "0439064864",
+    #             "043935806X",
+    #             "0553296981",
+    #             "0439136369",
+    #             "0385504209",
+    #             "0451167716",
+    #             "0590353403",
+    #             "059035342X",
+    #             "0439139597",
+    #             "0439136350",
+    #             ]
+    isbn_list = [
+                "0440414539",  
+                "0060928336",   
+                "0440407524",   
+                "067168390X",   
+                "0440407028",   
+                "0064400557",   
+                "0689824750",   
+                "0671690590",   
+                "0440228441",   
+                "0345370775"
+                ]
+                
+    # isbn_list = [
+    #             "0439136350",
+    #             "043935806X",
+    #             "0439064864",
+    #             "0440498058",
+    #             "0439139597",
+    #             "0590353403",
+    #             "0440414806",
+    #             "0345370775",
+    #             "0446608955",
+    #             "0441005489",
+    #     ]
+    #isbn_list =['9781484602607', '9780001846531', '9781484602617']
     url_list = generate_google_books_requests(isbn_list)
     
     get_book_info(url_list)
    
-    # isbn_list =['9781484602607', '9780001846531', '9781484602617']
 
-# books in isbn list: care and feeding of your gerbil, the phantom tollboooth, null
+
+# isbn_list =['9781484602607', '9780001846531', '9781484602617']
+#care and feeding of your gerbil, the phantom tollboooth, null
     # isbn_list = open_isbn_list(isbn_filepath)
     # get_book_info(isbn_list)

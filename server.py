@@ -17,7 +17,8 @@ from  server_helper_funct import pick_avatar, calculate_badges,\
                                  birthday_format,\
                                  calculates_total_badges,\
                                  calculates_total_reading_time,\
-                                 tally_book_ratings, format_chart_colors
+                                 tally_book_ratings, format_chart_colors,\
+                                 top_recommended
 
 #######################################################################
 # Flask variables and tools
@@ -610,27 +611,32 @@ def melon_types_data():
 def show_mentor_details():
     """Show possible books for scholars  """
     
-    book_display = []
-    book_list = query_all_books()
+    sci_fan = [
+            "0439136350",
+            "0439064864",
+            "0440498058",
+            "0439139597",
+         ]
+
+    main_rec  =  [
+                "0440414806",
+                "0441005489",
+                "0440407524",
+                "0064400557",
+                ]
     
-    for book in book_list:
-        
-        if book.image_url_md !='<i class="fa fa-book 4x"></i>' or book.image_url_md != None:
-            book_display.append(book)
-        else:
-            pass
-        
+    sci_fan_display = top_recommended(book_list, sci_fan)
+    
+    main_books = top_recommended(book_list, main_rec)
+
+    
 
     # if mentor is logged in, render the mentor_details page
    
     return render_template('mentor_detail.html', 
                            today_date=today_date,
-                           book_display=book_display)
+                           book_display=main_books)
     
-
-
-
-
 
 
 if __name__ == "__main__":
