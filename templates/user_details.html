@@ -26,7 +26,7 @@ Today is {{ today_date }}
       <br> 
       Your grade is {{ user_details.grade }}
       <br>
-      Today you read for {{ time_length }} minutes and earned a {{ badge_data.name  }} 
+    
     
   
       <br>
@@ -61,20 +61,31 @@ Today is {{ today_date }}
         
     </script>
      
-     
-        <table class="table table-responsive table-condensed">
+    <div>  
+           
+    <table class="table table-responsive table-condensed">
         <tr>
+          <td>Today you read for {{ time_length }} minutes and earned a {{ badge_data.name  }}</td>
           <td> <img src="{{ badge_data.badge_url }}"> </td>
           <td>{{ badge_data.description  }}</td>
      
         </tr>
       </table>
+    </div>
+
       
  
       You earned these badges!
       {% for key, value in badges_dict.items() %}
         
         <table class="table table-responsive table-condensed">
+        <tr>
+          <th>
+            
+            <td>name</td>
+            <td>count</td>
+          </th>
+        </tr>
         <tr>
           <td> <img src="{{ value['url'] }}"> </td>
           <td>{{ key }}</td>
