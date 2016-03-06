@@ -18,7 +18,7 @@ from  server_helper_funct import pick_avatar, calculate_badges,\
                                  calculates_total_badges,\
                                  calculates_total_reading_time,\
                                  tally_book_ratings, format_chart_colors,\
-                                 display_book_data
+                                 display_book_data, display_badges,format_site_chart
 
 #######################################################################
 # Flask variables and tools
@@ -546,9 +546,6 @@ def log_reading_session():
                            today_date=today_date)
 
 
-
-
-
 # TODO in progress: need to limit data to books and ratings_scores
 @app.route("/user/<int:scholar_id>", methods=["POST", "GET"])
 def show_user_details(scholar_id):
@@ -609,6 +606,7 @@ def books_data():
 def show_mentor_details():
     """Show possible books for scholars  """
     
+    # recommendation derived from data.py machine learning library
     sci_fan = [
             "0439420105",
             "0439136369",
@@ -626,14 +624,18 @@ def show_mentor_details():
     sci_fan_display = display_book_data(book_list, sci_fan)
     
     main_books = display_book_data(book_list, main_rec)
+    
+    badges_display_list = display_badges(badges_list)
+    
+    
 
    
     return render_template(
                            'mentor_detail.html', 
                            today_date=today_date,
                            book_display=main_books,
-                           sci_fan_display=sci_fan_display
-                           )
+                           sci_fan_display=sci_fan_display,
+                           badges_list=badges_display_list)
                            
 @app.route('/mentor-chart.json')
 def mentor_data():
@@ -663,6 +665,27 @@ def mentor_data():
     
     return jsonify(data)
 
+@app.route('/site-chart.json')
+def site_data():
+    """Return json object for aggregated site data"""
+    
+    sites = format_site_chart()
+    
+    data = {
+        'labels': sites.keys(),
+        'datasets': [
+          {
+            'label': "Reading Engagement by Site in Minutes",
+            'fillColor': '#4B5DC3',
+            'strokeColor': '#3C3295',
+            'highlightFill': '#7DBBD4',
+            'highlightStroke': '#A7C9E2',
+            'data': sites.values()
+          }
+         ]
+         }
+    
+    return jsonify(data)
 
 
 if __name__ == "__main__":

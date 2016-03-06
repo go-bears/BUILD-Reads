@@ -8,6 +8,55 @@ Today is {{ today_date }}
  <h2>Mentor Details</h2>
 <br>
 
+
+   <h3> Recommended</h3>
+    {% for book in book_display %}
+    <table class="table table-condensed" border=1>
+    
+    
+    <tr>
+
+       <td><img src="{{ book.image_url_md }} "></img></td>
+       <!--<td> {{ book.title }} </td>-->
+       <td> {{ book.description }} </td>
+     </tr>
+    </table>
+    {% endfor %}
+
+    
+    <h3> Recommended for Fantasy /Sci fi readers</h3>
+        {% for book in sci_fan_display %}
+    
+    <table class="table table-condensed" border=1>
+    
+    
+    <tr>
+
+       <td><img src="{{ book.image_url_md }} "></img></td>
+       <!--<td> {{ book.title }} </td>-->
+       <td> {{ book.description }} </td>
+     </tr>
+    </table>
+    {% endfor %}
+
+
+    <h3>Badge Legend</h3>
+     {% for badge in badges_list %}
+        <table class="table table-condensed" border=1>
+            <tr>
+                <th>Reading Period</th>
+                <th>Badge Description</th>
+                <th>Badge Image</th>
+                
+            </tr>
+            <tr >
+                <td>{{ badge['reading period'] }}</td>
+                <td>{{ badge['description'] }}</td>
+                <td><img class="img-responsive" src="{{ badge['img'] }} "></img></td>
+            </tr>
+        </table>
+    {% endfor %}
+    
       <div class="interestChart" >
         <h3>Mentors Reporting of Scholars' Reading Confidence Increases</h3>
         <canvas id="interestChart" height="200px"></canvas>
@@ -15,59 +64,52 @@ Today is {{ today_date }}
       </div>
            
       <br>
+    
+     <div class="siteChart" >
+        <h3>Reading Activity by Site</h3>
+        <canvas id="siteChart" height="200px"></canvas>
+        <div id="siteLegend" class="chart-legend"></div>
+      </div>
 
-    <script>
+<script type="text/javascript">
+          // global variable to make chart mobile responsive
+       var options = { responsive: true };
+       
+          // select html id readingCharts & returns method for canvas element
+       var site_data = $("#siteChart").get(0).getContext("2d");
+   
+          // AJAX request to grab data from /reading-chart.json route
+      $.get("/site-chart.json", function (data) {
+        
+          // readingChart is rendered by calling on Doughnut function
+      var siteChart = new Chart(site_data).Bar(data, options);
+      
+        // // jquery to get html id readingLegend to generate chart legend
+        $('#siteChart').html(myBarChart.generateLegend());
+        
+        });
 
+</script>
+
+<script>
+    // Pie Chart JS
 
       // global variable to make chart mobile responsive
        var options = { responsive: true };
        
       // select html id readingCharts & returns method for canvas element
-       var donut_data = $("#interestChart").get(0).getContext("2d");
+       var pie_data = $("#interestChart").get(0).getContext("2d");
       
       // AJAX request to grab data from /reading-chart.json route
       $.get("/mentor-chart.json", function (data) {
         
           // readingChart is rendered by calling on Doughnut function
-      var interestChart = new Chart(donut_data).Doughnut(data,options);
+      var interestChart = new Chart(pie_data).Pie(data.interest,options);
       
         // // jquery to get html id readingLegend to generate chart legend
-        $('#rinterestLegend').html(myDonutChart.generateLegend());
+        $('#interestLegend').html(myPieChart.generateLegend());
         
         });
         
     </script>
-
-
-
-<!-- Set up your HTML -->
-   <h3> Recommended</h3>
-    {% for book in book_display %}
-    
-    <tr class="table table-condensed" border=1> 
-    
-    <br>
-
-       <td><img src="{{ book.image_url_md }} "></img></td>
-       <!--<td> {{ book.title }} </td>-->
-       <td> {{ book.description }} </td>
-     </tr>
-
-    {% endfor %}
-    
-    <h3> Recommended for Fantasy /Sci fi readers</h3>
-        {% for book in sci_fan_display %}
-    
-    <tr class="table table-condensed" border=1> 
-    
-    <br>
-
-       <td><img src="{{ book.image_url_md }} "></img></td>
-       <!--<td> {{ book.title }} </td>-->
-       <td> {{ book.description }} </td>
-     </tr>
-
-    {% endfor %}
-
-
 {% endblock %}

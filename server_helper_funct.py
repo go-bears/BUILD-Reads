@@ -60,7 +60,7 @@ def convert_url_to_img_tag(url):
     """Adds html tags to http urls, returns list"""
     
     if url.startswith('http'):
-        img_src = ' <img src="%s"></img> ' % url
+        img_src = ' <img class="img-responsive" src="%s"></img> ' % url
         return img_src
     
 
@@ -162,3 +162,80 @@ def display_book_data(book_list, rec_list):
                 display_data.append(book)
                 
     return display_data
+
+# TODO amend database to store reading period data
+def display_badges(badges_list):
+    """formats badge data for mentor page"""
+    
+    badge_data = []
+    
+    for badge in badges_list:
+        if badge.badge_id == 0:
+            badge.name = {
+                'reading period': '0 to 20 minutes',
+                'description': badge.description,
+                'img': badge.badge_url
+                }
+        if badge.badge_id ==1:
+            badge.name = {
+            'reading period': '21 to 40 minutes',
+            'description': badge.description,
+            'img': badge.badge_url
+            }
+        if badge.badge_id ==2:
+            badge.name = {
+            'reading period': '41 to 60 minutes',
+            'description': badge.description,
+            'img': badge.badge_url
+            }
+        if badge.badge_id ==3:
+            badge.name = {
+            'reading period': '61 to 80 minutes',
+            'description': badge.description,
+            'img': badge.badge_url
+            }
+        if badge.badge_id ==4:
+            badge.name = {
+            'reading period': '81 to 100 minutes',
+            'description': badge.description,
+            'img': badge.badge_url
+            }
+        if badge.badge_id ==5:
+            badge.name = {
+            'reading period': '101 to 120 minutes',
+            'description': badge.description,
+            'img': badge.badge_url
+            }
+        badge_data.append(badge.name)
+            
+    return badge_data
+    
+def format_site_chart():
+    """formatting data of session logs per site"""
+    
+    sites = {
+            "Bahia School Age Program": 1100,
+            "Berkeley Arts Magnet":2000,
+            "Berkeley Maynard Academy":900,
+            "Berkeley Youth Alternatives":800,
+            "Cragmont Elementary":1000,
+            "Emerson Elementary--Oakland":950,
+            "Emerson Elementary":950,
+            "James Kenney Recreation Center":700,
+            "Jefferson Elementary":800,
+            "John Muir Elementary":1500,
+            "Lafayette Elementary":800,
+            "LeConte Elementary School":1000,
+            "Malcolm X Elementary School":500,
+            "Martin Luther King, Jr. Elementary School":600,
+            "Oxford Elementary":650,
+            "Rosa Parks":400,
+            "Sankofa":1000,
+            "Think College Now":750,
+            "Thousand Oaks":1300,
+            "Washington Elementary":500,
+            "Young Adult Project":200,
+            }
+            
+            
+    return sites
