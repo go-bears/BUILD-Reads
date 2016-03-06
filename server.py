@@ -612,8 +612,9 @@ def show_mentor_details():
     """Show possible books for scholars  """
     
     sci_fan = [
-            "0439136350",
-            "0439064864",
+            "0439420105",
+            "0439136369",
+
             "0440498058",
             "0439139597",
          ]
@@ -633,10 +634,13 @@ def show_mentor_details():
 
     # if mentor is logged in, render the mentor_details page
    
-    return render_template('mentor_detail.html', 
+    return render_template(
+                           'mentor_detail.html', 
                            today_date=today_date,
-                           book_display=main_books)
-    
+                           book_display=main_books,
+                           sci_fan_display=sci_fan_display,
+                           )
+        
 
 
 if __name__ == "__main__":
