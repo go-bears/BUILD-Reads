@@ -11,7 +11,7 @@ from jinja2 import StrictUndefined
 
 
 from model import *
-from seed import set_val_user_id
+
 
 from  server_helper_funct import pick_avatar, calculate_badges,\
                                  birthday_format,\
@@ -636,8 +636,7 @@ def show_mentor_details():
 if __name__ == "__main__":
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     connect_to_db(app)
-    # app config for local machine
-    # app.run(debug=True)
+    
     
     # Queries to db to be available for other files
     user_list = query_all_users()
@@ -654,4 +653,7 @@ if __name__ == "__main__":
     
 
     # app config for Cloud9
-    app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
+    # app.run(debug=True, host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
+
+    #app config for local machine
+    app.run(debug=True)

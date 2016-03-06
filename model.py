@@ -431,19 +431,7 @@ class UserBadge(db.Model):
 
 
 
-def connect_to_db(app):
-    """Connect the database to our Flask app."""
 
-    # Configure to use our PstgreSQL database     
-    # postgresql://[[:password][@host][:port]/[database-name]
-
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///build_reads'
-    
-    # config for Cloud9
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build_reads'
-    
-    db.app = app
-    db.init_app(app)
 
 
 ################################################################################
@@ -530,6 +518,24 @@ def set_val_rating_session_id():
     db.session.execute(query, {'new_id': max_id + 1})
     db.session.commit()
     
+
+def connect_to_db(app):
+    """Connect the database to our Flask app."""
+
+    # Configure to use our PstgreSQL database     
+    # postgresql://[[:password][@host][:port]/[database-name]
+
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///build_reads'
+    
+    # config for Cloud9
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build_reads'
+
+    # config for laptop
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:build@localhost/build_reads'
+    
+    db.app = app
+    db.init_app(app)
+
 
 if __name__ == "__main__":
     # As a convenience, if we run this module interactively, it will leave

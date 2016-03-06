@@ -1,8 +1,13 @@
 import server
 from  server_helper_funct import *
 import unittest
-from model import Site
+from model import Site, Book
 
+
+
+
+
+######################################################################
 
 
 class LoadPages(unittest.TestCase):
@@ -11,14 +16,14 @@ class LoadPages(unittest.TestCase):
         self.client = server.app.test_client()
         server.app.config['TESTING'] = True
         
-        server._old_sites_list = server.sites_list
+#         server._old_sites_list = server.sites_list
         server.sites_list = [Site(name="Berkeley Arts Magnet"),
                             Site(name="Young Adult Project")]
 
 
-        server._old_book_list = server.book_list
-        server.book_list = [Book(name="Charlotte's Web"),
-                            Book(name="Garfield Thinks Big")]
+        # server._old_book_list = server.book_list
+        server.book_list = [Book(title="Charlotte's Web"),
+                            Book(title="Garfield Thinks Big")]
 
 
     def test_login_status_code(self):
@@ -38,20 +43,23 @@ class LoadPages(unittest.TestCase):
         # tests if login pages load
         self.assertEqual(result.status_code, 200)
 
-    def test_mentor_detail_status_code(self):
-        """test mentor detail page loads """
+    # def test_mentor_detail_status_code(self):
+    #     """test mentor detail page loads """
         
-        result = self.client.get('/mentor_detail')    
+    #     # server.book_list = [Book(title="Charlotte's Web"),
+    #     #                     Book(title="Garfield Thinks Big")]
         
-        # tests if login pages load
-        self.assertEqual(result.status_code, 200)
+    #     result = self.client.get('/mentor_detail')    
+        
+    #     # tests if login pages load
+    #     self.assertEqual(result.status_code, 200)
         
 
-    def tearDown(self):
-        """Do at end of every test."""
+    # def tearDown(self):
+    #     """Do at end of every test."""
     
-        server.sites_list = self._old_sites_list
-        server.book_list = self._old_book_list
+    #     server.sites_list = self._old_sites_list
+    #     server.book_list = self._old_book_list
 
 
 class DataDisplays(unittest.TestCase):
