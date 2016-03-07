@@ -186,5 +186,3 @@ print top_rec
 
 # # summary statistics and details about recommendation model
 print m2.summary()
-
-
