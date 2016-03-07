@@ -18,7 +18,8 @@ from  server_helper_funct import pick_avatar, calculate_badges,\
                                  calculates_total_badges,\
                                  calculates_total_reading_time,\
                                  tally_book_ratings, format_chart_colors,\
-                                 display_book_data, display_badges,format_site_chart
+                                 display_book_data, display_badges,format_site_chart,\
+                                 reading_confidence
 
 #######################################################################
 # Flask variables and tools
@@ -154,9 +155,6 @@ def serve_reading_session_form():
     scholar = User.query.filter(User.first_name == session['first_name']).first()
     
     sites = scholar.site.name
-    print scholar
-    print scholar.user_id
-    print scholar.avatar
     
     # information messages    
     msg = "Tell us about your reading adventure %s !" % session['first_name']
@@ -276,16 +274,9 @@ def resolve_login():
             
             session['mentor'] = sidekick.sidekick_id
         
-        # success will redirects to mentor dashboard eventually
-            
-            # flash("Let's start reading with your scholar! \
-            #       Please help them with logging in")
+
         return redirect('/mentor_detail')
-        
-        # else:
-        #     flash("Looks like you're new to BUILD! Let's sign you up!")
-        #     return redirect('/new_mentor')
-            
+          
 
 
 #TESTED and WORKS!!
@@ -336,13 +327,10 @@ def register_new_user():
         scholar = db.session.query(User).filter((User.first_name==first_name) &
                                      (User.last_name==last_name) &
                                      (User.birthday==birthday)).first()
-
-        print "Database queried!"
-        print scholar
         
         # stores scholar's user.id from db if scholar is already in db
         session['scholar_id'] = scholar.user_id
-        print session['scholar_id']
+        
         
         print "the scholar id is for {} is {}".format(scholar, session['scholar_id'])
 
@@ -553,8 +541,6 @@ def show_user_details(scholar_id):
     
     # queries database for scholar information by id
     scholar_data = User.query.filter(User.user_id == scholar_id).first()
-    print "i'm the user", scholar_data
-    print scholar_id
     
     # queries database for all ratings by the scholar by scholar id
     user_ratings_list = Rating.query.filter(Rating.user_id == scholar_id).all()
@@ -614,7 +600,7 @@ def show_mentor_details():
             "0439139597",
              ]
 
-    main_rec  =  [
+    main_rec = [
                 "0440414806",
                 "0441005489",
                 "0440407524",
@@ -628,42 +614,21 @@ def show_mentor_details():
     badges_display_list = display_badges(badges_list)
     
     
-
-   
-    return render_template(
-                           'mentor_detail.html', 
+    return render_template('mentor_detail.html', 
                            today_date=today_date,
                            book_display=main_books,
                            sci_fan_display=sci_fan_display,
                            badges_list=badges_display_list)
+
                            
 @app.route('/mentor-chart.json')
 def mentor_data():
     """Return chart data about scholar's reading history.""" 
     
-    data = {}
-    data['interest'] =[
-        {
-            "value": 8,
-            "color":"#F7464A",
-            "highlight": "#FF5A5E",
-            "label": "A Little"
-        },
-        {
-            "value": 36,
-            "color": "#46BFBD",
-            "highlight": "#5AD3D1",
-            "label": "Somewhat"
-        },
-        {
-            "value": 57,
-            "color": "#FDB45C",
-            "highlight": "#FFC870",
-            "label": "A Lot"
-        }
-        ]
+    data = reading_confidence()
     
     return jsonify(data)
+
 
 @app.route('/site-chart.json')
 def site_data():

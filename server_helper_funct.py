@@ -239,3 +239,30 @@ def format_site_chart():
             
             
     return sites
+
+def reading_confidence():
+    """Returns JSON object of BUILD reading confidence data """
+    
+    data = {}
+    data['interest'] =[
+        {
+            "value": 8,
+            "color":"#F7464A",
+            "highlight": "#FF5A5E",
+            "label": "A Little"
+        },
+        {
+            "value": 36,
+            "color": "#46BFBD",
+            "highlight": "#5AD3D1",
+            "label": "Somewhat"
+        },
+        {
+            "value": 57,
+            "color": "#FDB45C",
+            "highlight": "#FFC870",
+            "label": "A Lot"
+        }
+        ]
+        
+    return data
