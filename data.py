@@ -18,94 +18,43 @@ from graphlab import ranking_factorization_recommender
 y_users = "/home/ubuntu/workspace/test-data/y_book_rating.csv"
 # books = "/home/ubuntu/workspace/test-data/BX-Dump/BX-Books.csv"
 
-# # convert csv to graph labs dataframe
-# ratings_df = gl.SFrame.read_csv(ratings,
-#                          delimiter=';',
-#                          header=False,
-#                          column_type_hints={'X2':str, 'X3': int}) 
-                         
-# # rename columns from default values to explict values
-# ratings_df.rename({'X1':'user_id', 'X2':'isbn', 'X3':'rating'})
-
-# # save ratings Sframe 
-# ratings_df.save('./book_data')
-
-# load Sframe created in lines 19-29
-# ratings_df = gl.load_sframe('./book_data')
-
-# selects out user_id  for it's own dataframe
-# users = ratings_df['user_id']
-
-# passes ratings_df into recommender.create() engine
-# rec_model = gl.recommender.create(ratings_df,
-#                               user_id="user_id",
-#                               item_id="isbn",
-#                               target="rating")
-
-# print rec_model.summary()
-# rec_model.save("rec_model")
-
-# loads saved model
-# loaded_model = gl.load_model('rec_model')
-
-# will load higest ranking books for any new user as default
-# print loaded_model.recommend([276724])
-# m = gl.item_similarity_recommender.create(ratings_df,
-#                                           user_id='user_id',
-#                                           item_id='isbn',
-#                                           target='rating',
-#                                           similarity_type='jaccard')
-# # Get 20 recommendations for each user in your list of users.
-
-# save the model that was created by rececommender.create()
-# m.save('model-m')
-
-# ratings_df = gl.SFrame.read_csv(y_ratings,
-#                          delimiter=';',
-#                          header=True) 
-
-
-# rec_model = model.save("rec_model")
-
-# recs = rec_model.recommend(users, k=20)
-
+# create SFrame data set from csv, only need to run once, & then work from saved model
 # y_df = gl.SFrame.read_csv(y_users,
 #                          delimiter=',',
 #                          header=True) 
 # print y_df.head()
 # y_df.save('./y_book_set')
 
-
+# load SFframe of youth subset of Book Crossing dataset
 y_ratings_df = gl.load_sframe('./y_book_set')
 (train_set, test_set) = y_ratings_df.random_split(0.8)
 
+# rename isbn column to 'item_id',required for processing by graphlabs library
 y_ratings_df.rename({'isbn': 'item_id'})
 
+# copy of original SFrame
 y_rating = y_ratings_df.copy()
 
-
-
-
+# filter larger dataset for only user ratings data
 user_rec_data = gl.SFrame({y_rating['user_id'], 
                           y_rating['item_id'], 
                           y_rating['rating'],
                           })
-                          
+
+# rename columns to relevant name                           
 user_rec_data.rename({'X1': 'item_id',
                       'X2': 'rating',
                       'X3': 'user_id'
                       })
 
+# create data subset for side item processing by model
 user_data = gl.SFrame({'user_id':y_rating['user_id'], 
                          'age': y_rating['age'],
                           })
-                          
-# user_rec_data.rename({'X1': 'age',
-#                       'X2': 'user_id'
-#                       })
-                          
+
+########### training and testing models for accuracy testing #############                          
 # 80/20 split for training and test data
-(train_set, test_set) = user_rec_data.random_split(0.8)
+# (train_set, test_set) = user_rec_data.random_split(0.8)
 
 
 # # creating the model for the recommendation system
@@ -139,11 +88,11 @@ user_data = gl.SFrame({'user_id':y_rating['user_id'],
 
 
 
-
-# # filtering data fraom for elementary readers and books
-# # elementary = y_ratings_df[(y_ratings_df['age'] <=11)]
-# # elementary_books = gl.SFrame([elementary['title'], elementary['item_id']])
-# # elementary_books.print_rows(num_rows=len(elementary))
+##############Creating User Profiles ##########################
+# pre-processing: filtering data frame to select for elementary readers and books
+# elementary = y_ratings_df[(y_ratings_df['age'] <=11)]
+# elementary_books = gl.SFrame([elementary['title'], elementary['item_id']])
+# elementary_books.print_rows(num_rows=len(elementary))
 
 
 elementary_books = ['0307121259', '0307122522', '0307302016', 
@@ -164,6 +113,7 @@ teen_books = ['0786817070', '0786845384', '0590494465' , '059035342X',
 
 
 def ratings(book_list, user, rating):
+    """Create SFrame for users' data """
     num = len(book_list)
     records = {'user_id': [user] * num,
               'rating': [rating] * num,
@@ -192,19 +142,16 @@ user_data.append(elem_user)
 # # create teen reader profile
 teen_scholar = 276727
 teen_scholar_ratings = ratings(teen_books, teen_scholar, 10)
-teen_scholar_ratings = teen_scholar_ratings.append(ratings(elementary_books, teen_scholar, 1))
+teen_scholar_ratings = teen_scholar_ratings.append(ratings(elementary_books, 
+                                                           teen_scholar, 1))
 teen_user = {'age':[15.0], 'user_id':[276727]}
 teen_user = gl.SFrame(teen_user)
 user_data.append(teen_user)
 
-# # # add young and teen reader ratings to larger dataset
+# add young and teen reader ratings to larger dataset
 user_rec_data = user_rec_data.append(elementary_scholar_ratings)
-# user_rec_data.print_rows(num_rows=40)
-# user_rec_data = user_rec_data.append(teen_scholar_ratings)
-print user_rec_data.dtype()
-print user_rec_data.head()
 
-# # training model with data, only need to run once and then save.
+# # training model with data, only need to run once. save & work from loaded model later
 # m2 = gl.ranking_factorization_recommender.create(user_rec_data,
 #                                                 # 'item_id', 
 #                                                 target = 'rating', 
@@ -213,91 +160,31 @@ print user_rec_data.head()
 #                                                 num_factors=5,
 #                                                 regularization=0.00001)
 
+
 # m2 = m2.save("m2")
 
+# loading model from memory
 m2 = gl.load_model('m2')
 
-# print elementary_scholar
-# # 276726
-
-# # print gl.SFrame(elementary_scholar['item_id'])
-
-# # print gl.SArray([elementary_scholar_ratings])
-# # print gl.SArray(elementary_scholar['item_id'])
+# make recommendation based on user profile, nearest-k similar items
 teen_recommendations = m2.recommend(users=[276727], k=10)
 print teen_recommendations
 
 elem_recommendations = m2.recommend(users=[276726], k=10)
 print elem_recommendations
 
+# top recommendations, based a new user with no rated items
 top_rec = m2.recommend(users=[276728],k=10)
 print top_rec
+
+#### more testing of recommenations #####
 # sim_books = m2.get_similar_items(items=elementary_books, k=10)
 # print sim_books
 
 # readers = m2.get_similar_users(276727, k=20)
 # print readers
 
-# # print elem_recommendations['elementary_books']
+# # summary statistics and details about recommendation model
 print m2.summary()
-# # print elem_recommendations.summary()
-# m2.recommend(gl.SArray(elementary_scholar), k=20)
-
-# print elem_recommendations
-
-# teen_recommendations = m2.recommend(gl.SArray([teen_scholar]), k=10)
-# print teen_recommendations['item_id']
 
 
-
-
-# ###################################################################
-# user_info = gl.SFrame({'user_id': y_ratings_df["user_id"],
-#                       'location': y_ratings_df["location"],
-#                       'age': y_ratings_df["age"]
-#                                     })
-
-# item_info = gl.SFrame({'item_id': y_ratings_df["isbn"],
-#                       'title': y_ratings_df["title"],
-#                       'rating': y_ratings_df["rating"]
-#                             })
-
-# m2 = gl.ranking_factorization_recommender.create(y_ratings_df,
-#                                               target='rating',
-#                                               user_data=user_info,
-#                                               item_data=item_info)
-# rec = m2.recommend(k=20)
-# print rec
-
-
-
-
-######################################################################
-# y_rec_model = gl.recommender.create(y_ratings_df,
-#                                     user_id='user_id',
-#                                     item_id='title',
-#                                     target='rating')
-                                
-# y_rec_model_saved = y_rec_model.save("y_rec_model")
-
-# y_rec_model=gl.load_model('y_rec_model')
-
-# # this works!!
-# y_recs = y_rec_model.recommend([276726], k=20)
-# print y_recs
-
-# list of 3 amelia bedelia books &  1 richard scarry
-# my_list_of_items =['0064440192', '0064442055', '038049171', '0307157857']
-
-# similar_items = y_rec_model.get_similar_items(my_list_of_items, k=10)
-# print similar_items.print_rows(num_rows=40)
-
-# y_popular_model = gl.popularity_recommender.create(y_rec_model)
-# print y_popular_model.PopularityRecommender.predict(y_popular_model)
-
-# item_similarity_recommender.create
-
-# m2 = gl.factorization_recommender.create(y_rec_model, target='rating')
-                                         
-# m2_save = m2.save("m2")
-# print m2_save.recommend()

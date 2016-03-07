@@ -8,9 +8,9 @@ Today is {{ today_date }}
       <div class="header clearfix">
         <nav>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="#">Home</a></li>
+            <li role="presentation" class="active"><a href="http://publicservice.berkeley.edu/build">Home</a></li>
             <li role="presentation"><a href="#">About</a></li>
-            <li role="presentation"></li>
+            <li role="presentation">Logout</li>
                 <!--make this appear only when user is logged in-->
             
     
@@ -40,7 +40,9 @@ Today is {{ today_date }}
     <label>Password:  </label>
       <input type="password" name="password" placeholder="password" value="password">
   <br>
-  <input type="Submit" value="Login">
+  <input type="submit" value="login">
+  
+  </form>
   
 {% with messages = get_flashed_messages() %}
   {% if messages %}

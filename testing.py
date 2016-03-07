@@ -1,6 +1,9 @@
+import unittest
+
 import server
 from  server_helper_funct import *
-import unittest
+from api_seed import *
+
 from model import Site
 
 
@@ -62,6 +65,17 @@ class DataDisplays(unittest.TestCase):
         self.assertIn('Today is %s' % server.today_date, result.data)
 
 
+
+class TestApiSeedFunctions(unittest.TestCase):
+    """Test seed file that stores api calls  """
+    
+    def test_generate_google_books_requests(self):
+        isbn_list = ["0439064864"] 
+        GOOGLE_BOOKS_SEARCH_ISBN = "https://www.googleapis.com/books/v1/volumes?q=isbn+"
+    
+        self.assertEqual(type(generate_google_books_requests(isbn_list)), list)
+        
+        
     
 class TestHelperFunctions(unittest.TestCase):
     
