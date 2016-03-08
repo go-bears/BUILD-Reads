@@ -1,72 +1,87 @@
 {% extends 'base.html' %}
 {% block content %}
 
-Today is {{ today_date }}
 
 <form action='/log_reading_session' method='POST' class="form-group">
   <p>
     <h2>New Reading Session</h2>
 
 <!-- flash message from @app.route('/reading_session') -->
-    {% with messages = get_flashed_messages() %}
-      {% if messages %} 
-          <ul class=flashes>
-            {% for message in messages %}
-              <li>{{ message }}</li>
-            {% endfor %}
-          </ul>
-      {% endif %} 
-    {% endwith %}
-
-   {% if avatar %}  
-      <i class='{{ avatar }}'></i> 
-    {% endif %}
+      <div class='row'>
+        <div class='col col-xs-8'>  
+          {% with messages = get_flashed_messages() %}
+            {% if messages %} 
+              <div class="alert alert-info">
+                <ul class=flashes>
+                  {% for message in messages %}
+                    {{ message }}
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %} 
+          {% endwith %}
+        </div>
+      </div>
+    
+    
+    <div class='row'>
+      <div class='col col-xs-2'>
+        {% if avatar %}  
+          <i class='{{ avatar }}'></i> 
+        {% endif %}
+      </div>
+      <div class='col col-xs-6'>
+        <h4>{{ msg }}</h4>
+      </div>
+    </div>
+  
     
 
-  {{ msg }}
-    <br>
-    <label for="title">Book Title:</label>
-      <input type="text" name="title" placeholder="Book Title">
-      <br>
-      <label for="reading-session-length">
-        Length of Reading session in minutes:
-      </label><br>
-      <input type="number" name="time_length" placeholder="20" min='20'>
-      <br>
-  
-      <select name="sidekick">
-        {% for mentor in sidekicks  %}
-        <option placeholder="choose your school" value="{{mentor.last_name}}">
-          {{ mentor.first_name}} {{ mentor.last_name }}
-        </option>
-        {% endfor %}
-      </select>
-      <br>
-        <label for="book-rating">
-          Rate How Much You Enjoyed Your Book today:
-        </label><br>
-      <input type="number" name="rating_score" placeholder="book rating" min='1' max='10'>
-      <br>
-
-    <label for="comment">Comments:</label> <br>
-
-      <input type="text" name="comment" placeholder="350 characters Max">
-      <br>
+    <div class='row'>
+      <div class='col col-xs-8'>  
+        <br>
+        <label for="title">Book Title:</label>
+          <input type="text" name="title" placeholder="Book Title">
+          <br>
+          <label for="reading-session-length">
+            Length of Reading session in minutes:
+          </label><br>
+          <input type="number" name="time_length" placeholder="20" min='20'>
+          <br>
+        
+          <label for="reading-session-length">
+            Who's your sidekick on this adventure?
+          </label>
+          <select name="sidekick">
+            {% for mentor in sidekicks  %}
+            <option class=".dropdown-toggle" placeholder="choose your mentor" value="{{mentor.last_name}}">
+              {{ mentor.first_name}} {{ mentor.last_name }}
+            </option>
+            {% endfor %}
+          </select>
+          <br>
+          <label for="book-rating">
+              Rate How Much You Enjoyed Your Book today:
+          </label>
+          <br>
+          <input type="number" name="rating_score" placeholder="book rating" min='1' max='10'>
+          <br>
       
-
-    <input type="Submit" value="Submit Reading Log">
-</form>
-
-
-
-
-  <form action="/user/{{ user_id }}">
-   <input type='submit'  value="Go to Your Reading History">
-  </form>
-
-
-
-
+          <label for="comment">Comments:</label> 
+          <br>
+      
+          <input type="text" class="form-control" name="comment" placeholder="350 characters Max">
+          <br> </br>
+      
+          <input class='btn btn-md btn-success' type="Submit" value="Submit Reading Log">
+      </form>
+      <br> </br>
+      
+      <form action="/user/{{ user_id }}">
+        <input class='btn btn-md btn-info' type='submit'  value="Go to Your Reading History">
+      </form>
+    </div>
+  </div>
 
 
 {% endblock %}

@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-Today is {{ today_date }}
+
 
   <p>
     <h2>Your Reading Journeys!</h2>
@@ -11,25 +11,54 @@ Today is {{ today_date }}
       {% if messages %}
         <ul class=flashes>
         {% for message in messages %}
-          <li>{{ message }}</li>
+          <h3><li>{{ message }}</li></h3>
         {% endfor %}
         </ul>
       {% endif %}
     {% endwith %}
     
-   {% if avatar %}  
-      <i class='{{ avatar }}'></i> 
-    {% endif %}
+    <div class='row'>
+      <div class="col col-xs-4">
+       {% if avatar %}  
+          <i class='{{ avatar }}'></i> 
+        {% endif %}
+      </div>
 
-
-      You attend {{ user_details.site.name }}
-      <br> 
-      Your grade is {{ user_details.grade }}
-      <br>
+      <div class="col col-xs-4">  
+        You attend {{ user_details.site.name }}
+      </div>
+      <div class="col col-xs-4">
+        <br> 
+        Your grade is {{ user_details.grade }}
+        <br>
+      </div>
+    </div>
     
     
-  
-      <br>
+    <div class='row'>
+      <div class="col col-xs-1">
+       <h4><strong>Today:</strong></h4>
+      </div>
+
+      <div class="col col-xs-5">  
+        <h5>you read for {{ time_length }} minutes...</h5>
+      </div>
+      <div class="col col-xs-6">
+        <table class="table table-responsive table-condensed">
+          <tr>
+            <td>...and earned a {{ badge_data.name  }}</td>
+            <td> <img src="{{ badge_data.badge_url }}"> </td>
+            <td>...{{ badge_data.description  }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    
+    
+
+      <div>
+        <h4>You read a total of {{ time }} minutes!!</h4>      
+      </div>
       
       <div class="readingchart" >
         <canvas id="readingChart" height="200px"></canvas>
@@ -37,7 +66,7 @@ Today is {{ today_date }}
       </div>
            
       <br>
-      <li>You read a total of {{ time }} minutes!!</li>
+
 
     <script>
 
@@ -61,29 +90,19 @@ Today is {{ today_date }}
         
     </script>
      
-    <div>  
-           
-    <table class="table table-responsive table-condensed">
-        <tr>
-          <td>Today you read for {{ time_length }} minutes and earned a {{ badge_data.name  }}</td>
-          <td> <img src="{{ badge_data.badge_url }}"> </td>
-          <td>{{ badge_data.description  }}</td>
-     
-        </tr>
-      </table>
-    </div>
+
 
       
  
-      You earned these badges!
+      <h4><strong>You earned these badges!</strong></h4>
       {% for key, value in badges_dict.items() %}
         
         <table class="table table-responsive table-condensed">
         <tr>
           <th>
             
-            <td>name</td>
-            <td>count</td>
+            <td class="col-md-4">name</td>
+            <td class="col-md-4">count</td>
           </th>
         </tr>
         <tr>
@@ -95,17 +114,17 @@ Today is {{ today_date }}
       
       {% endfor %}
 
-      You rated these books!
+      <h4><strong>You rated these books!</strong></h4>
 
       {% for key, value in book_rating_dict.items() %}
     
     <table class="table table-responsive table-condensed" >
       
       <tr>
-        <td> <img src="{{ value['img'] }}"> </td>
-        <td>{{ key }}</td>
-        <td>{{ value['avg_score'] }}</td>
-        <td> {% for comment in value['comments'] %}
+        <td class="col-md-2"> <img src="{{ value['img'] }}"> </td>
+        <td class="col-md-3">{{ key }}</td>
+        <td class="col-md-1">{{ value['avg_score'] }}</td>
+        <td class="col-md-6"> {% for comment in value['comments'] %}
           <ul>
             <li> {{ comment }}
             </li>
@@ -118,6 +137,8 @@ Today is {{ today_date }}
 
 
 <br>
-<a href='/reading_session'><button>Let's start a new reading session!</button></a>
+<a href='/reading_session'>
+  <button class='btn btn-success'>Let's start a new reading session!</button>
+</a>
 
 {% endblock %}

@@ -6,18 +6,21 @@
   
 
   <!-- Custom styles for this template -->
-  <link href="css/jumbotron-narrow.css" rel="stylesheet">
+  <link href="../static/css/jumbotron-narrow.css" rel="stylesheet">
   <!--import font awesome-->
   <link rel="stylesheet" 
         href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 
-
-
+  
+  <!--import for Tiliana font from Google Fonts-->
+  <link href='https://fonts.googleapis.com/css?family=Tillana:400,800' rel='stylesheet' type='text/css'>
   <!--import charts.js-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.js"></script>
   
   <!--import jquery-->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  
+  
   
 
   
@@ -27,32 +30,36 @@
     <div class="container">
       <div class="header clearfix">
         <nav>
+          <span>Today is {{ today_date }}</span>
           <ul class="nav nav-pills pull-right">
-            <li role="presentation" class="active"><a href="http://publicservice.berkeley.edu/build">Home</li></a>
-            <li role="presentation"><a href="#">About</a></li>
-            <li role="presentation"action="/logout">Logout</li>
+            <li role="presentation"><a href="/login">Home</li></a>
+            <li role="presentation">
+                <a href="http://publicservice.berkeley.edu/build">About</a>
+            </li>
+            <li role="presentation"><a href="/logout">Logout</a></li>
           </ul>
         </nav>
       </div>
     <div>
-    
-    
-    
-<form action="/logout">
-    <input type="submit" value="Logout"/>
-</form>
+        
 
-<hr>
-
+    
+    <div class="container">
+      <div class="header clearfix">
+          
+          
+        {% block content %} 
+        
+        put your content here 
+        
+        {% endblock %}
   
-    {% block content %} 
+          
+      </div>
+    </div>
     
-    put your content here 
-    
-    {% endblock %}
 
 
-     
 
 <!-- Latest compiled and minified CSS bootstrap-->
 <link rel="stylesheet" 

@@ -69,14 +69,15 @@ def calculates_total_badges(badges_list, user_ratings_list):
     
     badges_dict = {}
     for user_rating in user_ratings_list:
+        
         for badge in badges_list:
             if user_rating.session.badges_awarded == badge.badge_id:
                 if badge.name not in badges_dict:
+                    print badge.name
                     badges_dict[badge.name] = {"url": badge.badge_url, "count":1}
                 else:
                     badges_dict[badge.name]['count'] += 1
-                    
-            
+    print badges_dict
     return badges_dict
     
 def calculates_total_reading_time(user_ratings_list):
@@ -91,7 +92,7 @@ def calculates_total_reading_time(user_ratings_list):
     
 
 def tally_book_ratings(book_list, user_ratings_list):
-    """ Tally individual book ratings, stores img, avg score, return dictionary"""
+    """ Tally book ratings, stores img, avg score, return dictionary"""
     
     book_rating_dict ={}
     
@@ -102,18 +103,21 @@ def tally_book_ratings(book_list, user_ratings_list):
                 
                 if title not in book_rating_dict:
                     # collects scores from ratings, and url from book attribute
-                    book_rating_dict[title] = {'score': [user_rating.session.rating_score],
-                                              'img': book.image_url_sm,
-                                              'description': book.description,
-                                              'time_spent': [user_rating.session.time_length],
-                                              'comments': [user_rating.comment]}
+                    book_rating_dict[title] = \
+                                    {
+                                    'score': [user_rating.session.rating_score],
+                                    'img': book.image_url_sm,
+                                    'description': book.description,
+                                    'time_spent': [user_rating.session.time_length],
+                                    'comments': []
+                                     }
                                           
                 else:
                     book_rating_dict[title]['score'].append(user_rating.session.rating_score)
                     book_rating_dict[title]['time_spent'].append(user_rating.session.time_length)
                     
-                    if len(book_rating_dict[title]['comments']) >2:
-                        book_rating_dict[title]['comments'].append(user_rating.comment)
+                if len(user_rating.comment) > 2 and user_rating.comment not in book_rating_dict[title]['comments']:
+                    book_rating_dict[title]['comments'].append(user_rating.comment)
                     
                 # calculates average score                          
                 book_rating_dict[title]['avg_score'] = int(numpy.mean(book_rating_dict[title]['score']))
