@@ -3,7 +3,7 @@
 
 Today is {{ today_date }}
 <br>
-<img src='http://publicservice.berkeley.edu/sites/default/files/BUILDSitesBanner_0.jpg'>
+<img class='img-fluid' src='http://publicservice.berkeley.edu/sites/default/files/BUILDSitesBanner_0.jpg'>
 <br>
  <h2>Mentor Details</h2>
 <br>
@@ -44,9 +44,9 @@ Today is {{ today_date }}
      {% for badge in badges_list %}
         <table class="table table-condensed" border=1>
             <tr>
-                <th>Reading Period</th>
-                <th>Badge Description</th>
-                <th>Badge Image</th>
+                <th class="col col-xs-2">Reading Period</th>
+                <th class="col col-xs-2">Badge Description</th>
+                <th class="col col-xs-2">Badge Image</th>
                 
             </tr>
             <tr >
