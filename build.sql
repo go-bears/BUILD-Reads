@@ -3256,6 +3256,20 @@ COPY ratings (rating_id, comment, user_id, isbn, session_id) FROM stdin;
 21	I love pigs	6	0060263857	23
 20	I love dinos	6	0060562250	22
 26		6	0060263857	28
+27	Wilbur is shy	6	0060263857	29
+28	The children are sad	6	0060562250	30
+29	nice pig	6	0060263857	31
+30	Fern is nice	6	0060263857	32
+31	Love Dinos	6	0060224657	33
+32	Love Dinos	6	0060224657	34
+33	yay pig	6	0060263857	35
+34		6	0060263857	36
+35		6	0060263857	37
+36	Poor Orphans	6	0060562250	38
+37		6	0060562250	39
+38	The house is scary	6	0060562250	40
+39	Funny Bunny	6	0064430189	41
+40	I like bunnies	6	0064430189	42
 \.
 
 
@@ -3263,7 +3277,7 @@ COPY ratings (rating_id, comment, user_id, isbn, session_id) FROM stdin;
 -- Name: ratings_rating_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('ratings_rating_id_seq', 26, true);
+SELECT pg_catalog.setval('ratings_rating_id_seq', 40, true);
 
 
 --
@@ -3299,6 +3313,20 @@ COPY reading_sessions (session_id, date, time_length, badges_awarded, rating_sco
 26	2016-03-04 00:00:00	20	1	9	6	0060263857	1
 27	2016-03-04 00:00:00	20	1	8	6	0060263857	1
 28	2016-03-05 00:00:00	20	1	8	6	0060263857	1
+29	2016-03-06 00:00:00	40	3	10	6	0060263857	1
+30	2016-03-07 00:00:00	20	1	7	6	0060562250	1
+31	2016-03-07 00:00:00	20	1	10	6	0060263857	1
+32	2016-03-07 00:00:00	20	1	9	6	0060263857	1
+33	2016-03-07 00:00:00	20	1	10	6	0060224657	1
+34	2016-03-07 00:00:00	20	1	10	6	0060224657	1
+35	2016-03-07 00:00:00	20	1	9	6	0060263857	1
+36	2016-03-07 00:00:00	20	1	9	6	0060263857	1
+37	2016-03-07 00:00:00	20	1	9	6	0060263857	1
+38	2016-03-08 00:00:00	20	1	10	6	0060562250	1
+39	2016-03-08 00:00:00	20	1	10	6	0060562250	1
+40	2016-03-08 00:00:00	20	1	7	6	0060562250	1
+41	2016-03-08 00:00:00	20	1	10	6	0064430189	1
+42	2016-03-08 00:00:00	20	1	10	6	0064430189	1
 \.
 
 
@@ -3306,7 +3334,7 @@ COPY reading_sessions (session_id, date, time_length, badges_awarded, rating_sco
 -- Name: reading_sessions_session_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('reading_sessions_session_id_seq', 28, true);
+SELECT pg_catalog.setval('reading_sessions_session_id_seq', 42, true);
 
 
 --
