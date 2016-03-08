@@ -106,9 +106,9 @@
           </th>
         </tr>
         <tr>
-          <td> <img src="{{ value['url'] }}"> </td>
-          <td>{{ key }}</td>
-          <td>{{ value['count'] }}</td>
+          <td> <img class='img-responsive' src="{{ value['url'] }}"> </td>
+          <td class="col-md-4">{{ key }}</td>
+          <td class="col-md-4" >{{ value['count'] }}</td>
         </tr>
       </table>
       
@@ -121,10 +121,10 @@
     <table class="table table-responsive table-condensed" >
       
       <tr>
-        <td class="col-md-2"> <img src="{{ value['img'] }}"> </td>
-        <td class="col-md-3">{{ key }}</td>
-        <td class="col-md-1">{{ value['avg_score'] }}</td>
-        <td class="col-md-6"> {% for comment in value['comments'] %}
+        <td class="col-md-2 col-xs-3"> <img class='img-responsive img-fluid' max-width: 100% height: 'auto' src="{{ value['img'] }}"> </td>
+        <td class="col-md-3 col-xs-3">{{ key }}</td>
+        <td class="col-md-1 col-xs-3">{{ value['avg_score'] }}</td>
+        <td class="col-md-6 col-xs-3"> {% for comment in value['comments'] %}
           <ul>
             <li> {{ comment }}
             </li>

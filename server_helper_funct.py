@@ -125,7 +125,7 @@ def tally_book_ratings(book_list, user_ratings_list):
                 # calculates total time spent reading a specific book
                 book_rating_dict[title]['total_time'] = sum(book_rating_dict[title]['time_spent'])
 
-
+    print book_rating_dict
     return book_rating_dict
 
 def format_chart_colors(book_rating_dict):
