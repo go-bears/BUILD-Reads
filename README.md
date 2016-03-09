@@ -1,10 +1,10 @@
 #BUILD Reads!
 
 ###Synopsis
-BUILD Reads! is a GoodReads-for-Kids-style web responsive app for mentors and scholars to motivate enjoyment of reading.  A scholars can use BUILD Reads with a BUILD reading mentor  to track his reading progress and to keep a reading history profile. 
+BUILD Reads! is a GoodReads-for-Kids-styled web responsive app for mentors and scholars to motivate enjoyment of reading.  A scholars can use BUILD Reads! with a BUILD reading mentor to track his reading progress and to keep a reading history profile. 
 
 ###Motivation
-Melissa's work with Berkeley Unified in Literacy Development, a program supporting under-resourced k-8 students in Berkeley and Oakland, inspired her BUILD-Reads project. 
+Melissa's work with Berkeley Unified in Literacy Development, a program supporting under-resourced k-8 students in Berkeley and Oakland, inspired her BUILD Reads! project. A problem the app addresses is for 
 
 ###Features
 Scholars can log their daily reading progress, post book ratings, and store comments during their reading session. 
@@ -14,13 +14,14 @@ BUILD-Reads also provides reading mentors with data visualizations of BUILD's co
 
 
 ###Technologies Used
--Python using a Flask Framework
--Postgresql
--SQL Alchemy
--Javascript
--JQuery
--AJAX
--Charts.js
--GraphLab
--Jinga2
--Bootstrap
+
+-  Python using a Flask Framework
+-  Postgresql
+-  SQL Alchemy
+-  Javascript
+-  JQuery
+-  AJAX
+-  Charts.js
+-  GraphLab
+-  Jinga2
+-  Bootstrap
