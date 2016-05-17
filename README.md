@@ -1,15 +1,27 @@
-#BUILD reads
+#BUILD Reads!
 
-### Notes for running on c9.io
-starting and signing into postgres db (build_reads)
-    $ sudo sudo -u postgres psql build_reads
+###Synopsis
+BUILD Reads! is a GoodReads-for-Kids-styled web responsive app for mentors and scholars to motivate enjoyment of reading.  A scholars can use BUILD Reads! with a BUILD reading mentor to track his reading progress and to keep a reading history profile. 
 
-starting server (points to http://build-reads-go-bears.c9users.io:8080/ in browser)
-    $ python server.py
+###Motivation
+Melissa's work with Berkeley Unified in Literacy Development, a program supporting under-resourced k-8 students in Berkeley and Oakland, inspired her BUILD Reads! project. A problem the app addresses is for 
 
-running SqlAlchemy access to postgres db
-    $ python model.py
+###Features
+Scholars can log their daily reading progress, post book ratings, and store comments during their reading session. 
+Scholars can reviews their improvements through data visualizations and reward badges, and they also can review their own "book shelf" of cover images, an aggregated average of the scores they rated a book.  
 
-alternatively you can run model.py in python's interactive mode to add records to db
-    $ python -i model.py
+BUILD-Reads also provides reading mentors with data visualizations of BUILD's community impact and a machine learning book recommendation feature.
 
+
+###Technologies Used
+
+-  Python using a Flask Framework
+-  Postgresql
+-  SQL Alchemy
+-  Javascript
+-  JQuery
+-  AJAX
+-  Charts.js
+-  GraphLab
+-  Jinga2
+-  Bootstrap
