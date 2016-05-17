@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
-Today is {{ today_date }}
+
 
 <form action='/register_new_user' method="POST">
   <p>
@@ -10,13 +10,13 @@ Today is {{ today_date }}
     <label for="first-name">First Name:</label>
       <input type="text" name="first_name" placeholder="first name">
       <br>
-    <label for="last-name">Last Name:</label>
-      <input type="text" name="last_name" placeholder="last name">
+    <label for="last-name">Favorite Food:</label>
+      <input type="text" name="favorite_food" placeholder="favorite food">
       <br>
     <label for="birthday">Your Birthday:</label>
-      <input type="text" name="birthday" placeholder="YYYY-MM-DD">
+      <input type="text" name="birth_year" placeholder="YYYY">
       <br>
-    <label for="School">Your School:</label>
+    <label for="School">BUILD Site:</label>
       <select name="school">
         {% for site in sites  %}
         <option placeholder="choose your school" value="{{ site }}">{{ site }}</option>
@@ -32,8 +32,8 @@ Today is {{ today_date }}
     
   </p>
   <p>
-    <label>Password:  </label>
-      <input type="text" name="password" placeholder="password" value="password" >
+    <label>Favorite Animal</label>
+      <input type="text" name="favorite_animal" placeholder="favorite food" value="password" >
 
   </p>
   <input type="Submit" value="Register">
